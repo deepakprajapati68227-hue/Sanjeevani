@@ -1,0 +1,72 @@
+[
+  {
+    "id": "chandrapur",
+    "name": "Chandrapur",
+    "state": "Maharashtra",
+    "region": "Central India / Vidarbha",
+    "hazard_profile": "Extreme Heatwaves (>45°C), Industrial Mine Radiance & Forest Fires",
+    "climate_zone": "Tropical Dry / Deccan",
+    "centerLat": 20.08,
+    "centerLon": 79.42,
+    "zoom": 9.5,
+    "default_language": "mr",
+    "recommended_focus": "Heat & Thermal Inversion",
+    "color_accent": "#D32F2F"
+  },
+  {
+    "id": "barmer",
+    "name": "Barmer",
+    "state": "Rajasthan",
+    "region": "Western India / Thar Desert",
+    "hazard_profile": "Hyper-Heatwave (>48°C), Sandstorms, Severe Aridity & Deep Aquifer Exhaustion",
+    "climate_zone": "Arid Desert",
+    "centerLat": 25.75,
+    "centerLon": 71.40,
+    "zoom": 9.5,
+    "default_language": "en",
+    "recommended_focus": "Hyper-Heat & Water Depletion",
+    "color_accent": "#E65100"
+  },
+  {
+    "id": "wayanad",
+    "name": "Wayanad",
+    "state": "Kerala",
+    "region": "Southern India / Western Ghats",
+    "hazard_profile": "Extreme Monsoon Cloudbursts, Flash Flooding & Riparian Soil Saturation",
+    "climate_zone": "Tropical Wet Highlands",
+    "centerLat": 11.68,
+    "centerLon": 76.13,
+    "zoom": 10.0,
+    "default_language": "en",
+    "recommended_focus": "Monsoon Cloudburst & Flash Floods",
+    "color_accent": "#1976D2"
+  },
+  {
+    "id": "sundarbans",
+    "name": "Sundarbans (S. 24 Parganas)",
+    "state": "West Bengal",
+    "region": "Eastern India / Coastal Delta",
+    "hazard_profile": "Cyclonic Tidal Surges, River Embankment Breaches & Saline Aquifer Ingress",
+    "climate_zone": "Coastal Mangrove Estuary",
+    "centerLat": 22.15,
+    "centerLon": 88.65,
+    "zoom": 9.5,
+    "default_language": "en",
+    "recommended_focus": "Cyclone Surge & Saline Inundation",
+    "color_accent": "#00838F"
+  },
+  {
+    "id": "solapur",
+    "name": "Solapur",
+    "state": "Maharashtra",
+    "region": "Western Deccan / Rainshadow",
+    "hazard_profile": "Chronic Agricultural Drought, Borewell Depletion & Pre-Monsoon Heat Stress",
+    "climate_zone": "Semi-Arid Rainshadow",
+    "centerLat": 17.65,
+    "centerLon": 75.90,
+    "zoom": 9.5,
+    "default_language": "mr",
+    "recommended_focus": "Agricultural Drought & Groundwater",
+    "color_accent": "#C2185B"
+  }
+]

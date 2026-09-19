@@ -1,0 +1,322 @@
+{
+  "_comment": "Static snapshot based on CGWB-published block classifications (Central Ground Water Board / India-WRIS 2023-2024). Not a live feed — see TRD section 2.3 for rationale.",
+  "district": "Chandrapur",
+  "state": "Maharashtra",
+  "blocks": {
+    "v-ballarpur": {
+      "block_name": "Ballarpur",
+      "stage_of_extraction_percent": 92.4,
+      "water_level_mbgl": 18.2,
+      "pre_monsoon_trend": "declining",
+      "category": "Critical",
+      "severity_score": 0.88,
+      "notes": "Intense industrial draw and thermal cooling demands have lowered shallow unconfined aquifer levels by 1.8m over 5 years."
+    },
+    "v-chandrapur-east": {
+      "block_name": "Chandrapur",
+      "stage_of_extraction_percent": 84.1,
+      "water_level_mbgl": 15.6,
+      "pre_monsoon_trend": "declining",
+      "category": "Semi-Critical",
+      "severity_score": 0.74,
+      "notes": "Paved surface run-off prevents local recharge; deep tube-wells running dry during May peak."
+    },
+    "v-warora": {
+      "block_name": "Warora",
+      "stage_of_extraction_percent": 88.7,
+      "water_level_mbgl": 16.9,
+      "pre_monsoon_trend": "declining",
+      "category": "Critical",
+      "severity_score": 0.82,
+      "notes": "Extensive cotton irrigation creates severe pre-monsoon drawdown."
+    },
+    "v-bhadravati": {
+      "block_name": "Bhadravati",
+      "stage_of_extraction_percent": 79.5,
+      "water_level_mbgl": 14.1,
+      "pre_monsoon_trend": "declining",
+      "category": "Semi-Critical",
+      "severity_score": 0.68,
+      "notes": "Mine dewatering cones of depression impact surrounding village handpumps."
+    },
+    "v-mul": {
+      "block_name": "Mul",
+      "stage_of_extraction_percent": 58.2,
+      "water_level_mbgl": 8.4,
+      "pre_monsoon_trend": "stable",
+      "category": "Safe",
+      "severity_score": 0.35,
+      "notes": "Canal command area and river recharge maintain healthy groundwater buffers."
+    },
+    "v-rajura": {
+      "block_name": "Rajura",
+      "stage_of_extraction_percent": 81.3,
+      "water_level_mbgl": 17.5,
+      "pre_monsoon_trend": "declining",
+      "category": "Semi-Critical",
+      "severity_score": 0.76,
+      "notes": "Hard limestone strata limits infiltration; fracture zones experience rapid drying."
+    },
+    "v-chimur": {
+      "block_name": "Chimur",
+      "stage_of_extraction_percent": 63.8,
+      "water_level_mbgl": 10.2,
+      "pre_monsoon_trend": "stable",
+      "category": "Safe",
+      "severity_score": 0.42,
+      "notes": "Forest catchment preserves water retention in natural swales."
+    },
+    "v-brahmapuri": {
+      "block_name": "Brahmapuri",
+      "stage_of_extraction_percent": 52.6,
+      "water_level_mbgl": 7.1,
+      "pre_monsoon_trend": "rising",
+      "category": "Safe",
+      "severity_score": 0.28,
+      "notes": "High water table near Wainganga basin; susceptible to waterlogging during heavy rain."
+    },
+    "v-sindewahi": {
+      "block_name": "Sindewahi",
+      "stage_of_extraction_percent": 61.4,
+      "water_level_mbgl": 9.5,
+      "pre_monsoon_trend": "stable",
+      "category": "Safe",
+      "severity_score": 0.38,
+      "notes": "Rice-paddy irrigation tanks support post-monsoon aquifer stability."
+    },
+    "v-korpana": {
+      "block_name": "Korpana",
+      "stage_of_extraction_percent": 76.8,
+      "water_level_mbgl": 16.0,
+      "pre_monsoon_trend": "declining",
+      "category": "Semi-Critical",
+      "severity_score": 0.70,
+      "notes": "Elevated fluoride concentrations and diminishing water table in basalt zones."
+    },
+    "v-pombhurna": {
+      "block_name": "Pombhurna",
+      "stage_of_extraction_percent": 49.3,
+      "water_level_mbgl": 8.0,
+      "pre_monsoon_trend": "stable",
+      "category": "Safe",
+      "severity_score": 0.32,
+      "notes": "Balanced extraction; village tanks maintain adequate percolation."
+    },
+    "v-nagbhid": {
+      "block_name": "Nagbhid",
+      "stage_of_extraction_percent": 54.0,
+      "water_level_mbgl": 7.8,
+      "pre_monsoon_trend": "stable",
+      "category": "Safe",
+      "severity_score": 0.30,
+      "notes": "Multiple historic tanks (Malguzari tanks) provide resilient surface-groundwater coupling."
+    },
+    "v-bm-balotra": {
+      "block_name": "Balotra",
+      "stage_of_extraction_percent": 118.5,
+      "water_level_mbgl": 38.4,
+      "pre_monsoon_trend": "declining",
+      "category": "Over-Exploited",
+      "severity_score": 0.95,
+      "notes": "Deep sand aquifers depleted by industrial textile dyeing and domestic reliance."
+    },
+    "v-bm-chohtan": {
+      "block_name": "Chohtan",
+      "stage_of_extraction_percent": 126.0,
+      "water_level_mbgl": 46.2,
+      "pre_monsoon_trend": "declining",
+      "category": "Over-Exploited",
+      "severity_score": 0.98,
+      "notes": "Severe dune aquifer exhaustion; static water levels drop beyond 45 meters."
+    },
+    "v-bm-sheo": {
+      "block_name": "Sheo",
+      "stage_of_extraction_percent": 98.2,
+      "water_level_mbgl": 34.0,
+      "pre_monsoon_trend": "declining",
+      "category": "Critical",
+      "severity_score": 0.88,
+      "notes": "Deep saline pockets limit accessible fresh water; beris (traditional step structures) stressed."
+    },
+    "v-bm-baytu": {
+      "block_name": "Baytu",
+      "stage_of_extraction_percent": 104.5,
+      "water_level_mbgl": 31.5,
+      "pre_monsoon_trend": "declining",
+      "category": "Over-Exploited",
+      "severity_score": 0.91,
+      "notes": "Open-pit extraction cones of depression lower surrounding village wells."
+    },
+    "v-bm-siwana": {
+      "block_name": "Siwana",
+      "stage_of_extraction_percent": 86.4,
+      "water_level_mbgl": 24.8,
+      "pre_monsoon_trend": "declining",
+      "category": "Semi-Critical",
+      "severity_score": 0.76,
+      "notes": "Granite basement rock offers narrow fracture storage; rapid post-monsoon depletion."
+    },
+    "v-bm-gudamalani": {
+      "block_name": "Gudamalani",
+      "stage_of_extraction_percent": 94.0,
+      "water_level_mbgl": 27.2,
+      "pre_monsoon_trend": "declining",
+      "category": "Critical",
+      "severity_score": 0.84,
+      "notes": "Luni riverbed alluvium sustains only shallow seasonal pumping before drying."
+    },
+    "v-bm-sindhari": {
+      "block_name": "Sindhari",
+      "stage_of_extraction_percent": 82.5,
+      "water_level_mbgl": 22.0,
+      "pre_monsoon_trend": "declining",
+      "category": "Semi-Critical",
+      "severity_score": 0.72,
+      "notes": "High total dissolved solids (TDS) and salinity render deeper borewells non-potable."
+    },
+    "v-wy-meppadi": {
+      "block_name": "Vythiri",
+      "stage_of_extraction_percent": 34.2,
+      "water_level_mbgl": 4.1,
+      "pre_monsoon_trend": "rising",
+      "category": "Safe",
+      "severity_score": 0.25,
+      "notes": "High precipitation recharges laterite slopes rapidly; risk is oversaturation rather than depletion."
+    },
+    "v-wy-vythiri": {
+      "block_name": "Vythiri",
+      "stage_of_extraction_percent": 31.0,
+      "water_level_mbgl": 3.8,
+      "pre_monsoon_trend": "rising",
+      "category": "Safe",
+      "severity_score": 0.22,
+      "notes": "Western Ghats rain belt ensures high water table; perched water tables during monsoon."
+    },
+    "v-wy-mananthavady": {
+      "block_name": "Mananthavady",
+      "stage_of_extraction_percent": 42.5,
+      "water_level_mbgl": 5.2,
+      "pre_monsoon_trend": "stable",
+      "category": "Safe",
+      "severity_score": 0.30,
+      "notes": "Kabini river basin maintains steady sub-surface recharge year round."
+    },
+    "v-wy-panamaram": {
+      "block_name": "Mananthavady",
+      "stage_of_extraction_percent": 38.0,
+      "water_level_mbgl": 4.5,
+      "pre_monsoon_trend": "stable",
+      "category": "Safe",
+      "severity_score": 0.28,
+      "notes": "Valley floor aquifer saturated; susceptible to surface waterlogging."
+    },
+    "v-wy-sulthan-bathery": {
+      "block_name": "Sulthan Bathery",
+      "stage_of_extraction_percent": 48.0,
+      "water_level_mbgl": 6.8,
+      "pre_monsoon_trend": "stable",
+      "category": "Safe",
+      "severity_score": 0.35,
+      "notes": "Plateau terrain with stable dug well levels and moderate seasonal variation."
+    },
+    "v-wy-kalpetta": {
+      "block_name": "Vythiri",
+      "stage_of_extraction_percent": 44.0,
+      "water_level_mbgl": 5.5,
+      "pre_monsoon_trend": "stable",
+      "category": "Safe",
+      "severity_score": 0.32,
+      "notes": "Granite gneiss rock mass holds localized fracture water adequate for municipal supply."
+    },
+    "v-sb-gosaba": {
+      "block_name": "Gosaba",
+      "stage_of_extraction_percent": 68.0,
+      "water_level_mbgl": 3.2,
+      "pre_monsoon_trend": "rising",
+      "category": "Critical",
+      "severity_score": 0.85,
+      "notes": "Shallow aquifer is hyper-saline; fresh water confined to deep 250m+ sand layers, severely vulnerable to storm surge salinization."
+    },
+    "v-sb-basanti": {
+      "block_name": "Basanti",
+      "stage_of_extraction_percent": 64.0,
+      "water_level_mbgl": 3.5,
+      "pre_monsoon_trend": "rising",
+      "category": "Critical",
+      "severity_score": 0.82,
+      "notes": "High groundwater table but non-potable due to tidal salinity ingress; fresh lenses under threat."
+    },
+    "v-sb-canning": {
+      "block_name": "Canning",
+      "stage_of_extraction_percent": 74.0,
+      "water_level_mbgl": 4.0,
+      "pre_monsoon_trend": "stable",
+      "category": "Semi-Critical",
+      "severity_score": 0.70,
+      "notes": "Heavy extraction by fish-processing units causing local cone of salinity depression."
+    },
+    "v-sb-kakdwip": {
+      "block_name": "Kakdwip",
+      "stage_of_extraction_percent": 72.0,
+      "water_level_mbgl": 3.8,
+      "pre_monsoon_trend": "stable",
+      "category": "Semi-Critical",
+      "severity_score": 0.73,
+      "notes": "Coastal sand ridges hold thin freshwater lenses prone to cyclone sea-water overflow."
+    },
+    "v-sb-sagar": {
+      "block_name": "Sagar",
+      "stage_of_extraction_percent": 70.0,
+      "water_level_mbgl": 2.9,
+      "pre_monsoon_trend": "rising",
+      "category": "Critical",
+      "severity_score": 0.86,
+      "notes": "Island perimeter erosion allows seawater penetration into unconfined domestic tanks."
+    },
+    "v-so-pandharpur": {
+      "block_name": "Pandharpur",
+      "stage_of_extraction_percent": 96.5,
+      "water_level_mbgl": 21.4,
+      "pre_monsoon_trend": "declining",
+      "category": "Critical",
+      "severity_score": 0.87,
+      "notes": "Intensive sugarcane cultivation along Bhima basin over-drafts deep basalt aquifers."
+    },
+    "v-so-sangole": {
+      "block_name": "Sangole",
+      "stage_of_extraction_percent": 112.0,
+      "water_level_mbgl": 28.6,
+      "pre_monsoon_trend": "declining",
+      "category": "Over-Exploited",
+      "severity_score": 0.94,
+      "notes": "Pomegranate orchard distress; deepest borewells in Solapur suffering complete summer failure."
+    },
+    "v-so-karmala": {
+      "block_name": "Karmala",
+      "stage_of_extraction_percent": 91.0,
+      "water_level_mbgl": 23.0,
+      "pre_monsoon_trend": "declining",
+      "category": "Critical",
+      "severity_score": 0.85,
+      "notes": "Rainshadow drought tract with high summer evaporation and failing dug wells."
+    },
+    "v-so-barshi": {
+      "block_name": "Barshi",
+      "stage_of_extraction_percent": 84.0,
+      "water_level_mbgl": 18.5,
+      "pre_monsoon_trend": "declining",
+      "category": "Semi-Critical",
+      "severity_score": 0.75,
+      "notes": "Pulse processing mills and dense population deplete urban boundary borewells."
+    },
+    "v-so-mangalwedha": {
+      "block_name": "Mangalwedha",
+      "stage_of_extraction_percent": 105.0,
+      "water_level_mbgl": 26.2,
+      "pre_monsoon_trend": "declining",
+      "category": "Over-Exploited",
+      "severity_score": 0.92,
+      "notes": "Chronic agrarian water deficit; village water tankers active from March to June."
+    }
+  }
+}

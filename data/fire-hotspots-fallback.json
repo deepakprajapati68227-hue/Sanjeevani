@@ -1,0 +1,47 @@
+[
+  {
+    "id": "firms-fb-01",
+    "lat": 20.2105,
+    "lon": 79.3142,
+    "brightness": 334.8,
+    "scan": 1.1,
+    "track": 1.0,
+    "acq_date": "2024-05-18",
+    "acq_time": "0815",
+    "satellite": "VIIRS-SNPP",
+    "confidence": "high",
+    "frp": 24.6,
+    "location_name": "Tadoba-Andhari Buffer Forest Fringe (Dry brush thermal anomaly)",
+    "is_fallback": true
+  },
+  {
+    "id": "firms-fb-02",
+    "lat": 19.8920,
+    "lon": 79.2810,
+    "brightness": 348.2,
+    "scan": 1.2,
+    "track": 1.1,
+    "acq_date": "2024-05-18",
+    "acq_time": "0815",
+    "satellite": "VIIRS-SNPP",
+    "confidence": "nominal",
+    "frp": 38.2,
+    "location_name": "Durgapur Open-Cast Mining Belt (Coal seam thermal radiance)",
+    "is_fallback": true
+  },
+  {
+    "id": "firms-fb-03",
+    "lat": 19.8240,
+    "lon": 79.3750,
+    "brightness": 328.5,
+    "scan": 1.0,
+    "track": 1.0,
+    "acq_date": "2024-05-18",
+    "acq_time": "0818",
+    "satellite": "VIIRS-SNPP",
+    "confidence": "nominal",
+    "frp": 16.4,
+    "location_name": "South Ballarpur Industrial Fringe (Agricultural residue flare)",
+    "is_fallback": true
+  }
+]

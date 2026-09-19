@@ -3,6 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRisk } from "@/context/RiskContext";
+import { SupportedLanguage } from "@/lib/types";
+import {
+  speakText,
+  stopSpeaking,
+  getSpeakingStatus,
+  SUPPORTED_LANGUAGES,
+} from "@/lib/speech";
 import {
   Sparkles,
   X,
@@ -16,8 +23,12 @@ import {
   Copy,
   Check,
   Megaphone,
-  Clock,
-  ArrowRight,
+  Volume2,
+  VolumeX,
+  Globe,
+  Play,
+  Square,
+  Languages,
 } from "lucide-react";
 
 interface AIAdvisoryData {
@@ -47,7 +58,7 @@ export default function AIIncidentAdvisorModal({
   isOpen,
   onClose,
 }: AIIncidentAdvisorModalProps) {
-  const { selectedAssessment } = useRisk();
+  const { selectedAssessment, language: globalLanguage } = useRisk();
 
   const [advisory, setAdvisory] = useState<AIAdvisoryData | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -58,6 +69,35 @@ export default function AIIncidentAdvisorModal({
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
   const [modelUsed, setModelUsed] = useState<string>("qwen/qwen3.8-27b");
 
+  // Multilingual & TTS States
+  const [targetLang, setTargetLang] = useState<SupportedLanguage>(globalLanguage || "en");
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [translatedAdvisory, setTranslatedAdvisory] = useState<AIAdvisoryData | null>(null);
+  const [isVoiceActive, setIsVoiceActive] = useState(false);
+  const [speakingSection, setSpeakingSection] = useState<string | null>(null);
+  const [speechRate, setSpeechRate] = useState<number>(0.95);
+
+  // Sync with global language on open
+  useEffect(() => {
+    if (globalLanguage) {
+      setTargetLang(globalLanguage);
+    }
+  }, [globalLanguage]);
+
+  // Cleanup speech on modal close or unmount
+  useEffect(() => {
+    return () => {
+      stopSpeaking();
+    };
+  }, []);
+
+  const handleClose = () => {
+    stopSpeaking();
+    setIsVoiceActive(false);
+    setSpeakingSection(null);
+    onClose();
+  };
+
   // Fetch initial advisory when modal opens
   useEffect(() => {
     if (!isOpen || !selectedAssessment) return;
@@ -66,8 +106,11 @@ export default function AIIncidentAdvisorModal({
     setIsLoading(true);
     setError(null);
     setChatAnswer(null);
+    setTranslatedAdvisory(null);
+    stopSpeaking();
+    setIsVoiceActive(false);
 
-    fetch("/app/api/ai-advisory", {
+    fetch("/api/ai-advisory", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -78,23 +121,6 @@ export default function AIIncidentAdvisorModal({
         risk_level: selectedAssessment.risk_level,
       }),
     })
-      .then(async (res) => {
-        // Fallback to relative /api/ai-advisory
-        if (!res.ok) {
-          return fetch("/api/ai-advisory", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              village: selectedAssessment.village,
-              weather: selectedAssessment.weather,
-              groundwater: selectedAssessment.groundwater,
-              overall_score: selectedAssessment.overall_score,
-              risk_level: selectedAssessment.risk_level,
-            }),
-          });
-        }
-        return res;
-      })
       .then((res) => res.json())
       .then((data) => {
         if (!isMounted) return;
@@ -119,6 +145,84 @@ export default function AIIncidentAdvisorModal({
     };
   }, [isOpen, selectedAssessment]);
 
+  // Dynamic Translation Handler
+  const handleTranslateTo = async (langCode: SupportedLanguage) => {
+    setTargetLang(langCode);
+    stopSpeaking();
+    setIsVoiceActive(false);
+
+    if (!advisory || langCode === "en") {
+      setTranslatedAdvisory(null);
+      return;
+    }
+
+    setIsTranslating(true);
+    try {
+      // Translate threat summary and citizen advisory
+      const [threatRes, megaphoneRes] = await Promise.all([
+        fetch("/api/translate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: advisory.threat_summary,
+            targetLanguage: langCode,
+            context: "disaster threat situational assessment",
+          }),
+        }),
+        fetch("/api/translate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: advisory.citizen_advisory_en,
+            targetLanguage: langCode,
+            context: "public emergency citizen broadcast script",
+          }),
+        }),
+      ]);
+
+      const threatData = await threatRes.json();
+      const megaphoneData = await megaphoneRes.json();
+
+      setTranslatedAdvisory({
+        ...advisory,
+        threat_summary: threatData.translatedText || advisory.threat_summary,
+        citizen_advisory_regional: megaphoneData.translatedText || advisory.citizen_advisory_regional,
+      });
+    } catch (err) {
+      console.warn("Translation failed, falling back to base regional content:", err);
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
+  // TTS Speech Handler
+  const handleSpeakText = (text: string, sectionId: string) => {
+    if (isVoiceActive && speakingSection === sectionId) {
+      stopSpeaking();
+      setIsVoiceActive(false);
+      setSpeakingSection(null);
+      return;
+    }
+
+    stopSpeaking();
+    setSpeakingSection(sectionId);
+
+    speakText(text, targetLang, {
+      rate: speechRate,
+      onStart: () => {
+        setIsVoiceActive(true);
+      },
+      onEnd: () => {
+        setIsVoiceActive(false);
+        setSpeakingSection(null);
+      },
+      onError: () => {
+        setIsVoiceActive(false);
+        setSpeakingSection(null);
+      },
+    });
+  };
+
   // Handle custom authority query
   const handleAskQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -138,13 +242,12 @@ export default function AIIncidentAdvisorModal({
           user_query: customQuestion.trim(),
         }),
       });
-
       const data = await res.json();
       if (data.advisory?.chat_answer) {
         setChatAnswer(data.advisory.chat_answer);
       }
     } catch (err) {
-      console.error(err);
+      console.error("Custom query error:", err);
     } finally {
       setIsAsking(false);
     }
@@ -159,11 +262,12 @@ export default function AIIncidentAdvisorModal({
   if (!isOpen || !selectedAssessment) return null;
 
   const v = selectedAssessment.village;
+  const currentAdvisory = translatedAdvisory || advisory;
 
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md">
-        <div className="absolute inset-0" onClick={onClose} />
+        <div className="absolute inset-0" onClick={handleClose} />
 
         <motion.div
           initial={{ scale: 0.95, opacity: 0 }}
@@ -172,7 +276,7 @@ export default function AIIncidentAdvisorModal({
           className="relative w-full max-w-4xl max-h-[92vh] bg-navy border border-purple-500/40 rounded-xl shadow-2xl flex flex-col overflow-hidden z-10 text-white"
         >
           {/* Header Bar */}
-          <div className="bg-navy-card px-5 py-3.5 border-b border-purple-500/30 flex items-center justify-between">
+          <div className="bg-navy-card px-5 py-3 border-b border-purple-500/30 flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-purple-500/20 border border-purple-400/50 flex items-center justify-center text-purple-300">
                 <Bot size={18} />
@@ -193,11 +297,79 @@ export default function AIIncidentAdvisorModal({
             </div>
 
             <button
-              onClick={onClose}
+              onClick={handleClose}
               className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-navy-light transition-colors"
+              title="Close Modal"
             >
               <X size={18} />
             </button>
+          </div>
+
+          {/* Multilingual Voice Broadcast & Translation Deck */}
+          <div className="bg-[#121A38] px-5 py-2.5 border-b border-purple-500/20 flex flex-wrap items-center justify-between gap-3 text-xs">
+            {/* Language Selector Chips */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="text-gray-400 flex items-center gap-1 font-semibold text-[11px]">
+                <Globe size={13} className="text-pink" />
+                <span>Language & Voice:</span>
+              </span>
+              <div className="flex items-center gap-1 overflow-x-auto custom-scrollbar">
+                {SUPPORTED_LANGUAGES.map((langItem) => (
+                  <button
+                    key={langItem.code}
+                    onClick={() => handleTranslateTo(langItem.code)}
+                    disabled={isTranslating}
+                    className={`px-2 py-0.5 rounded text-[11px] transition-all font-medium ${
+                      targetLang === langItem.code
+                        ? "bg-purple-600 text-white font-bold shadow-sm"
+                        : "bg-navy-card text-gray-400 hover:text-white border border-gray-700/80"
+                    }`}
+                  >
+                    {langItem.nativeName}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Audio Voice Broadcast Master Controls */}
+            <div className="flex items-center gap-2">
+              {/* Speed toggle */}
+              <button
+                onClick={() => setSpeechRate((r) => (r === 0.85 ? 1.0 : r === 1.0 ? 1.25 : 0.85))}
+                className="text-[10px] font-mono bg-navy border border-gray-700 px-2 py-0.5 rounded text-gray-300 hover:text-white"
+                title="Voice speed rate"
+              >
+                {speechRate}x Speed
+              </button>
+
+              {/* Master Play/Stop TTS */}
+              {currentAdvisory && (
+                <button
+                  onClick={() => {
+                    const fullText = `Incident appraisal for ${v.name}. Urgency: ${currentAdvisory.urgency}. ${currentAdvisory.threat_summary}. Department directives: ${currentAdvisory.department_directives.map((d) => `${d.department}: ${d.action}`).join(". ")}. Public broadcast: ${currentAdvisory.citizen_advisory_regional || currentAdvisory.citizen_advisory_en}`;
+                    handleSpeakText(fullText, "full_advisory");
+                  }}
+                  className={`px-3 py-1 rounded text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm ${
+                    isVoiceActive && speakingSection === "full_advisory"
+                      ? "bg-red-500 hover:bg-red-600 text-white animate-pulse"
+                      : "bg-gradient-to-r from-pink to-purple-600 hover:opacity-90 text-white"
+                  }`}
+                  title="Speak entire incident advisory via TTS voice"
+                >
+                  {isVoiceActive && speakingSection === "full_advisory" ? (
+                    <>
+                      <Square size={12} />
+                      <span>Stop Voice</span>
+                    </>
+                  ) : (
+                    <>
+                      <Volume2 size={13} />
+                      <span>🔊 Read Out Advisory (TTS)</span>
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Modal Body */}
@@ -231,6 +403,14 @@ export default function AIIncidentAdvisorModal({
               </div>
             </div>
 
+            {/* Translation in progress indicator */}
+            {isTranslating && (
+              <div className="p-2.5 bg-purple-950/40 border border-purple-500/40 rounded text-xs text-purple-200 flex items-center justify-center gap-2">
+                <Loader2 size={14} className="animate-spin text-purple-400" />
+                <span>Translating advisory to {SUPPORTED_LANGUAGES.find((l) => l.code === targetLang)?.nativeName || targetLang} via Groq AI...</span>
+              </div>
+            )}
+
             {/* Loading State */}
             {isLoading && (
               <div className="py-14 flex flex-col items-center justify-center gap-3 text-center">
@@ -252,34 +432,73 @@ export default function AIIncidentAdvisorModal({
             )}
 
             {/* Content Display */}
-            {!isLoading && advisory && (
+            {!isLoading && currentAdvisory && (
               <div className="space-y-5 animate-fade-in">
                 {/* 1. Executive Summary & Urgency */}
                 <div className="bg-gradient-to-r from-purple-950/40 via-navy-card to-pink/10 border border-purple-500/40 p-4 rounded-lg">
-                  <div className="flex items-center justify-between gap-2 mb-2">
+                  <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
                     <div className="flex items-center gap-2">
                       <Sparkles size={16} className="text-purple-400" />
                       <span className="text-xs font-bold uppercase tracking-wider text-purple-300">
                         Incident Appraisal for District Magistrate / Municipal Commissioner
                       </span>
                     </div>
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/40 uppercase">
-                      Urgency: {advisory.urgency}
-                    </span>
+
+                    <div className="flex items-center gap-2">
+                      {/* Section TTS Speaker Button */}
+                      <button
+                        onClick={() => handleSpeakText(currentAdvisory.threat_summary, "appraisal")}
+                        className={`text-[11px] px-2 py-0.5 rounded flex items-center gap-1 border transition-colors ${
+                          isVoiceActive && speakingSection === "appraisal"
+                            ? "bg-red-500 text-white border-red-400 animate-pulse"
+                            : "bg-navy border-purple-500/40 text-purple-300 hover:text-white"
+                        }`}
+                        title="Listen to Incident Appraisal in selected language"
+                      >
+                        <Volume2 size={12} />
+                        <span>{isVoiceActive && speakingSection === "appraisal" ? "Playing..." : "Listen"}</span>
+                      </button>
+
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/40 uppercase">
+                        Urgency: {currentAdvisory.urgency}
+                      </span>
+                    </div>
                   </div>
+
                   <p className="text-sm text-gray-200 leading-relaxed font-sans">
-                    {advisory.threat_summary}
+                    {currentAdvisory.threat_summary}
                   </p>
                 </div>
 
                 {/* 2. Departmental Tactical Directives */}
                 <div>
-                  <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-gray-400 mb-3 flex items-center gap-1.5">
-                    <ShieldCheck size={14} className="text-pink" />
-                    <span>Immediate Departmental Action Matrix</span>
-                  </h3>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
+                      <ShieldCheck size={14} className="text-pink" />
+                      <span>Immediate Departmental Action Matrix</span>
+                    </h3>
+
+                    {/* Directives TTS */}
+                    <button
+                      onClick={() => {
+                        const dirText = currentAdvisory.department_directives
+                          .map((d) => `${d.department}: Priority ${d.priority}. ${d.action}`)
+                          .join(". ");
+                        handleSpeakText(dirText, "directives");
+                      }}
+                      className={`text-[11px] px-2 py-0.5 rounded flex items-center gap-1 border transition-colors ${
+                        isVoiceActive && speakingSection === "directives"
+                          ? "bg-red-500 text-white border-red-400 animate-pulse"
+                          : "bg-navy border-gray-700 text-gray-400 hover:text-white"
+                      }`}
+                    >
+                      <Volume2 size={12} />
+                      <span>{isVoiceActive && speakingSection === "directives" ? "Playing..." : "Read Directives"}</span>
+                    </button>
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {advisory.department_directives?.map((item, idx) => (
+                    {currentAdvisory.department_directives?.map((item, idx) => (
                       <div
                         key={idx}
                         className="bg-navy-card border border-navy-light/80 hover:border-purple-500/40 p-3.5 rounded-lg flex flex-col justify-between transition-colors"
@@ -321,7 +540,7 @@ export default function AIIncidentAdvisorModal({
                         <span>Potable Water Fleet</span>
                       </div>
                       <p className="text-gray-300 text-[11px] leading-relaxed">
-                        {advisory.resource_deployment?.water_tankers}
+                        {currentAdvisory.resource_deployment?.water_tankers}
                       </p>
                     </div>
 
@@ -331,7 +550,7 @@ export default function AIIncidentAdvisorModal({
                         <span>Cooling & Relief Shelters</span>
                       </div>
                       <p className="text-gray-300 text-[11px] leading-relaxed">
-                        {advisory.resource_deployment?.cooling_shelters}
+                        {currentAdvisory.resource_deployment?.cooling_shelters}
                       </p>
                     </div>
 
@@ -341,7 +560,7 @@ export default function AIIncidentAdvisorModal({
                         <span>Medical Rapid Response</span>
                       </div>
                       <p className="text-gray-300 text-[11px] leading-relaxed">
-                        {advisory.resource_deployment?.medical_support}
+                        {currentAdvisory.resource_deployment?.medical_support}
                       </p>
                     </div>
                   </div>
@@ -357,38 +576,66 @@ export default function AIIncidentAdvisorModal({
                           <Megaphone size={13} className="text-pink" />
                           <span>Public Megaphone Script (English)</span>
                         </span>
-                        <button
-                          onClick={() => handleCopy(advisory.citizen_advisory_en, "en")}
-                          className="text-[10px] text-gray-400 hover:text-white flex items-center gap-1 bg-navy px-2 py-0.5 rounded border border-gray-700"
-                        >
-                          {copiedSection === "en" ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
-                          <span>{copiedSection === "en" ? "Copied" : "Copy"}</span>
-                        </button>
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            onClick={() => handleSpeakText(currentAdvisory.citizen_advisory_en, "megaphone_en")}
+                            className={`text-[10px] px-2 py-0.5 rounded border transition-colors flex items-center gap-1 ${
+                              isVoiceActive && speakingSection === "megaphone_en"
+                                ? "bg-red-500 text-white border-red-400 animate-pulse"
+                                : "bg-navy text-gray-300 border-gray-700 hover:text-white"
+                            }`}
+                          >
+                            <Volume2 size={11} />
+                            <span>Listen</span>
+                          </button>
+                          <button
+                            onClick={() => handleCopy(currentAdvisory.citizen_advisory_en, "en")}
+                            className="text-[10px] text-gray-400 hover:text-white flex items-center gap-1 bg-navy px-2 py-0.5 rounded border border-gray-700"
+                          >
+                            {copiedSection === "en" ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                            <span>{copiedSection === "en" ? "Copied" : "Copy"}</span>
+                          </button>
+                        </div>
                       </div>
                       <p className="text-xs text-gray-300 leading-relaxed font-mono bg-navy p-2 rounded">
-                        "{advisory.citizen_advisory_en}"
+                        "{currentAdvisory.citizen_advisory_en}"
                       </p>
                     </div>
                   </div>
 
-                  {/* Regional Broadcast (Marathi / Local) */}
+                  {/* Regional Broadcast (Selected Language) */}
                   <div className="bg-navy-card border border-navy-light/80 p-3.5 rounded-lg flex flex-col justify-between">
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-[11px] font-bold text-gray-300 flex items-center gap-1.5">
                           <Megaphone size={13} className="text-emerald-400" />
-                          <span>स्थानिक ध्वनिक्षेपक संदेश (Marathi / Hindi)</span>
+                          <span>
+                            स्थानिक ध्वनिक्षेपक संदेश ({SUPPORTED_LANGUAGES.find((l) => l.code === targetLang)?.nativeName || "Regional"})
+                          </span>
                         </span>
-                        <button
-                          onClick={() => handleCopy(advisory.citizen_advisory_regional, "regional")}
-                          className="text-[10px] text-gray-400 hover:text-white flex items-center gap-1 bg-navy px-2 py-0.5 rounded border border-gray-700"
-                        >
-                          {copiedSection === "regional" ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
-                          <span>{copiedSection === "regional" ? "Copied" : "Copy"}</span>
-                        </button>
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            onClick={() => handleSpeakText(currentAdvisory.citizen_advisory_regional, "megaphone_reg")}
+                            className={`text-[10px] px-2 py-0.5 rounded border transition-colors flex items-center gap-1 ${
+                              isVoiceActive && speakingSection === "megaphone_reg"
+                                ? "bg-red-500 text-white border-red-400 animate-pulse"
+                                : "bg-navy text-gray-300 border-gray-700 hover:text-white"
+                            }`}
+                          >
+                            <Volume2 size={11} />
+                            <span>Listen</span>
+                          </button>
+                          <button
+                            onClick={() => handleCopy(currentAdvisory.citizen_advisory_regional, "regional")}
+                            className="text-[10px] text-gray-400 hover:text-white flex items-center gap-1 bg-navy px-2 py-0.5 rounded border border-gray-700"
+                          >
+                            {copiedSection === "regional" ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                            <span>{copiedSection === "regional" ? "Copied" : "Copy"}</span>
+                          </button>
+                        </div>
                       </div>
                       <p className="text-xs text-gray-300 leading-relaxed font-sans bg-navy p-2 rounded">
-                        "{advisory.citizen_advisory_regional}"
+                        "{currentAdvisory.citizen_advisory_regional}"
                       </p>
                     </div>
                   </div>
@@ -422,9 +669,18 @@ export default function AIIncidentAdvisorModal({
                   </form>
 
                   {chatAnswer && (
-                    <div className="mt-3 p-3 bg-purple-950/40 border border-purple-500/50 rounded-lg text-xs text-purple-200 leading-relaxed animate-fade-in">
-                      <div className="font-bold text-[11px] text-purple-300 uppercase tracking-wider mb-1">
-                        Incident Commander Response:
+                    <div className="mt-3 p-3 bg-purple-950/40 border border-purple-500/50 rounded-lg text-xs text-purple-200 leading-relaxed animate-fade-in space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="font-bold text-[11px] text-purple-300 uppercase tracking-wider">
+                          Incident Commander Response:
+                        </div>
+                        <button
+                          onClick={() => handleSpeakText(chatAnswer, "chat_answer")}
+                          className="text-[10px] bg-purple-900/60 border border-purple-400/40 text-purple-200 px-2 py-0.5 rounded flex items-center gap-1"
+                        >
+                          <Volume2 size={11} />
+                          <span>{isVoiceActive && speakingSection === "chat_answer" ? "Speaking..." : "Listen"}</span>
+                        </button>
                       </div>
                       <p>{chatAnswer}</p>
                     </div>
@@ -435,13 +691,15 @@ export default function AIIncidentAdvisorModal({
           </div>
 
           {/* Footer Bar */}
-          <div className="bg-navy-card px-5 py-3 border-t border-navy-light/80 flex items-center justify-between text-xs text-gray-400">
+          <div className="bg-navy-card px-5 py-3 border-t border-navy-light/80 flex items-center justify-between text-xs text-gray-400 flex-wrap gap-2">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-              <span>Ultra-Fast LLM Inference: Powered by Groq ({modelUsed})</span>
+              <span>
+                Engine: Groq ({modelUsed}) • Web Speech API TTS • Multilingual Translation Active
+              </span>
             </div>
             <button
-              onClick={onClose}
+              onClick={handleClose}
               className="bg-navy-light hover:bg-gray-700 text-white px-4 py-1.5 rounded transition-colors text-xs font-semibold"
             >
               Close Advisory

@@ -141,4 +141,4 @@ export interface OutcomeRecord {
   logged_by: string;
 }
 
-export type SupportedLanguage = "en" | "mr";
+export type SupportedLanguage = "en" | "mr" | "hi" | "te" | "ta" | "bn" | "gu" | "kn";

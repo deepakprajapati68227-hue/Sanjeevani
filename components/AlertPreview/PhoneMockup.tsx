@@ -1,13 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRisk } from "@/context/RiskContext";
 import { ALERT_TRANSLATIONS } from "@/lib/translations";
+import { SupportedLanguage } from "@/lib/types";
+import {
+  speakText,
+  stopSpeaking,
+  getSpeakingStatus,
+  SUPPORTED_LANGUAGES,
+} from "@/lib/speech";
 import {
   X,
   ShieldCheck,
-  MapPin,
   Building,
   Phone,
   CheckCheck,
@@ -17,6 +23,9 @@ import {
   Play,
   Pause,
   Mic,
+  Volume2,
+  VolumeX,
+  Globe,
 } from "lucide-react";
 
 export default function PhoneMockup() {
@@ -28,12 +37,53 @@ export default function PhoneMockup() {
     setLanguage,
   } = useRisk();
 
-  const [isVoicePlaying, setIsVoicePlaying] = React.useState(false);
+  const [isVoicePlaying, setIsVoicePlaying] = useState(false);
+  const [speechRate, setSpeechRate] = useState<number>(0.95);
+
+  // Stop voice speech on modal close or unmount
+  useEffect(() => {
+    return () => {
+      stopSpeaking();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isAlertOpen) {
+      stopSpeaking();
+      setIsVoicePlaying(false);
+    }
+  }, [isAlertOpen]);
 
   if (!isAlertOpen || !selectedAssessment) return null;
 
-  const alertContent = ALERT_TRANSLATIONS[language](selectedAssessment);
+  const alertContent = ALERT_TRANSLATIONS[language]
+    ? ALERT_TRANSLATIONS[language](selectedAssessment)
+    : ALERT_TRANSLATIONS.en(selectedAssessment);
+
   const isHigh = selectedAssessment.risk_level === "High";
+
+  const handleToggleVoice = () => {
+    if (isVoicePlaying) {
+      stopSpeaking();
+      setIsVoicePlaying(false);
+    } else {
+      // Build natural spoken alert script
+      const spokenText = `${alertContent.header}. ${alertContent.hazardBanner}. ${alertContent.bodyParagraph}. ${alertContent.criticalAdvisory}. ${alertContent.shelterHeading} ${alertContent.shelterDirections}. ${alertContent.helplineNotice}`;
+
+      speakText(spokenText, language, {
+        rate: speechRate,
+        onStart: () => setIsVoicePlaying(true),
+        onEnd: () => setIsVoicePlaying(false),
+        onError: () => setIsVoicePlaying(false),
+      });
+    }
+  };
+
+  const handleLanguageChange = (newLang: SupportedLanguage) => {
+    stopSpeaking();
+    setIsVoicePlaying(false);
+    setLanguage(newLang);
+  };
 
   return (
     <AnimatePresence>
@@ -41,7 +91,10 @@ export default function PhoneMockup() {
         {/* Backdrop click to close */}
         <div
           className="absolute inset-0"
-          onClick={() => setIsAlertOpen(false)}
+          onClick={() => {
+            stopSpeaking();
+            setIsAlertOpen(false);
+          }}
         />
 
         {/* Sliding Phone Frame */}
@@ -50,12 +103,16 @@ export default function PhoneMockup() {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: 400, opacity: 0 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          className="relative z-10 w-full max-w-[390px] h-[720px] max-h-[92vh] bg-[#111B21] rounded-[36px] border-[8px] border-[#222E35] shadow-2xl flex flex-col overflow-hidden text-white select-none"
+          className="relative z-10 w-full max-w-[400px] h-[750px] max-h-[92vh] bg-[#111B21] rounded-[36px] border-[8px] border-[#222E35] shadow-2xl flex flex-col overflow-hidden text-white select-none"
         >
           {/* Close button at top right of frame */}
           <button
-            onClick={() => setIsAlertOpen(false)}
+            onClick={() => {
+              stopSpeaking();
+              setIsAlertOpen(false);
+            }}
             className="absolute top-3 right-3 z-30 bg-black/50 hover:bg-black/80 text-gray-300 p-1.5 rounded-full transition-colors"
+            title="Close Alert Preview"
           >
             <X size={16} />
           </button>
@@ -63,7 +120,6 @@ export default function PhoneMockup() {
           {/* Smartphone Hardware Notch & Status Bar */}
           <div className="h-8 bg-[#1F2C34] flex items-center justify-between px-6 text-[11px] font-mono text-gray-300 select-none">
             <span>10:45 AM</span>
-            {/* Camera Speaker Notch */}
             <div className="w-20 h-4 bg-[#111B21] rounded-b-xl flex items-center justify-center">
               <div className="w-3 h-3 rounded-full bg-black/80" />
             </div>
@@ -75,49 +131,57 @@ export default function PhoneMockup() {
           </div>
 
           {/* WhatsApp / Messaging Header */}
-          <div className="bg-[#1F2C34] px-4 py-2.5 flex items-center justify-between border-b border-gray-800">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-full bg-[#EC1E63] flex items-center justify-center text-white font-bold text-sm shadow">
-                स
-              </div>
-              <div>
-                <div className="flex items-center gap-1.5 font-semibold text-xs text-white">
-                  <span>{alertContent.senderTitle}</span>
-                  <ShieldCheck size={14} className="text-[#00A884]" />
+          <div className="bg-[#1F2C34] px-4 py-2 border-b border-gray-800 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-[#EC1E63] flex items-center justify-center text-white font-bold text-xs shadow">
+                  सं
                 </div>
-                <div className="text-[10px] text-gray-400">
-                  {alertContent.senderBadge} • Official
+                <div>
+                  <div className="flex items-center gap-1.5 font-semibold text-xs text-white">
+                    <span>{alertContent.senderTitle}</span>
+                    <ShieldCheck size={13} className="text-[#00A884]" />
+                  </div>
+                  <div className="text-[10px] text-gray-400">
+                    {alertContent.senderBadge} • Official
+                  </div>
                 </div>
               </div>
+
+              {/* Speech Speed Pill */}
+              <button
+                onClick={() => setSpeechRate((r) => (r === 0.85 ? 1.0 : r === 1.0 ? 1.25 : 0.85))}
+                className="text-[10px] font-mono bg-[#111B21] px-2 py-0.5 rounded border border-gray-700 text-gray-300 hover:text-white"
+                title="Toggle voice playback speed"
+              >
+                {speechRate}x Speed
+              </button>
             </div>
 
-            {/* Language Pill Switcher within the Phone View */}
-            <div className="flex items-center bg-[#111B21] border border-gray-700 p-0.5 rounded-full text-[10px] font-bold">
-              <button
-                onClick={() => setLanguage("en")}
-                className={`px-2 py-0.5 rounded-full transition-colors ${
-                  language === "en" ? "bg-[#00A884] text-white" : "text-gray-400"
-                }`}
-              >
-                EN
-              </button>
-              <button
-                onClick={() => setLanguage("mr")}
-                className={`px-2 py-0.5 rounded-full transition-colors ${
-                  language === "mr" ? "bg-[#00A884] text-white" : "text-gray-400"
-                }`}
-              >
-                मराठी
-              </button>
+            {/* 8-Language Selector Ribbon within WhatsApp */}
+            <div className="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1 pt-0.5 text-[10px]">
+              <Globe size={12} className="text-[#00A884] flex-shrink-0" />
+              {SUPPORTED_LANGUAGES.map((langItem) => (
+                <button
+                  key={langItem.code}
+                  onClick={() => handleLanguageChange(langItem.code)}
+                  className={`px-2 py-0.5 rounded-full transition-all flex-shrink-0 font-medium ${
+                    language === langItem.code
+                      ? "bg-[#00A884] text-white font-bold shadow-sm"
+                      : "bg-[#111B21] text-gray-400 hover:text-gray-200 border border-gray-800"
+                  }`}
+                >
+                  {langItem.nativeName}
+                </button>
+              ))}
             </div>
           </div>
 
           {/* Chat Canvas / Messages Area */}
           <div className="flex-1 bg-[#0B141A] p-3.5 overflow-y-auto custom-scrollbar space-y-3 relative">
-            {/* WhatsApp Wallpaper Texture Effect */}
             <div className="text-center my-1">
               <span className="bg-[#182229] text-gray-400 text-[10px] px-3 py-1 rounded-md font-mono">
-                TODAY • EMERGENCY BROADCAST
+                TODAY • EMERGENCY BROADCAST ({language.toUpperCase()})
               </span>
             </div>
 
@@ -181,49 +245,68 @@ export default function PhoneMockup() {
               </div>
             </motion.div>
 
-            {/* WhatsApp Audio Voice Note Simulation (The Empathy Differentiator for Low-Literacy Rural Communities) */}
+            {/* Real Web Speech Voice Note Player */}
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.2, delay: 0.1 }}
-              className="rounded-bubble p-3 bg-[#1F2C34] border border-[#00A884]/40 text-xs shadow-md space-y-2"
+              className="rounded-bubble p-3 bg-[#1F2C34] border border-[#00A884]/50 text-xs shadow-md space-y-2.5"
             >
               <div className="flex items-center justify-between text-[10px] text-gray-400 border-b border-gray-700/50 pb-1">
                 <span className="flex items-center gap-1 text-[#00A884] font-semibold">
                   <Mic size={12} />
-                  <span>{language === "mr" ? "अधिकृत स्थानिक ध्वनी संदेश" : "Official Audio Voice Broadcast"}</span>
+                  <span>
+                    {isVoicePlaying ? "Broadcasting Voice Alert..." : "Official Audio Voice Broadcast"}
+                  </span>
                 </span>
-                <span>ASHA Health Desk</span>
+                <span className="font-mono text-emerald-400 uppercase text-[9px] font-bold">
+                  {language} • TTS ACTIVE
+                </span>
               </div>
 
               <div className="flex items-center gap-3">
                 {/* Play/Pause Button */}
                 <button
-                  onClick={() => setIsVoicePlaying((p) => !p)}
-                  className="w-10 h-10 rounded-full bg-[#00A884] hover:bg-[#029070] text-white flex items-center justify-center flex-shrink-0 shadow transition-transform active:scale-95"
+                  onClick={handleToggleVoice}
+                  className={`w-11 h-11 rounded-full text-white flex items-center justify-center flex-shrink-0 shadow transition-all active:scale-95 ${
+                    isVoicePlaying
+                      ? "bg-red-500 hover:bg-red-600 animate-pulse"
+                      : "bg-[#00A884] hover:bg-[#029070]"
+                  }`}
+                  title={isVoicePlaying ? "Stop voice audio" : "Play voice alert in selected language"}
                 >
-                  {isVoicePlaying ? <Pause size={18} /> : <Play size={18} className="ml-0.5" />}
+                  {isVoicePlaying ? (
+                    <Pause size={18} />
+                  ) : (
+                    <Play size={18} className="ml-0.5" />
+                  )}
                 </button>
 
-                {/* Simulated Audio Waveform Bar */}
+                {/* Animated Audio Waveform Equalizer */}
                 <div className="flex-1 space-y-1">
-                  <div className="flex items-center gap-0.5 h-6">
-                    {[12, 18, 8, 22, 16, 24, 10, 14, 20, 26, 12, 18, 24, 15, 9, 21, 13, 20, 16, 10].map(
+                  <div className="flex items-center gap-0.5 h-7">
+                    {[10, 18, 8, 24, 16, 26, 12, 16, 22, 28, 14, 20, 26, 17, 9, 23, 15, 22, 18, 12].map(
                       (h, i) => (
                         <div
                           key={i}
-                          className={`w-1 rounded-full transition-all duration-300 ${
-                            isVoicePlaying ? "bg-[#00A884] animate-pulse" : "bg-gray-500"
+                          className={`w-1 rounded-full transition-all duration-200 ${
+                            isVoicePlaying
+                              ? "bg-[#00A884] animate-pulse"
+                              : "bg-gray-500"
                           }`}
                           style={{
-                            height: isVoicePlaying ? `${Math.min(24, Math.max(6, (h * (i % 3 + 1)) % 24))}px` : `${h / 1.6}px`,
+                            height: isVoicePlaying
+                              ? `${Math.min(26, Math.max(6, (h * ((i % 4) + 1.2)) % 26))}px`
+                              : `${h / 1.8}px`,
                           }}
                         />
                       )
                     )}
                   </div>
                   <div className="flex items-center justify-between text-[9px] font-mono text-gray-400">
-                    <span>{isVoicePlaying ? "0:14 / 0:28 (Playing...)" : "0:28 • Voice Bulletin"}</span>
+                    <span className={isVoicePlaying ? "text-emerald-400 font-bold" : ""}>
+                      {isVoicePlaying ? "Speaking in natural regional voice..." : "Press Play to Listen (TTS)"}
+                    </span>
                     <span className="text-[#53BDEB] flex items-center gap-0.5">
                       <CheckCheck size={11} />
                     </span>
@@ -231,24 +314,30 @@ export default function PhoneMockup() {
                 </div>
               </div>
 
-              <div className="text-[10px] text-gray-300 italic bg-black/25 p-1.5 rounded">
-                {language === "mr"
-                  ? '🔊 "लक्ष द्या: आज दुपारी १२ ते ४ दरम्यान उन्हात काम थांबवा. महापालिकेचे शीतकरण केंद्र खुले आहे."'
-                  : '🔊 "Alert: Halt outdoor work between 12-4 PM today. Municipal cooling hall open with free ORS."'}
+              {/* Audio Note Caption */}
+              <div className="text-[10px] text-gray-300 italic bg-black/30 p-2 rounded flex items-center justify-between gap-2">
+                <span className="flex-1 line-clamp-2">
+                  🔊 "{alertContent.header} — {alertContent.bodyParagraph.slice(0, 80)}..."
+                </span>
+                {isVoicePlaying ? (
+                  <Volume2 size={14} className="text-[#00A884] flex-shrink-0 animate-bounce" />
+                ) : (
+                  <VolumeX size={14} className="text-gray-500 flex-shrink-0" />
+                )}
               </div>
             </motion.div>
 
             {/* Quick Action Button for Resident Simulation */}
             <div className="bg-[#182229] p-3 rounded-card text-center space-y-2">
               <span className="text-[11px] text-gray-400 block">
-                Resident Quick Action
+                Resident Quick Emergency Contact
               </span>
               <a
                 href={`tel:${selectedAssessment.nearest_shelter.contact}`}
                 className="w-full bg-[#00A884] hover:bg-[#029070] text-white font-bold py-2 rounded-btn text-xs flex items-center justify-center gap-2 transition-colors"
               >
                 <Phone size={14} />
-                <span>Call Emergency Coordinator</span>
+                <span>Call Emergency Coordinator ({selectedAssessment.nearest_shelter.contact})</span>
               </a>
             </div>
           </div>

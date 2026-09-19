@@ -4,9 +4,10 @@ import React from "react";
 import { useRisk } from "@/context/RiskContext";
 import { PredictIcon, AlertIcon, RespondIcon } from "./Icons";
 import { UI_STRINGS } from "@/lib/translations";
-import { Flame, Sliders, Radio, Smartphone, Activity, MapPin } from "lucide-react";
+import { Flame, Sliders, Radio, Smartphone, Activity, MapPin, Globe } from "lucide-react";
 import Link from "next/link";
 import LiveLocationSearch from "@/components/Search/LiveLocationSearch";
+import { SupportedLanguage } from "@/lib/types";
 
 interface HeaderProps {
   onToggleWhatIf?: () => void;
@@ -166,24 +167,24 @@ export default function Header({ onToggleWhatIf, isWhatIfOpen }: HeaderProps) {
           </button>
         </div>
 
-        {/* Language Switcher */}
-        <div className="bg-navy-card border border-gray-700 p-0.5 rounded-btn flex items-center text-[11px] font-semibold">
-          <button
-            onClick={() => setLanguage("en")}
-            className={`px-2 py-0.5 rounded-sm transition-colors ${
-              language === "en" ? "bg-white/20 text-white" : "text-gray-400 hover:text-white"
-            }`}
+        {/* Multilingual Switcher (8 Indian Languages) */}
+        <div className="bg-navy-card border border-gray-700/80 px-2 py-1 rounded-btn flex items-center gap-1.5 text-[11px] font-semibold hover:border-pink/50 transition-colors">
+          <Globe size={13} className="text-pink flex-shrink-0" />
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value as SupportedLanguage)}
+            className="bg-transparent text-white font-semibold text-xs border-none focus:outline-none cursor-pointer py-0.5"
+            aria-label="Select Language"
           >
-            EN
-          </button>
-          <button
-            onClick={() => setLanguage("mr")}
-            className={`px-2 py-0.5 rounded-sm transition-colors ${
-              language === "mr" ? "bg-white/20 text-white" : "text-gray-400 hover:text-white"
-            }`}
-          >
-            मराठी
-          </button>
+            <option value="en" className="bg-navy text-white">English (EN)</option>
+            <option value="hi" className="bg-navy text-white">हिन्दी (Hindi)</option>
+            <option value="mr" className="bg-navy text-white">मराठी (Marathi)</option>
+            <option value="te" className="bg-navy text-white">తెలుగు (Telugu)</option>
+            <option value="ta" className="bg-navy text-white">தமிழ் (Tamil)</option>
+            <option value="bn" className="bg-navy text-white">বাংলা (Bengali)</option>
+            <option value="gu" className="bg-navy text-white">ગુજરાતી (Gujarati)</option>
+            <option value="kn" className="bg-navy text-white">ಕನ್ನಡ (Kannada)</option>
+          </select>
         </div>
       </div>
     </header>

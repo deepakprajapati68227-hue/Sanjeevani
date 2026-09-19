@@ -14,6 +14,7 @@ import {
   Building,
   Truck,
   Navigation,
+  Radio,
 } from "lucide-react";
 
 // Helper component to center map on selected village
@@ -58,6 +59,24 @@ function DistrictFlyController({
   return null;
 }
 
+// Helper component to fly map dynamically when a live search location is selected
+function LiveSearchFlyController({ liveAssessment }: { liveAssessment: RiskAssessment | null }) {
+  const map = useMap();
+  const prevIdRef = React.useRef<string | null>(null);
+
+  useEffect(() => {
+    if (liveAssessment && liveAssessment.village.id !== prevIdRef.current) {
+      prevIdRef.current = liveAssessment.village.id;
+      map.flyTo([liveAssessment.village.lat, liveAssessment.village.lon], 12.0, {
+        animate: true,
+        duration: 1.6,
+      });
+    }
+  }, [liveAssessment, map]);
+
+  return null;
+}
+
 export default function LeafletMap() {
   const {
     assessments,
@@ -68,6 +87,8 @@ export default function LeafletMap() {
     showHotspotsLayer,
     selectedDistrict,
     currentDistrictInfo,
+    liveSearchAssessment,
+    clearLiveSearch,
   } = useRisk();
 
   const [basemap, setBasemap] = useState<"dark" | "satellite" | "streets">("dark");
@@ -134,6 +155,7 @@ export default function LeafletMap() {
           zoom={zoom}
           districtId={selectedDistrict}
         />
+        <LiveSearchFlyController liveAssessment={liveSearchAssessment} />
         <MapController selected={selectedAssessment} />
 
         {/* Dynamic Basemap Tile Layer (Watermark-Free) */}
@@ -351,7 +373,101 @@ export default function LeafletMap() {
             </React.Fragment>
           );
         })}
+
+        {/* Live Search Custom Location Pin & Radar Wave */}
+        {liveSearchAssessment && (
+          <React.Fragment key={liveSearchAssessment.village.id}>
+            {/* Outer Pulsing Live Radar Ring */}
+            <CircleMarker
+              center={[liveSearchAssessment.village.lat, liveSearchAssessment.village.lon]}
+              radius={32}
+              pathOptions={{
+                color: "#00E5FF",
+                fillColor: "#00E5FF",
+                fillOpacity: 0.2,
+                weight: 1.5,
+                dashArray: "4, 6",
+              }}
+            />
+            <CircleMarker
+              center={[liveSearchAssessment.village.lat, liveSearchAssessment.village.lon]}
+              radius={20}
+              pathOptions={{
+                color: "#D500F9",
+                fillColor: "#D500F9",
+                fillOpacity: 0.35,
+                weight: 2,
+              }}
+            />
+            <CircleMarker
+              center={[liveSearchAssessment.village.lat, liveSearchAssessment.village.lon]}
+              radius={11}
+              pathOptions={{
+                color: "#FFFFFF",
+                fillColor: getMarkerColor(liveSearchAssessment.risk_level),
+                fillOpacity: 1,
+                weight: 3,
+              }}
+            >
+              <Popup className="sanjeevani-map-popup" autoPan={true}>
+                <div className="p-2.5 text-xs min-w-[220px]">
+                  <div className="flex items-center gap-1 font-bold text-cyan-400 mb-1 bg-cyan-950/60 p-1 rounded text-[10px] uppercase">
+                    <Radio size={12} className="animate-pulse" />
+                    <span>Real-Time Geocoded Hazard Pin</span>
+                  </div>
+                  <div className="font-bold text-sm text-gray-900 mt-1">
+                    {liveSearchAssessment.village.name}
+                  </div>
+                  <div className="text-[11px] text-gray-600 mb-2">
+                    {liveSearchAssessment.village.district}, {liveSearchAssessment.village.state}
+                  </div>
+                  <div className="bg-gray-100 p-2 rounded mb-2 text-[11px] space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Live Forecast:</span>
+                      <strong className="text-gray-900">
+                        {Math.round(liveSearchAssessment.weather.max_temperature_forecast)}°C / {liveSearchAssessment.weather.precipitation_forecast_sum}mm rain
+                      </strong>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Risk Score:</span>
+                      <strong style={{ color: getMarkerColor(liveSearchAssessment.risk_level) }}>
+                        {Math.round(liveSearchAssessment.overall_score * 100)} / 100 ({liveSearchAssessment.risk_level})
+                      </strong>
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-gray-600 leading-tight">
+                    {liveSearchAssessment.village.primary_hazard}
+                  </p>
+                </div>
+              </Popup>
+            </CircleMarker>
+          </React.Fragment>
+        )}
       </MapContainer>
+
+      {/* Live Search Mode Floating Banner */}
+      {liveSearchAssessment && (
+        <div className="absolute top-3 left-14 z-20 bg-navy/95 border border-cyan-400/80 px-3.5 py-1.5 rounded-lg shadow-xl flex items-center gap-2.5 backdrop-blur-md text-xs text-white">
+          <Radio size={14} className="text-cyan-400 animate-pulse flex-shrink-0" />
+          <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
+            <span className="font-bold text-cyan-300">
+              Live Hazard Radar: {liveSearchAssessment.village.name}
+            </span>
+            <span className="text-[11px] text-gray-300">
+              ({liveSearchAssessment.village.district}, {liveSearchAssessment.village.state}) • Score:{" "}
+              <strong style={{ color: getMarkerColor(liveSearchAssessment.risk_level) }}>
+                {Math.round(liveSearchAssessment.overall_score * 100)}/100
+              </strong>
+            </span>
+          </div>
+          <button
+            onClick={clearLiveSearch}
+            className="ml-2 bg-navy-card hover:bg-navy-light text-gray-300 hover:text-white px-2 py-0.5 rounded border border-gray-700 text-[10px] transition-colors"
+          >
+            Exit Live Search
+          </button>
+        </div>
+      )}
 
       {/* Top Map Controls Toolbar */}
       <div className="absolute top-3 right-3 z-10 flex items-center gap-2 bg-navy/90 backdrop-blur-sm border border-navy-light/80 p-1 rounded-card text-xs shadow-lg">

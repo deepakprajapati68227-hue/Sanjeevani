@@ -6,6 +6,7 @@ import { PredictIcon, AlertIcon, RespondIcon } from "./Icons";
 import { UI_STRINGS } from "@/lib/translations";
 import { Flame, Sliders, Radio, Smartphone, Activity, MapPin } from "lucide-react";
 import Link from "next/link";
+import LiveLocationSearch from "@/components/Search/LiveLocationSearch";
 
 interface HeaderProps {
   onToggleWhatIf?: () => void;
@@ -74,6 +75,11 @@ export default function Header({ onToggleWhatIf, isWhatIfOpen }: HeaderProps) {
               ))}
             </select>
           </div>
+        </div>
+
+        {/* Live Pan-India Location Search Bar (Approach A) */}
+        <div className="flex items-center">
+          <LiveLocationSearch />
         </div>
 
         {/* Hazard Focus Pill */}

@@ -50,6 +50,10 @@ interface RiskContextType {
     data_source_live: boolean;
   };
 
+  liveSearchAssessment: RiskAssessment | null;
+  setLiveSearchAssessment: (assessment: RiskAssessment | null) => void;
+  clearLiveSearch: () => void;
+
   // Actions
   setSelectedDistrict: (districtId: string) => void;
   selectVillage: (id: string) => void;
@@ -78,6 +82,7 @@ export function RiskProvider({ children }: { children: ReactNode }) {
   const [selectedDistrict, setSelectedDistrictState] = useState<string>("chandrapur");
   const [assessments, setAssessments] = useState<RiskAssessment[]>([]);
   const [selectedVillageId, setSelectedVillageId] = useState<string | null>("v-ballarpur");
+  const [liveSearchAssessment, setLiveSearchAssessment] = useState<RiskAssessment | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [activeRole, setActiveRole] = useState<"supervisor" | "resident">("supervisor");
@@ -161,6 +166,7 @@ export function RiskProvider({ children }: { children: ReactNode }) {
   const setSelectedDistrict = (distId: string) => {
     const target = typedDistricts.find((d) => d.id === distId);
     if (!target) return;
+    setLiveSearchAssessment(null);
     setSelectedDistrictState(distId);
     if (target.default_language) {
       setLanguage(target.default_language);
@@ -191,6 +197,11 @@ export function RiskProvider({ children }: { children: ReactNode }) {
 
   const selectVillage = (id: string) => {
     setSelectedVillageId(id);
+    setLiveSearchAssessment(null);
+  };
+
+  const clearLiveSearch = () => {
+    setLiveSearchAssessment(null);
   };
 
   const updateWhatIf = (tempDelta: number, precipDelta: number) => {
@@ -243,6 +254,7 @@ export function RiskProvider({ children }: { children: ReactNode }) {
   };
 
   const selectedAssessment =
+    liveSearchAssessment ||
     assessments.find((a) => a.village.id === selectedVillageId) ||
     assessments[0] ||
     null;
@@ -253,6 +265,9 @@ export function RiskProvider({ children }: { children: ReactNode }) {
         assessments,
         selectedVillageId,
         selectedAssessment,
+        liveSearchAssessment,
+        setLiveSearchAssessment,
+        clearLiveSearch,
         isLoading,
         error,
         activeRole,

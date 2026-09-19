@@ -1,18 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getGroqApiKey } from "@/lib/ai-config";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { village, weather, groundwater, overall_score, risk_level, user_query } = body;
 
-    const GROQ_KEY = process.env.GROQ_API_KEY;
-
-    if (!GROQ_KEY) {
-      return NextResponse.json(
-        { error: "GROQ_API_KEY not configured in environment" },
-        { status: 500 }
-      );
-    }
+    const GROQ_KEY = getGroqApiKey();
 
     const systemPrompt = `You are the Chief AI Disaster Management Incident Advisor for the District Disaster Management Authority (DDMA), Government of India.
 You provide concrete, realistic, and tactical emergency mitigation directives to District Magistrates, Municipal Commissioners, and Field Officers under the Disaster Management Act, 2005.

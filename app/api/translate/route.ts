@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getGroqApiKey } from "@/lib/ai-config";
 
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 
@@ -33,9 +34,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const groqApiKey =
-      process.env.GROQ_API_KEY ||
-      ["gsk", "NFaZLyxUHahRnYpscgShWGdyb3FY7FSRFEUJTRRvjZhlarPtyVFq"].join("_");
+    const groqApiKey = getGroqApiKey();
 
     if (!groqApiKey) {
       return NextResponse.json({

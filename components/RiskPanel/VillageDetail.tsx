@@ -14,9 +14,11 @@ import {
   CheckCircle2,
   PhoneCall,
   FileText,
+  Sparkles,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import CollectorateOrderModal from "../ExecutiveDirective/CollectorateOrderModal";
+import AIIncidentAdvisorModal from "../AIAdvisory/AIIncidentAdvisorModal";
 
 export default function VillageDetail() {
   const {
@@ -29,6 +31,7 @@ export default function VillageDetail() {
   } = useRisk();
 
   const [isDirectiveOpen, setIsDirectiveOpen] = React.useState(false);
+  const [isAIAdvisorOpen, setIsAIAdvisorOpen] = React.useState(false);
 
   if (!selectedAssessment) {
     return (
@@ -140,6 +143,15 @@ export default function VillageDetail() {
           </button>
         </div>
 
+        {/* AI Incident Solutions Advisor (Groq-Powered Action Matrix) */}
+        <button
+          onClick={() => setIsAIAdvisorOpen(true)}
+          className="w-full bg-gradient-to-r from-pink via-purple-600 to-indigo-600 hover:from-pink-hover hover:via-purple-500 hover:to-indigo-500 text-white text-xs font-bold py-2.5 px-3 rounded-btn transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-pink/25 active:scale-[0.99]"
+        >
+          <Sparkles size={15} className="text-pink-200 animate-pulse" />
+          <span>✨ AI Incident Advisory & Solutions (Groq)</span>
+        </button>
+
         {/* Executive Collectorate Directive Generator (Actionable Governance Feature) */}
         <button
           onClick={() => setIsDirectiveOpen(true)}
@@ -149,6 +161,12 @@ export default function VillageDetail() {
           <span>Official Collectorate Disaster Order (DMA 2005)</span>
         </button>
       </div>
+
+      {/* AI Incident Advisor Modal */}
+      <AIIncidentAdvisorModal
+        isOpen={isAIAdvisorOpen}
+        onClose={() => setIsAIAdvisorOpen(false)}
+      />
 
       {/* Collectorate Executive Order Modal */}
       <CollectorateOrderModal

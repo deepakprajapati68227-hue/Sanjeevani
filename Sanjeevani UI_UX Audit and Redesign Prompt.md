@@ -521,3 +521,189 @@ Avoid bouncy, elastic, or overshooting transitions in critical safety flows.
 5. Add only the interaction animations that improve orientation and feedback.
 6. Test contrast, color-blind distinguishability, reduced motion, and mobile performance.
 7. Review the final UI for visual restraint and human authorship before adding any optional decorative detail.
+
+
+## 11. Revised color recommendation: Monsoon Indigo, Teal, and Saffron
+
+After reviewing the current live dashboard and comparing established accessibility guidance from the U.S. Web Design System and Material Design color roles, use a brighter but still professional combination called **Monsoon Indigo + River Teal + Saffron**. The current navy/slate foundation is dependable, but it feels slightly dull when used across most surfaces. The new combination introduces warmth and local environmental character without returning to neon pink, purple glow, or an AI-generated appearance.
+
+The palette follows a role-based approach: one primary brand color, one supporting action color, one warm attention color, and separate semantic risk colors. This reflects the principle that color roles should be tokenized and paired with corresponding “on” colors for readable text and icons [4] [5].
+
+### 11.1 Final recommended palette
+
+| Role | Token | Hex value | Use |
+|---|---|---:|---|
+| Page background | `--surface-page` | `#F7F9FC` | Main light application background |
+| Card surface | `--surface-card` | `#FFFFFF` | Cards, drawers, modals, alert content |
+| Soft surface | `--surface-soft` | `#EAF2F5` | Quiet section grouping and selected navigation background |
+| Main text | `--text-strong` | `#172B4D` | Headings, primary labels, values |
+| Secondary text | `--text-muted` | `#52657A` | Descriptions, metadata, timestamps |
+| Border | `--border-default` | `#CBD7E2` | Dividers, card borders, input outlines |
+| Primary brand | `--primary-indigo` | `#3157A6` | Main navigation, selected tabs, primary non-emergency actions |
+| Primary pressed | `--primary-indigo-dark` | `#24417D` | Hover, pressed, and active primary states |
+| Supporting action | `--secondary-teal` | `#087F7B` | Confirmed, operational, route, shelter, and communication actions |
+| Supporting action pressed | `--secondary-teal-dark` | `#05605D` | Hover and pressed teal states |
+| Warm attention | `--attention-saffron` | `#C47A12` | Watch state, stale data, attention, and pending review |
+| Warm attention surface | `--attention-saffron-soft` | `#FFF3D6` | Watch and attention backgrounds with dark text |
+| Critical | `--risk-critical` | `#B9383E` | Critical risk and emergency escalation |
+| Critical surface | `--risk-critical-soft` | `#FBE8E8` | Critical alert background with dark critical text |
+| Stable | `--risk-stable` | `#267A58` | Stable status, safe confirmation, verified positive report |
+| Stable surface | `--risk-stable-soft` | `#E5F3EC` | Stable status background |
+| Information | `--info-blue` | `#2B6EA6` | Live data, source, forecast, and informational notices |
+| Analysis | `--analysis-indigo` | `#6558A5` | Model evidence and explainability only |
+| Focus | `--focus-blue` | `#1D6FD0` | Keyboard focus outline and accessible focus state |
+
+### 11.2 Why this combination is better
+
+Monsoon Indigo gives Sanjeevani a confident administrative identity without the cold, synthetic feeling of an all-neon dark interface. River Teal suggests water, recovery, and coordinated action, which fits the product’s groundwater and relief mission. Saffron introduces warmth and visual distinction for attention states, but it is used sparingly and never as a decorative accent. Critical red and stable green remain reserved for their operational meanings.
+
+The overall result should feel more lively than the current slate-heavy palette while remaining calm enough for emergency decisions. It should resemble a carefully designed public-service system with a regional environmental character, not a generic AI analytics product.
+
+### 11.3 Strict no-gradient requirement
+
+The implementation must remain completely flat and non-gradient. Do not use CSS `linear-gradient`, `radial-gradient`, `conic-gradient`, mesh gradients, aurora backgrounds, gradient text, gradient borders, gradient shadows, blurred colored glows, or gradient skeleton loaders. Do not introduce gradients through SVG fills, chart areas, map overlays, image masks, or third-party components.
+
+Use solid fills, subtle neutral borders, standard shadows, and clear spacing to create hierarchy. A lighter solid surface next to a darker solid surface is allowed. A transition that blends two colors is not allowed. Add a visual QA check that scans compiled CSS and SVG assets for gradient declarations before release.
+
+### 11.4 Semantic color application
+
+Use the following meaning consistently throughout the product:
+
+- **Indigo:** navigation, selected views, primary non-emergency action, and Sanjeevani identity.
+- **Teal:** operational confirmation, shelter routes, communications, safe confirmation, and completed actions.
+- **Saffron:** watch status, stale data, pending review, and attention required.
+- **Red:** critical risk, emergency escalation, and urgent response only.
+- **Green:** stable or safe status only.
+- **Blue:** live data, forecast, source, and informational context.
+- **Violet:** model evidence and explainability only, never the primary emergency action.
+
+Use a pale solid surface behind status text when appropriate. Do not place small light-colored text directly on saturated yellow or saffron. Always pair each status with text and an icon so that color is not the only signal. Validate all final pairings against WCAG AA contrast requirements [4].
+
+## 12. Custom animation direction
+
+Add custom animations that express Sanjeevani’s actual product behavior. The animations should feel authored for a climate early-warning system rather than copied from a generic dashboard kit.
+
+### 12.1 Custom motion concepts
+
+**District Pulse.** When the officer changes district, the district header, map extent, and summary values transition as one coordinated event. First show a small inline district-color marker, then crossfade the summary values, move the map to the new district, and finish with a quiet “District data refreshed” confirmation. Use a 220–320ms transition with no full-screen wipe.
+
+**Risk Tide.** When a zone changes from Stable to Watch or Watch to Critical, animate only the selected marker and its priority-queue row. Use a single outward ring of the zone’s semantic color, then settle into a static marker. The ring should communicate change, not remain as a permanent decoration.
+
+**Evidence Reveal.** When the officer opens “Why this alert?”, reveal the risk drivers in weighted order. Each bar should enter once from zero to its actual value, with the feature label and contribution appearing at the same time. Do not animate all seven bars continuously or use a rainbow chart.
+
+**Response Trail.** After an officer starts an action, show a short horizontal or vertical trail from `Identified` to `Prepared` to `Dispatched` to `Verified`. Each completed stage receives a flat teal check state. The trail should preserve the audit sequence and make operational progress understandable.
+
+**Shelter Direction.** In the resident view, animate the shelter arrow with a restrained spring when the direction changes. Keep the shelter card itself still. The motion should guide the eye without creating the impression that the interface is unstable.
+
+**Voice State.** Create a custom Sanjeevani voice control with a simple speaker icon and three clear states: `Ready to play`, `Playing alert`, and `Replay alert`. Use a short waveform-like opacity movement only while audio is playing. The waveform must be flat solid strokes, not a glowing or gradient visualization.
+
+**Community Confirmation.** When a resident submits `I need help` or `I am safe`, animate the button into a confirmed state and insert the report into the community-signal summary. The confirmation should include a text message and timestamp. Do not use confetti, celebratory bursts, or decorative success effects for emergency reporting.
+
+**Morning Brief Assembly.** When generating the SITREP, show a short sequence of document sections being prepared: `Risk summary`, `Priority zones`, `Resources`, and `Action log`. This should be a purposeful progress indicator that ends with `Brief ready`, not an indefinite spinner.
+
+### 12.2 Framer Motion implementation
+
+Use Framer Motion as the main React motion layer:
+
+- Use `AnimatePresence` for drawers, modals, alert banners, and changing empty/loading/error states.
+- Use `layout` and shared `layoutId` values for selected priority rows, tabs, and status chips so elements appear to move into their new position rather than disappear and reappear.
+- Define reusable variants for `pageEnter`, `drawerOpen`, `statusChange`, `priorityInsert`, `toastEnter`, and `tabCrossfade`.
+- Keep motion values in a shared `motionTokens.ts` file so timing and easing remain consistent.
+- Use `useReducedMotion()` and a global reduced-motion preference to replace spring and stagger behavior with immediate or short opacity transitions.
+- Use `whileHover`, `whileTap`, and `whileFocus` only for clear interaction feedback. Never attach hover animation to every card.
+- Use `useMotionValue` and `useTransform` only where they improve map selection, compass direction, or numeric refresh behavior.
+- Use `LazyMotion` and the lightest Framer Motion feature set necessary for performance on low-end devices.
+
+Use CSS transitions for simple color, border, shadow, and focus changes. Use Leaflet’s built-in pan and zoom animation for maps. If React Spring, Motion One, or AutoAnimate is used, limit it to one defined interaction and document why Framer Motion alone was insufficient. Do not add multiple animation libraries simply to create visual novelty.
+
+### 12.3 Motion rules for usability
+
+- Motion duration: 120ms for button feedback, 180–240ms for normal transitions, and 300–420ms for drawers or major state changes.
+- Use ease-out for entrances and ease-in-out for layout changes.
+- Do not use bounce, rubber-band, elastic overshoot, flashing, shaking, or continuous glow in critical flows.
+- Do not animate more than one or two related regions during a live-data update.
+- Do not move text while a user is reading it.
+- Keep map markers static after the change animation completes.
+- Ensure all motion has a text, icon, or state-label equivalent.
+- Respect `prefers-reduced-motion`; remove repeated pulses, chart drawing, animated counters, parallax, and spring movement when enabled.
+- Keep the resident view quieter than the officer view.
+
+## 13. Typography, alignment, and readability system
+
+The current dashboard contains many compact labels and technical values. The redesign must make the typography feel intentionally composed and readable in English and Indian scripts. Do not allow the interface to become visually dense simply because the data is important.
+
+### 13.1 Font selection
+
+Use one primary UI typeface with strong Latin and Indian-script coverage. Prefer a family such as **Noto Sans** or another well-tested multilingual sans-serif that supports Devanagari, Marathi, Bengali, Gujarati, Kannada, Tamil, Telugu, and other required scripts. Use one family consistently rather than combining several unrelated font styles. If a brand display face is introduced, use it only for the wordmark or a very small number of headings; do not use it for data, labels, or emergency instructions.
+
+Use a minimum body size of 16px for resident content and 14px for dense officer metadata. Do not use 11px or 12px text for essential labels. Technical source notes may be 13px on desktop but must remain readable on mobile.
+
+### 13.2 Type scale
+
+Use a restrained responsive type scale:
+
+| Text role | Desktop | Mobile | Guidance |
+|---|---:|---:|---|
+| Resident emergency heading | 32px / 38px | 28px / 34px | One short alert title |
+| Officer page title | 28px / 34px | 24px / 30px | District and workspace title |
+| Section heading | 20px / 26px | 18px / 24px | One clear section purpose |
+| Card heading | 16px / 22px | 16px / 22px | Location and action headings |
+| Metric value | 28px / 32px | 24px / 30px | Use tabular numerals where possible |
+| Body text | 16px / 24px | 16px / 24px | Alerts and explanations |
+| Supporting text | 14px / 20px | 14px / 20px | Metadata and secondary descriptions |
+| Micro-label | 13px / 18px | 13px / 18px | Never use for critical instructions |
+
+Use `clamp()` only within these defined ranges. Do not allow headings to grow so large that they wrap unpredictably in Indian scripts.
+
+### 13.3 Alignment and spacing rules
+
+- Align page titles, section headings, metric values, and supporting text to a shared 8px spacing grid.
+- Use left alignment for English and left-to-right Indian-script layouts; respect right-to-left behavior only if a future language requires it.
+- Do not center-align long alert paragraphs. Center only short alert titles, a voice control, or a single resident action when it improves focus.
+- Keep numeric values aligned on a common baseline and use tabular numerals for risk scores, temperatures, distances, dates, and counts.
+- Keep labels above values or to the left of values consistently; do not alternate patterns without a clear reason.
+- Use 1.4–1.6 line height for body copy and 1.15–1.3 for headings.
+- Limit paragraph measure to approximately 60–75 characters in officer detail panels and 35–55 characters in resident alerts.
+- Keep 16–24px vertical spacing between unrelated content groups and 8–12px inside a related group.
+- Use a minimum 44px height for officer controls and 48px for resident touch targets.
+- Avoid all-caps for sentences and instructions. Use uppercase only for short metadata labels such as `LIVE` or `DDMA`.
+
+### 13.4 Readability behavior
+
+- Use sentence case for buttons: `Dispatch multilingual alert`, `Open shelter route`, and `View risk drivers`.
+- Never truncate critical instructions with an ellipsis. Wrap them or provide a clearly labeled expandable area.
+- Preserve units with values: `5.1 days`, `400 m`, `35.2°C`, and `89,450 people`. Never expose `undefined`, `NaN`, missing units, or ambiguous time formatting.
+- Use plain language first and technical detail second. For example, show `Heat stress is the main driver` before the full formula and learned weight.
+- Support dynamic text expansion for Hindi, Marathi, Tamil, Telugu, Bengali, Gujarati, and Kannada without clipping or fixed-height overflow.
+- Test every screen at 200% browser zoom and at a 320px viewport width.
+- Keep essential information readable in both light and dark themes. Do not use opacity as the only way to create hierarchy.
+
+## 14. Updated design prompt for implementation
+
+> Redesign the current Sanjeevani dashboard into a human-designed, personalized, readable public-safety application with two separate products: an Officer Command Dashboard and a Resident Safety Dashboard. Begin from the current live dashboard at `https://sanjeevani-eight-tau.vercel.app/dashboard`, which now includes district personalization, an officer navigation structure, a light/dark map option, priority queue, risk drivers, shelter details, and a dedicated resident view. Preserve all existing functionality and integrations.
+>
+> Use the **Monsoon Indigo + River Teal + Saffron** flat palette defined in this brief. Use standard role-based colors and explicit “on” colors for text and icons. Do not use any gradients, glow effects, gradient text, gradient borders, mesh backgrounds, or animated gradient loaders. Use solid fills, neutral borders, clear typography, and semantic red/amber/green status treatments. Make the visual system brighter and more appealing than the current slate-heavy version without becoming neon or AI-themed.
+>
+> Use Framer Motion for purposeful custom animations: district transitions, risk-state changes, selected map markers, priority queue updates, evidence reveals, response trails, shelter direction, voice states, community confirmation, and SITREP generation. Use shared motion variants, `AnimatePresence`, `layoutId`, reduced-motion support, and a single source of motion tokens. Use CSS transitions and Leaflet motion for simple interactions. Add React Spring, Motion One, AutoAnimate, or Lottie only for a narrowly justified interaction; do not combine animation libraries for decoration.
+>
+> Make the typography highly readable. Use Noto Sans or an equivalent multilingual font. Use the defined type scale, 16px minimum resident body text, strong baseline alignment, comfortable line height, sentence-case labels, consistent 8px spacing, 44–48px touch targets, tabular numeric alignment, and dynamic layout behavior for Indian-language text. The result must work at 320px width, 200% zoom, reduced-motion mode, and in both light and dark themes.
+>
+> Make the experience feel authored by a real product team. Use district names, local shelters, clear operational language, and human-reviewed empty, loading, error, and success states. Avoid generic AI copy, repeated card grids, decorative sparkles, robotic illustrations, excessive glassmorphism, random gradients, and continuous motion. The finished application should feel calm, distinctive, locally relevant, and easy to understand under pressure.
+
+## 15. Final validation checklist
+
+- The current live dashboard was reviewed before choosing the palette and information hierarchy.
+- The new combination is brighter than the previous slate-heavy palette but remains professional.
+- The product uses indigo, teal, saffron, semantic red, stable green, and informational blue by role.
+- No gradient exists anywhere in CSS, SVG, charts, loading states, buttons, cards, map layers, or illustrations.
+- Framer Motion provides shared, custom, purposeful animations across the overall website.
+- Animation is restrained, accessible, and disabled or simplified under reduced-motion preferences.
+- Font family, size, line height, alignment, spacing, and multilingual expansion are explicitly specified.
+- Critical content is understandable without relying on color, animation, hover, or technical knowledge.
+- The officer and resident dashboards remain distinct and appropriate to their audiences.
+- The UI feels personalized and human-designed rather than AI-generated or template-based.
+
+## References for the revised palette
+
+[4]: https://designsystem.digital.gov/design-tokens/color/overview/ "U.S. Web Design System — Using color and accessibility"
+[5]: https://m3.material.io/styles/color/roles "Material Design 3 — Color roles"

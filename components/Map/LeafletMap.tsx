@@ -113,9 +113,9 @@ export default function LeafletMap() {
   };
 
   const getMarkerColor = (level: string) => {
-    if (level === "High") return "#C43D3D";
-    if (level === "Moderate") return "#B7791F";
-    return "#2E8B68";
+    if (level === "High") return "#B9383E";
+    if (level === "Moderate") return "#C47A12";
+    return "#267A58";
   };
 
   // Dynamic relief fleet for active physical disaster response centered on current district
@@ -141,13 +141,13 @@ export default function LeafletMap() {
   ];
 
   return (
-    <div className="relative w-full h-full min-h-[500px] bg-[#0A1128] overflow-hidden">
+    <div className="relative w-full h-full bg-[#EAF2F5] min-h-[420px] select-none">
       <MapContainer
         center={[centerLat, centerLon]}
         zoom={zoom}
         scrollWheelZoom={true}
-        className="w-full h-full z-0"
-        style={{ background: "#0A1128" }}
+        className="w-full h-full z-0 font-sans"
+        zoomControl={false}
       >
         <DistrictFlyController
           districtLat={centerLat}
@@ -166,7 +166,7 @@ export default function LeafletMap() {
           maxZoom={18}
         />
 
-        {/* Evacuation / Relief Corridor Line to Nearest Shelter */}
+        {/* Evacuation Route to Nearest Shelter */}
         {showEvacuationRoute && selectedAssessment && selectedAssessment.nearest_shelter && (
           <>
             <Polyline
@@ -175,10 +175,10 @@ export default function LeafletMap() {
                 [selectedAssessment.nearest_shelter.lat, selectedAssessment.nearest_shelter.lon],
               ]}
               pathOptions={{
-                color: "#147D78",
+                color: "#087F7B",
                 weight: 3,
                 dashArray: "6, 8",
-                opacity: 0.9,
+                opacity: 0.95,
               }}
             />
             {/* Shelter Destination Landmark Pin */}
@@ -186,8 +186,8 @@ export default function LeafletMap() {
               center={[selectedAssessment.nearest_shelter.lat, selectedAssessment.nearest_shelter.lon]}
               radius={8}
               pathOptions={{
-                color: "#2E8B68",
-                fillColor: "#2E8B68",
+                color: "#267A58",
+                fillColor: "#267A58",
                 fillOpacity: 0.95,
                 weight: 2,
               }}

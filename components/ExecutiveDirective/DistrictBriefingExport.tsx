@@ -89,28 +89,28 @@ export default function DistrictBriefingExport({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-[#172B4D]/80 backdrop-blur-xs">
         <div className="absolute inset-0" onClick={onClose} />
 
         <motion.div
-          initial={{ scale: 0.94, opacity: 0 }}
+          initial={{ scale: 0.96, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.94, opacity: 0 }}
-          transition={{ duration: 0.22 }}
-          className="relative w-full max-w-4xl max-h-[94vh] bg-navy border border-gray-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-10 text-white"
+          exit={{ scale: 0.96, opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="relative w-full max-w-4xl max-h-[94vh] bg-[#FFFFFF] border border-[#CBD7E2] rounded-xl shadow-2xl flex flex-col overflow-hidden z-10 text-[#172B4D]"
         >
-          {/* Header */}
-          <div className="bg-[#203447] px-5 py-3 border-b border-[#2D465A] flex items-center justify-between flex-wrap gap-2">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-[#147D78]/20 border border-[#147D78]/50 flex items-center justify-center text-[#147D78]">
-                <FileText size={18} />
+          {/* Header - Monsoon Indigo */}
+          <div className="bg-[#3157A6] px-5 py-3 border-b border-[#24417D] flex items-center justify-between flex-wrap gap-2 text-white">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-md bg-[#24417D] border border-[#4469B5] flex items-center justify-center text-[#EAF2F5]">
+                <FileText size={18} className="text-[#087F7B]" />
               </div>
               <div>
                 <h2 className="font-heading font-bold text-sm text-white">
-                  Exportable District Risk Briefing
+                  DDMA Executive Situation Report (Morning SITREP)
                 </h2>
-                <p className="text-[11px] text-[#E7EDF0]">
-                  Morning briefing document for District Magistrate &amp; Municipal Commissioner (P2)
+                <p className="text-[11px] text-[#DCE6F2]">
+                  Authored statutory report for District Magistrate & Municipal Commissioner
                 </p>
               </div>
             </div>
@@ -118,15 +118,15 @@ export default function DistrictBriefingExport({
             <div className="flex items-center gap-2">
               <button
                 onClick={handleCopyText}
-                className="bg-[#2D465A] hover:bg-[#38556D] text-white px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition-colors border border-[#526575]"
+                className="bg-[#24417D] hover:bg-[#1E3666] text-white px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition-colors border border-[#4469B5] focus:outline-none focus:ring-2 focus:ring-[#1D6FD0]"
               >
-                {copied ? <Check size={13} className="text-[#2E8B68]" /> : <Copy size={13} />}
+                {copied ? <Check size={13} className="text-[#267A58]" /> : <Copy size={13} />}
                 <span>{copied ? "Copied" : "Copy Briefing"}</span>
               </button>
 
               <button
                 onClick={handlePrint}
-                className="bg-[#147D78] hover:bg-[#0E625E] text-white px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
+                className="bg-[#087F7B] hover:bg-[#05605D] text-white px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs focus:outline-none focus:ring-2 focus:ring-[#1D6FD0]"
               >
                 <Printer size={13} />
                 <span>Print / Save PDF</span>
@@ -134,59 +134,75 @@ export default function DistrictBriefingExport({
 
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-[#2D465A] transition-colors ml-1"
+                className="p-1.5 rounded-md text-[#CBD7E2] hover:text-white hover:bg-[#24417D] transition-colors ml-1"
+                aria-label="Close"
               >
                 <X size={18} />
               </button>
             </div>
           </div>
 
-          {/* Printable Briefing Document Canvas */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6 bg-white text-gray-900 printable-document">
+          {/* Printable Briefing Document Canvas with Morning Brief Assembly Stagger */}
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6 bg-[#FFFFFF] text-[#172B4D] printable-document">
             {/* Document Letterhead */}
-            <div className="border-b-2 border-gray-800 pb-4 text-center space-y-1">
-              <div className="text-[10px] uppercase font-bold tracking-widest text-gray-600">
+            <div className="border-b-2 border-[#172B4D] pb-4 text-center space-y-1">
+              <div className="text-[10px] uppercase font-bold tracking-widest text-[#52657A]">
                 Government of India • State Disaster Management Authority
               </div>
-              <h1 className="text-xl font-bold font-serif uppercase tracking-tight text-gray-950">
+              <h1 className="text-xl font-bold font-serif uppercase tracking-tight text-[#172B4D]">
                 District Disaster Management Authority ({districtStats.district.toUpperCase()})
               </h1>
-              <div className="text-xs font-medium text-gray-600 flex items-center justify-center gap-2">
+              <div className="text-xs font-medium text-[#52657A] flex items-center justify-center gap-2 flex-wrap">
                 <span>Morning Executive Situation Report (SITREP)</span>
                 <span>•</span>
                 <span>{todayStr}</span>
+                <span>•</span>
+                <span className="font-semibold text-[#087F7B]">Brief ready · Updated 06:00 IST</span>
               </div>
             </div>
 
-            {/* Key Stats Bar */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-gray-50 border border-gray-200 p-3.5 rounded-lg text-center">
+            {/* Morning Brief Assembly: Step 1 - Risk summary lines up (0-150ms) */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.18, delay: 0.05 }}
+              className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-[#EAF2F5] border border-[#CBD7E2] p-3.5 rounded-lg text-center"
+            >
               <div>
-                <span className="text-[10px] text-gray-500 uppercase font-bold block">Wards Monitored</span>
-                <span className="text-lg font-bold text-gray-900">{districtStats.assessed_count}</span>
+                <span className="text-[10px] text-[#52657A] uppercase font-bold block">Wards Monitored</span>
+                <span className="text-lg font-bold text-[#172B4D]">{districtStats.assessed_count}</span>
               </div>
               <div>
-                <span className="text-[10px] text-gray-500 uppercase font-bold block">High Risk Wards</span>
-                <span className="text-lg font-bold text-red-600">{districtStats.high_risk_count}</span>
+                <span className="text-[10px] text-[#52657A] uppercase font-bold block">High Risk Wards</span>
+                <span className="text-lg font-bold text-[#B9383E]">{districtStats.high_risk_count}</span>
               </div>
               <div>
-                <span className="text-[10px] text-gray-500 uppercase font-bold block">Critical Population</span>
-                <span className="text-lg font-bold text-gray-900">{totalCriticalPop.toLocaleString()}</span>
+                <span className="text-[10px] text-[#52657A] uppercase font-bold block">Critical Population</span>
+                <span className="text-lg font-bold text-[#172B4D]">{totalCriticalPop.toLocaleString()}</span>
               </div>
               <div>
-                <span className="text-[10px] text-gray-500 uppercase font-bold block">Hazard Focus</span>
-                <span className="text-xs font-bold text-[#147D78] mt-1 block">{currentDistrictInfo.recommended_focus}</span>
+                <span className="text-[10px] text-[#52657A] uppercase font-bold block">Hazard Focus</span>
+                <span className="text-xs font-bold text-[#087F7B] mt-1 block">{currentDistrictInfo.recommended_focus}</span>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Critical Wards Matrix */}
-            <div className="space-y-2">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-800 border-b border-gray-200 pb-1">
-                1. High-Priority Wards Requiring Immediate Administrative Action
-              </h3>
+            {/* Morning Brief Assembly: Step 2 - Priority zones populate (150-300ms) */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.18, delay: 0.18 }}
+              className="space-y-2"
+            >
+              <div className="flex items-center justify-between border-b border-[#CBD7E2] pb-1">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#172B4D]">
+                  1. High-Priority Wards Requiring Immediate Administrative Action
+                </h3>
+                <span className="text-[10px] text-[#52657A] font-mono font-medium">Stage 2/4 Verified</span>
+              </div>
 
-              <div className="border border-gray-200 rounded-lg overflow-hidden text-xs">
+              <div className="border border-[#CBD7E2] rounded-lg overflow-hidden text-xs">
                 <table className="w-full text-left border-collapse">
-                  <thead className="bg-gray-100 text-gray-700 font-semibold text-[11px] border-b border-gray-200">
+                  <thead className="bg-[#EAF2F5] text-[#172B4D] font-semibold text-[11px] border-b border-[#CBD7E2]">
                     <tr>
                       <th className="py-2 px-3">Ward / Village</th>
                       <th className="py-2 px-3">Population</th>
@@ -196,78 +212,91 @@ export default function DistrictBriefingExport({
                       <th className="py-2 px-3">Assigned Relief Shelter</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200 text-gray-800">
+                  <tbody className="divide-y divide-[#CBD7E2] text-[#172B4D]">
                     {highRiskWards.map((a) => (
-                      <tr key={a.village.id} className="hover:bg-gray-50">
-                        <td className="py-2 px-3 font-bold text-red-700">{a.village.name}</td>
+                      <tr key={a.village.id} className="hover:bg-[#F7F9FC]">
+                        <td className="py-2 px-3 font-bold text-[#B9383E]">{a.village.name}</td>
                         <td className="py-2 px-3">{a.village.population.toLocaleString()}</td>
                         <td className="py-2 px-3 font-semibold">{Math.round(a.weather.max_temperature_forecast)}°C</td>
                         <td className="py-2 px-3">{a.groundwater.water_level_mbgl} mbgl ({a.groundwater.category})</td>
-                        <td className="py-2 px-3 text-gray-600">{a.primary_risk_driver}</td>
+                        <td className="py-2 px-3 text-[#52657A]">{a.primary_risk_driver}</td>
                         <td className="py-2 px-3 font-medium">{a.nearest_shelter.name}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Department Directives */}
-            <div className="space-y-2 text-xs">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-800 border-b border-gray-200 pb-1">
-                2. Inter-Departmental Response Mobilization Orders (DMA 2005)
-              </h3>
+            {/* Morning Brief Assembly: Step 3 - Resource allocation table slots into place (300-450ms) */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.18, delay: 0.32 }}
+              className="space-y-2 text-xs"
+            >
+              <div className="flex items-center justify-between border-b border-[#CBD7E2] pb-1">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#172B4D]">
+                  2. Inter-Departmental Response Mobilization Orders (DMA 2005)
+                </h3>
+                <span className="text-[10px] text-[#52657A] font-mono font-medium">Stage 3/4 Verified</span>
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                <div className="border border-gray-200 p-3 rounded-lg bg-gray-50">
-                  <strong className="text-blue-700 block mb-1">Public Health & Hospital Services:</strong>
-                  <p className="text-gray-700 leading-relaxed text-[11px]">
+                <div className="border border-[#CBD7E2] p-3 rounded-lg bg-[#F7F9FC]">
+                  <strong className="text-[#3157A6] block mb-1">Public Health & Hospital Services:</strong>
+                  <p className="text-[#172B4D] leading-relaxed text-[11px]">
                     Position heatstroke resuscitation beds at Sub-District Hospital; deploy mobile medical vans to informal settlements in Ballarpur and Warora between 11:30 AM and 4:00 PM.
                   </p>
                 </div>
 
-                <div className="border border-gray-200 p-3 rounded-lg bg-gray-50">
-                  <strong className="text-cyan-700 block mb-1">Municipal Water Supply Grid:</strong>
-                  <p className="text-gray-700 leading-relaxed text-[11px]">
+                <div className="border border-[#CBD7E2] p-3 rounded-lg bg-[#F7F9FC]">
+                  <strong className="text-[#087F7B] block mb-1">Municipal Water Supply Grid:</strong>
+                  <p className="text-[#172B4D] leading-relaxed text-[11px]">
                     Route {Math.max(4, highRiskWards.length * 3)} potable water tankers (10,000L) to high-density clusters; install continuous chlorinated water swales at bus stands.
                   </p>
                 </div>
 
-                <div className="border border-gray-200 p-3 rounded-lg bg-gray-50">
-                  <strong className="text-amber-700 block mb-1">Labour Department & Factory Inspectorate:</strong>
-                  <p className="text-gray-700 leading-relaxed text-[11px]">
+                <div className="border border-[#CBD7E2] p-3 rounded-lg bg-[#F7F9FC]">
+                  <strong className="text-[#C47A12] block mb-1">Labour Department & Factory Inspectorate:</strong>
+                  <p className="text-[#172B4D] leading-relaxed text-[11px]">
                     Enforce mandatory work cessation for all open-air manual labor between 12:00 PM and 4:00 PM under DMA Section 34; inspect coal siding worksites.
                   </p>
                 </div>
 
-                <div className="border border-gray-200 p-3 rounded-lg bg-gray-50">
-                  <strong className="text-emerald-700 block mb-1">Civil Defense & Community Shelters:</strong>
-                  <p className="text-gray-700 leading-relaxed text-[11px]">
+                <div className="border border-[#CBD7E2] p-3 rounded-lg bg-[#F7F9FC]">
+                  <strong className="text-[#267A58] block mb-1">Civil Defense & Community Shelters:</strong>
+                  <p className="text-[#172B4D] leading-relaxed text-[11px]">
                     Operationalize designated community halls 24/7 with industrial air coolers, power backup, and free ORS distribution points.
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Sign-off Seal */}
-            <div className="pt-6 border-t border-gray-300 flex items-center justify-between text-[11px] text-gray-600">
+            {/* Morning Brief Assembly: Step 4 - Action log and signatures render (450-600ms) */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.18, delay: 0.48 }}
+              className="pt-6 border-t border-[#CBD7E2] flex items-center justify-between text-[11px] text-[#52657A] flex-wrap gap-4"
+            >
               <div>
-                <span>Sanjeevani Automated Disaster Decision-Support System</span>
-                <span className="block font-mono text-[10px]">Telemetry Source: Open-Meteo & CGWB India-WRIS</span>
+                <span className="font-semibold text-[#172B4D]">Sanjeevani Automated Disaster Decision-Support System</span>
+                <span className="block font-mono text-[10px] text-[#52657A]">Telemetry Source: Open-Meteo & CGWB India-WRIS</span>
               </div>
               <div className="text-right">
-                <span className="font-bold block text-gray-900">District Magistrate & Collector</span>
+                <span className="font-bold block text-[#172B4D]">District Magistrate & Collector</span>
                 <span>Chairperson, District Disaster Management Authority</span>
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Footer */}
-          <div className="bg-navy-card px-5 py-3 border-t border-gray-800 flex items-center justify-between text-xs text-gray-400">
-            <span>Official Government Briefing Document</span>
+          <div className="bg-[#EAF2F5] px-5 py-3 border-t border-[#CBD7E2] flex items-center justify-between text-xs text-[#52657A]">
+            <span className="font-medium">Official Government Statutory Briefing (DMA 2005)</span>
             <button
               onClick={onClose}
-              className="bg-navy-light hover:bg-gray-700 text-white px-4 py-1.5 rounded transition-colors text-xs font-semibold"
+              className="bg-[#3157A6] hover:bg-[#24417D] text-white px-4 py-1.5 rounded transition-colors text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#1D6FD0]"
             >
               Close
             </button>

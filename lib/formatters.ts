@@ -57,7 +57,7 @@ export function formatTimeToCritical(
 
 /**
  * Canonical risk state helper ensuring strict 0.45 and 0.70 thresholds across all views.
- * Adheres to Section 7.1 flat non-gradient semantic color system.
+ * Adheres to Section 11 flat non-gradient semantic color system.
  */
 export function getRiskState(score: number): {
   label: "Critical" | "Watch" | "Stable";
@@ -73,11 +73,11 @@ export function getRiskState(score: number): {
   if (score >= RISK_THRESHOLDS.HIGH_MIN) {
     return {
       label: "Critical",
-      colorClass: "text-[#C43D3D]",
-      badgeClass: "bg-[#FCEBEB] text-[#C43D3D] border-[#F4BEBE]",
-      bgLightClass: "bg-[#FCEBEB]",
-      borderClass: "border-[#C43D3D]",
-      dotColor: "#C43D3D",
+      colorClass: "text-[#B9383E]",
+      badgeClass: "bg-[#FBE8E8] text-[#B9383E] border-[#F4BEBE]",
+      bgLightClass: "bg-[#FBE8E8]",
+      borderClass: "border-[#B9383E]",
+      dotColor: "#B9383E",
       scoreDisplay,
     };
   }
@@ -85,22 +85,22 @@ export function getRiskState(score: number): {
   if (score >= RISK_THRESHOLDS.MODERATE_MIN) {
     return {
       label: "Watch",
-      colorClass: "text-[#B7791F]",
-      badgeClass: "bg-[#FBF3E8] text-[#B7791F] border-[#F3D8B0]",
-      bgLightClass: "bg-[#FBF3E8]",
-      borderClass: "border-[#B7791F]",
-      dotColor: "#B7791F",
+      colorClass: "text-[#C47A12]",
+      badgeClass: "bg-[#FFF3D6] text-[#C47A12] border-[#F3D8B0]",
+      bgLightClass: "bg-[#FFF3D6]",
+      borderClass: "border-[#C47A12]",
+      dotColor: "#C47A12",
       scoreDisplay,
     };
   }
 
   return {
     label: "Stable",
-    colorClass: "text-[#2E8B68]",
-    badgeClass: "bg-[#EAF5F0] text-[#2E8B68] border-[#BCE1D1]",
-    bgLightClass: "bg-[#EAF5F0]",
-    borderClass: "border-[#2E8B68]",
-    dotColor: "#2E8B68",
+    colorClass: "text-[#267A58]",
+    badgeClass: "bg-[#E5F3EC] text-[#267A58] border-[#BCE1D1]",
+    bgLightClass: "bg-[#E5F3EC]",
+    borderClass: "border-[#267A58]",
+    dotColor: "#267A58",
     scoreDisplay,
   };
 }

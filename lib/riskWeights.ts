@@ -39,11 +39,12 @@ export const TOTAL_WEIGHT = Math.round(
     RISK_WEIGHTS.vulnerability) * 1000
 ) / 1000;
 
-// Threshold boundaries for classification
+// Canonical threshold boundaries for classification (Audit Section 2.2 & 3F)
 export const RISK_THRESHOLDS = {
-  LOW_MAX: 0.40,      // 0.00 to 0.39 -> Low Risk (Green)
-  MODERATE_MAX: 0.70, // 0.40 to 0.69 -> Moderate Risk (Amber)
-  HIGH_MIN: 0.70,     // 0.70 to 1.00 -> High Risk (Red)
+  LOW_MAX: 0.45,      // 0.00 to 0.44 -> Low Risk / Stable (Green)
+  MODERATE_MIN: 0.45, // 0.45 to 0.69 -> Moderate Risk / Watch (Amber)
+  MODERATE_MAX: 0.70, // Boundary
+  HIGH_MIN: 0.70,     // 0.70 to 1.00 -> High Risk / Critical (Red)
 } as const;
 
 // Normalization thresholds based on regional climate norms (Vidarbha / Maharashtra / Rajasthan)

@@ -113,9 +113,9 @@ export default function LeafletMap() {
   };
 
   const getMarkerColor = (level: string) => {
-    if (level === "High") return "#D32F2F";
-    if (level === "Moderate") return "#F9A825";
-    return "#2E7D32";
+    if (level === "High") return "#E5484D";
+    if (level === "Moderate") return "#F5B942";
+    return "#16B8A6";
   };
 
   // Dynamic relief fleet for active physical disaster response centered on current district
@@ -302,9 +302,9 @@ export default function LeafletMap() {
                   center={[item.village.lat, item.village.lon]}
                   radius={radius + 5}
                   pathOptions={{
-                    color: "#EC1E63",
+                    color: "#4CC9F0",
                     fillColor: "transparent",
-                    weight: 3,
+                    weight: 2.5,
                   }}
                 />
               )}
@@ -526,30 +526,30 @@ export default function LeafletMap() {
         </button>
       </div>
 
-      {/* Floating Interactive Map Legend */}
-      <div className="absolute bottom-4 left-4 z-10 bg-navy/90 backdrop-blur-sm border border-navy-light/80 p-3 rounded-card text-white text-[11px] shadow-xl max-w-[240px]">
-        <div className="font-heading font-semibold text-xs text-gray-200 mb-2 border-b border-gray-700 pb-1 flex items-center justify-between">
-          <span>Map Telemetry Legend</span>
-          <span className="text-[9px] text-pink font-mono uppercase">{basemap} Mode</span>
+      {/* Floating Interactive Map Legend (Canonical Thresholds) */}
+      <div className="absolute bottom-4 left-4 z-10 bg-[#0E1726]/90 backdrop-blur-md border border-[#2C4663] p-3 rounded-md text-[#F5F7FA] text-[11px] shadow-xl max-w-[240px]">
+        <div className="font-heading font-semibold text-xs text-white mb-2 border-b border-[#1E344D] pb-1 flex items-center justify-between">
+          <span>Map Risk Legend</span>
+          <span className="text-[9px] text-[#4CC9F0] font-mono uppercase">{basemap} Mode</span>
         </div>
         <div className="space-y-1.5">
           <div className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 rounded-full bg-[#D32F2F] border border-white/50 flex-shrink-0 relative">
-              <span className="animate-ping absolute inset-0 rounded-full bg-red-400 opacity-60"></span>
+            <span className="w-3.5 h-3.5 rounded-full bg-[#E5484D] border border-white/50 flex-shrink-0 relative">
+              <span className="animate-ping absolute inset-0 rounded-full bg-[#E5484D] opacity-60"></span>
             </span>
-            <span className="text-gray-200">High Risk (&gt;0.70) — Pulsing</span>
+            <span className="text-gray-200">Critical (&ge;0.70) — Escalated</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 rounded-full bg-[#F9A825] border border-white/40 flex-shrink-0"></span>
-            <span className="text-gray-200">Moderate Risk (0.40–0.69)</span>
+            <span className="w-3.5 h-3.5 rounded-full bg-[#F5B942] border border-white/40 flex-shrink-0"></span>
+            <span className="text-gray-200">Watch (0.45–0.69)</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 rounded-full bg-[#2E7D32] border border-white/40 flex-shrink-0"></span>
-            <span className="text-gray-200">Low Risk (&lt;0.40)</span>
+            <span className="w-3.5 h-3.5 rounded-full bg-[#16B8A6] border border-white/40 flex-shrink-0"></span>
+            <span className="text-gray-200">Stable (&lt;0.45)</span>
           </div>
           {showEvacuationRoute && (
-            <div className="flex items-center gap-2 text-emerald-400">
-              <span className="w-3 h-3 rounded-full bg-emerald-500 border border-white/60"></span>
+            <div className="flex items-center gap-2 text-[#16B8A6]">
+              <span className="w-3 h-3 rounded-full bg-[#16B8A6] border border-white/60"></span>
               <span>Designated Cooling Shelter</span>
             </div>
           )}

@@ -77,13 +77,21 @@ export default function HomePage() {
           </span>
         </div>
 
-        <Link
-          href="/dashboard"
-          className="bg-pink hover:bg-[#D81557] hover:scale-[1.03] text-white text-xs font-semibold px-4 py-2 rounded-btn shadow transition-all duration-150 flex items-center gap-1.5 active:scale-[0.98]"
-        >
-          <span>Open Live Dashboard</span>
-          <ArrowRight size={14} />
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/resident"
+            className="bg-[#16B8A6]/15 hover:bg-[#16B8A6]/25 text-[#16B8A6] border border-[#16B8A6]/40 text-xs font-semibold px-3.5 py-2 rounded-btn shadow transition-all duration-150 flex items-center gap-1.5"
+          >
+            <span>Resident View</span>
+          </Link>
+          <Link
+            href="/dashboard"
+            className="bg-pink hover:bg-[#D81557] hover:scale-[1.02] text-white text-xs font-semibold px-4 py-2 rounded-btn shadow transition-all duration-150 flex items-center gap-1.5 active:scale-[0.98]"
+          >
+            <span>Officer Command</span>
+            <ArrowRight size={14} />
+          </Link>
+        </div>
       </header>
 
       {/* Main Content Area */}
@@ -162,8 +170,14 @@ export default function HomePage() {
               href="/dashboard"
               className="bg-pink hover:bg-[#D81557] hover:scale-[1.03] text-white text-xs sm:text-sm font-semibold px-5 py-2.5 rounded-btn shadow-lg hover:shadow-pink/30 transition-all duration-150 flex items-center gap-2 group active:scale-[0.98]"
             >
-              <span>Launch Supervisor Station</span>
+              <span>Officer Command Station</span>
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-150" />
+            </Link>
+            <Link
+              href="/resident"
+              className="bg-[#12233A] hover:bg-[#1E344D] text-[#16B8A6] border border-[#16B8A6]/50 text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-btn shadow transition-all flex items-center gap-2"
+            >
+              <span>Resident Safety View</span>
             </Link>
           </motion.div>
         </div>

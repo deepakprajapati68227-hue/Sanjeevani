@@ -101,15 +101,15 @@ export default function LeafletMap() {
   const zoom = currentDistrictInfo.zoom || 9.5;
 
   const basemapUrls = {
-    light: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+    light: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    dark: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
     satellite: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   };
 
   const basemapAttributions = {
-    light: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    dark: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    satellite: '&copy; <a href="https://www.esri.com/">Esri</a> & NASA',
+    light: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    dark: '&copy; <a href="https://www.esri.com/">Esri</a> &copy; OpenStreetMap contributors',
+    satellite: '&copy; <a href="https://www.esri.com/">Esri</a> &amp; NASA',
   };
 
   const getMarkerColor = (level: string) => {

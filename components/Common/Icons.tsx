@@ -6,7 +6,7 @@ interface IconProps {
   color?: string;
 }
 
-export function PredictIcon({ className = "", size = 24, color = "#EC1E63" }: IconProps) {
+export function PredictIcon({ className = "", size = 24, color = "#147D78" }: IconProps) {
   return (
     <svg
       width={size}
@@ -28,7 +28,7 @@ export function PredictIcon({ className = "", size = 24, color = "#EC1E63" }: Ic
   );
 }
 
-export function AlertIcon({ className = "", size = 24, color = "#EC1E63" }: IconProps) {
+export function AlertIcon({ className = "", size = 24, color = "#147D78" }: IconProps) {
   return (
     <svg
       width={size}
@@ -43,12 +43,12 @@ export function AlertIcon({ className = "", size = 24, color = "#EC1E63" }: Icon
     >
       <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
       <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-      <circle cx="19" cy="5" r="2.5" fill="#D32F2F" stroke="#FFFFFF" strokeWidth="1.5" />
+      <circle cx="19" cy="5" r="2.5" fill="#C43D3D" stroke="#FFFFFF" strokeWidth="1.5" />
     </svg>
   );
 }
 
-export function RespondIcon({ className = "", size = 24, color = "#EC1E63" }: IconProps) {
+export function RespondIcon({ className = "", size = 24, color = "#147D78" }: IconProps) {
   return (
     <svg
       width={size}

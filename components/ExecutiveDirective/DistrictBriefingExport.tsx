@@ -100,17 +100,17 @@ export default function DistrictBriefingExport({
           className="relative w-full max-w-4xl max-h-[94vh] bg-navy border border-gray-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-10 text-white"
         >
           {/* Header */}
-          <div className="bg-navy-card px-5 py-3 border-b border-gray-800 flex items-center justify-between flex-wrap gap-2">
+          <div className="bg-[#203447] px-5 py-3 border-b border-[#2D465A] flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-pink/20 border border-pink/50 flex items-center justify-center text-pink">
+              <div className="w-8 h-8 rounded-lg bg-[#147D78]/20 border border-[#147D78]/50 flex items-center justify-center text-[#147D78]">
                 <FileText size={18} />
               </div>
               <div>
                 <h2 className="font-heading font-bold text-sm text-white">
                   Exportable District Risk Briefing
                 </h2>
-                <p className="text-[11px] text-gray-400">
-                  Morning briefing document for District Magistrate & Municipal Commissioner (P2)
+                <p className="text-[11px] text-[#E7EDF0]">
+                  Morning briefing document for District Magistrate &amp; Municipal Commissioner (P2)
                 </p>
               </div>
             </div>
@@ -118,15 +118,15 @@ export default function DistrictBriefingExport({
             <div className="flex items-center gap-2">
               <button
                 onClick={handleCopyText}
-                className="bg-navy-light hover:bg-gray-700 text-gray-200 px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition-colors border border-gray-700"
+                className="bg-[#2D465A] hover:bg-[#38556D] text-white px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition-colors border border-[#526575]"
               >
-                {copied ? <Check size={13} className="text-emerald-400" /> : <Copy size={13} />}
+                {copied ? <Check size={13} className="text-[#2E8B68]" /> : <Copy size={13} />}
                 <span>{copied ? "Copied" : "Copy Briefing"}</span>
               </button>
 
               <button
                 onClick={handlePrint}
-                className="bg-pink hover:bg-pink-hover text-white px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm"
+                className="bg-[#147D78] hover:bg-[#0E625E] text-white px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-xs"
               >
                 <Printer size={13} />
                 <span>Print / Save PDF</span>
@@ -134,7 +134,7 @@ export default function DistrictBriefingExport({
 
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-navy-light transition-colors ml-1"
+                className="p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-[#2D465A] transition-colors ml-1"
               >
                 <X size={18} />
               </button>
@@ -174,7 +174,7 @@ export default function DistrictBriefingExport({
               </div>
               <div>
                 <span className="text-[10px] text-gray-500 uppercase font-bold block">Hazard Focus</span>
-                <span className="text-xs font-bold text-pink mt-1 block">{currentDistrictInfo.recommended_focus}</span>
+                <span className="text-xs font-bold text-[#147D78] mt-1 block">{currentDistrictInfo.recommended_focus}</span>
               </div>
             </div>
 

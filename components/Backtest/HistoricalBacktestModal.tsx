@@ -149,7 +149,7 @@ export default function HistoricalBacktestModal({
             <div className="bg-navy-card border border-gray-800 p-4 rounded-xl space-y-2">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-pink font-mono">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#147D78] font-mono">
                     {currentPreset.disasterType} • {currentPreset.district}, {currentPreset.state}
                   </span>
                   <h3 className="text-base font-heading font-bold text-white mt-0.5">
@@ -189,7 +189,7 @@ export default function HistoricalBacktestModal({
             {!isLoading && data && (
               <div className="space-y-4 animate-fade-in">
                 {/* Forewarning Lead Time Highlight Callout */}
-                <div className="bg-gradient-to-r from-emerald-950/50 via-navy-card to-purple-950/40 border border-emerald-500/50 p-4 rounded-xl flex items-center justify-between flex-wrap gap-3">
+                <div className="bg-[#12233A] border border-[#2E8B68] p-4 rounded-md flex items-center justify-between flex-wrap gap-3">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center text-emerald-400 flex-shrink-0">
                       <CheckCircle2 size={22} />
@@ -213,7 +213,7 @@ export default function HistoricalBacktestModal({
                     </div>
                     <div className="text-center px-3 py-1 bg-navy rounded border border-gray-800">
                       <span className="text-[10px] text-gray-400 block font-mono">Red Alert Date</span>
-                      <span className="text-xs font-bold text-pink font-mono">
+                      <span className="text-xs font-bold text-[#C43D3D] font-mono">
                         {data.red_alert_date || "N/A"}
                       </span>
                     </div>
@@ -223,7 +223,7 @@ export default function HistoricalBacktestModal({
                 {/* Day-by-Day Historical Timeline Matrix */}
                 <div>
                   <h4 className="font-heading font-bold text-xs uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-1.5">
-                    <TrendingUp size={13} className="text-pink" />
+                    <TrendingUp size={13} className="text-[#147D78]" />
                     <span>Historical Timeline Telemetry & Model Progression</span>
                   </h4>
 

@@ -92,7 +92,7 @@ export default function OutcomeModal() {
             <>
               {/* Modal Header */}
               <div className="flex items-center gap-2.5 mb-3 border-b border-gray-700/60 pb-3">
-                <div className="p-2 rounded bg-navy border border-pink/40 text-pink">
+                <div className="p-2 rounded bg-navy border border-[#147D78]/40 text-[#147D78]">
                   <ClipboardCheck size={20} />
                 </div>
                 <div>
@@ -100,7 +100,7 @@ export default function OutcomeModal() {
                     Log Field Response Outcome
                   </h3>
                   <p className="text-xs text-gray-400">
-                    Target: <strong className="text-pink">{selectedAssessment.village.name}</strong> ({selectedAssessment.village.block} Block)
+                    Target: <strong className="text-[#147D78]">{selectedAssessment.village.name}</strong> ({selectedAssessment.village.block} Block)
                   </p>
                 </div>
               </div>
@@ -122,7 +122,7 @@ export default function OutcomeModal() {
                   <select
                     value={eventType}
                     onChange={(e) => setEventType(e.target.value as any)}
-                    className="w-full bg-navy border border-gray-700 rounded-btn p-2 text-white focus:outline-none focus:border-pink text-xs"
+                    className="w-full bg-navy border border-gray-700 rounded-btn p-2 text-white focus:outline-none focus:border-[#147D78] text-xs"
                   >
                     <option value="Heat Advisory Dispatched">Heat Advisory Dispatched</option>
                     <option value="Relief Shelter Activated">Relief Shelter Activated</option>
@@ -139,7 +139,7 @@ export default function OutcomeModal() {
                     <select
                       value={outcomeStatus}
                       onChange={(e) => setOutcomeStatus(e.target.value as any)}
-                      className="w-full bg-navy border border-gray-700 rounded-btn p-2 text-white focus:outline-none focus:border-pink text-xs"
+                      className="w-full bg-navy border border-gray-700 rounded-btn p-2 text-white focus:outline-none focus:border-[#147D78] text-xs"
                     >
                       <option value="Alert acted on successfully">Alert acted on successfully</option>
                       <option value="Partial false alarm / Condition normalized">Partial false alarm / Condition normalized</option>
@@ -156,20 +156,20 @@ export default function OutcomeModal() {
                       min={0}
                       value={protectedEstimate}
                       onChange={(e) => setProtectedEstimate(Number(e.target.value))}
-                      className="w-full bg-navy border border-gray-700 rounded-btn p-2 text-white focus:outline-none focus:border-pink text-xs font-mono"
+                      className="w-full bg-navy border border-gray-700 rounded-btn p-2 text-white focus:outline-none focus:border-[#147D78] text-xs font-mono"
                     />
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-gray-300 font-semibold mb-1">
-                    Field Notes & Observations
+                    Field Notes &amp; Observations
                   </label>
                   <textarea
                     rows={2}
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    className="w-full bg-navy border border-gray-700 rounded-btn p-2 text-white focus:outline-none focus:border-pink text-xs"
+                    className="w-full bg-navy border border-gray-700 rounded-btn p-2 text-white focus:outline-none focus:border-[#147D78] text-xs"
                     placeholder="Enter observations on shelter occupancy, water distribution, or symptoms..."
                   />
                 </div>
@@ -182,7 +182,7 @@ export default function OutcomeModal() {
                     type="text"
                     value={supervisorName}
                     onChange={(e) => setSupervisorName(e.target.value)}
-                    className="w-full bg-navy border border-gray-700 rounded-btn p-2 text-white focus:outline-none focus:border-pink text-xs"
+                    className="w-full bg-navy border border-gray-700 rounded-btn p-2 text-white focus:outline-none focus:border-[#147D78] text-xs"
                   />
                 </div>
 
@@ -200,7 +200,7 @@ export default function OutcomeModal() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="bg-pink hover:bg-pink-hover text-white font-semibold px-4 py-2 rounded-btn text-xs flex items-center gap-1.5 transition-colors shadow"
+                    className="bg-[#147D78] hover:bg-[#0E625E] text-white font-semibold px-4 py-2 rounded-btn text-xs flex items-center gap-1.5 transition-colors shadow-xs"
                   >
                     {isSubmitting ? (
                       <>
@@ -210,7 +210,7 @@ export default function OutcomeModal() {
                     ) : (
                       <>
                         <ClipboardCheck size={14} />
-                        <span>Confirm & Recalibrate Model</span>
+                        <span>Confirm &amp; Recalibrate Model</span>
                       </>
                     )}
                   </button>

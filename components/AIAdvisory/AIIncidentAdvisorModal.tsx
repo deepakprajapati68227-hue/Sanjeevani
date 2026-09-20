@@ -345,7 +345,7 @@ export default function AIIncidentAdvisorModal({
             {/* Language Selector Chips */}
             <div className="flex items-center gap-1.5 flex-wrap">
               <span className="text-gray-400 flex items-center gap-1 font-semibold text-[11px]">
-                <Globe size={13} className="text-pink" />
+                <Globe size={13} className="text-[#147D78]" />
                 <span>Language & Voice:</span>
               </span>
               <div className="flex items-center gap-1 overflow-x-auto custom-scrollbar">
@@ -387,7 +387,7 @@ export default function AIIncidentAdvisorModal({
                   className={`px-3 py-1 rounded text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm ${
                     isVoiceActive && speakingSection === "full_advisory"
                       ? "bg-red-500 hover:bg-red-600 text-white animate-pulse"
-                      : "bg-gradient-to-r from-pink to-purple-600 hover:opacity-90 text-white"
+                      : "bg-[#635B8F] hover:bg-[#534B7D] text-white"
                   }`}
                   title="Speak entire incident advisory via TTS voice"
                 >
@@ -431,7 +431,7 @@ export default function AIIncidentAdvisorModal({
                 </div>
                 <div>
                   <span className="text-gray-400 mr-1.5">Risk Score:</span>
-                  <strong className="text-pink">
+                  <strong className="text-[#C43D3D]">
                     {Math.round(selectedAssessment.overall_score * 100)}/100 ({selectedAssessment.risk_level})
                   </strong>
                 </div>
@@ -470,12 +470,12 @@ export default function AIIncidentAdvisorModal({
             {!isLoading && currentAdvisory && (
               <div className="space-y-5 animate-fade-in">
                 {/* 1. Executive Summary & Urgency */}
-                <div className="bg-gradient-to-r from-purple-950/40 via-navy-card to-pink/10 border border-purple-500/40 p-4 rounded-lg">
+                <div className="bg-[#12233A] border border-[#635B8F]/50 p-4 rounded-md">
                   <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
                     <div className="flex items-center gap-2">
-                      <Sparkles size={16} className="text-purple-400" />
-                      <span className="text-xs font-bold uppercase tracking-wider text-purple-300">
-                        Incident Appraisal for District Magistrate / Municipal Commissioner
+                      <span className="w-2 h-2 rounded-full bg-[#635B8F]"></span>
+                      <span className="text-xs font-bold uppercase tracking-wider text-[#A9B7C6]">
+                        Model-Assisted Appraisal for District Magistrate / Municipal Commissioner
                       </span>
                     </div>
 
@@ -509,7 +509,7 @@ export default function AIIncidentAdvisorModal({
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                      <ShieldCheck size={14} className="text-pink" />
+                      <ShieldCheck size={14} className="text-[#635B8F]" />
                       <span>Immediate Departmental Action Matrix</span>
                     </h3>
 
@@ -590,7 +590,7 @@ export default function AIIncidentAdvisorModal({
                     </div>
 
                     <div className="p-3 rounded bg-navy border border-gray-800">
-                      <div className="text-pink font-bold mb-1 flex items-center gap-1">
+                      <div className="text-[#C43D3D] font-bold mb-1 flex items-center gap-1">
                         <ShieldCheck size={13} />
                         <span>Medical Rapid Response</span>
                       </div>
@@ -608,7 +608,7 @@ export default function AIIncidentAdvisorModal({
                     <div>
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-[11px] font-bold text-gray-300 flex items-center gap-1.5">
-                          <Megaphone size={13} className="text-pink" />
+                          <Megaphone size={13} className="text-[#147D78]" />
                           <span>Public Megaphone Script (English)</span>
                         </span>
                         <div className="flex items-center gap-1.5">
@@ -677,11 +677,11 @@ export default function AIIncidentAdvisorModal({
                 </div>
 
                 {/* 5. Interactive "Ask AI Incident Commander" Custom Query Box */}
-                <div className="bg-gradient-to-b from-navy-card to-navy p-4 rounded-lg border border-purple-500/30">
+                <div className="bg-[#12233A] p-4 rounded-md border border-[#2D465A]">
                   <div className="flex items-center gap-2 mb-2">
-                    <Bot size={15} className="text-purple-400" />
+                    <Bot size={15} className="text-[#635B8F]" />
                     <span className="font-heading font-semibold text-xs text-white">
-                      Ask AI Incident Commander a Custom Tactical Question
+                      Ask Tactical Model a Custom Operational Question
                     </span>
                   </div>
 

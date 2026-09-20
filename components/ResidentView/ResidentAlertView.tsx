@@ -25,6 +25,7 @@ import {
   ShieldAlert,
   MapPin,
   Compass,
+  AlertTriangle,
 } from "lucide-react";
 
 interface ResidentAlertViewProps {
@@ -123,13 +124,13 @@ export default function ResidentAlertView({ isOpen, onClose }: ResidentAlertView
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.92, opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="relative w-full max-w-md bg-[#0A1128] border-2 border-pink/60 rounded-3xl shadow-2xl flex flex-col overflow-hidden z-10 text-white select-none max-h-[94vh]"
+          className="relative w-full max-w-md bg-[#0A1128] border-2 border-[#147D78]/60 rounded-3xl shadow-2xl flex flex-col overflow-hidden z-10 text-white select-none max-h-[94vh]"
         >
           {/* Top Accessibility Bar */}
           <div className="bg-navy-card/90 px-4 py-2.5 border-b border-gray-800 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-pink animate-ping" />
-              <span className="text-xs font-bold uppercase tracking-wider text-pink font-mono">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#147D78]" />
+              <span className="text-xs font-bold uppercase tracking-wider text-[#147D78] font-mono">
                 {language === "mr" ? "आपत्कालीन इशारा" : "Resident Emergency Alert"}
               </span>
             </div>
@@ -140,7 +141,7 @@ export default function ResidentAlertView({ isOpen, onClose }: ResidentAlertView
                 onClick={handleToggleMute}
                 className={`p-1.5 rounded-full border transition-colors ${
                   isSpeaking
-                    ? "bg-pink text-white border-pink animate-pulse"
+                    ? "bg-[#147D78] text-white border-[#147D78]"
                     : "bg-navy text-gray-300 border-gray-700 hover:text-white"
                 }`}
                 title={isSpeaking ? "Mute audio" : "Play audio broadcast"}
@@ -165,10 +166,10 @@ export default function ResidentAlertView({ isOpen, onClose }: ResidentAlertView
               <motion.div
                 animate={{ scale: [1, 1.08, 1] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className={`w-32 h-32 rounded-full flex items-center justify-center shadow-2xl border-4 ${
+                className={`w-32 h-32 rounded-full flex items-center justify-center border-4 ${
                   isHigh
-                    ? "bg-gradient-to-tr from-red-600 to-pink border-red-400 shadow-red-500/50"
-                    : "bg-gradient-to-tr from-amber-500 to-orange-500 border-amber-300 shadow-amber-500/40"
+                    ? "bg-[#C43D3D] border-[#F4BEBE]"
+                    : "bg-[#B7791F] border-[#F3D8B0]"
                 }`}
               >
                 {isFlood ? (
@@ -187,7 +188,7 @@ export default function ResidentAlertView({ isOpen, onClose }: ResidentAlertView
                   ? "⚠️ हवामान दक्षता!"
                   : "⚠️ CLIMATE WARNING!"}
               </h1>
-              <p className="text-sm font-semibold text-pink uppercase tracking-wider mt-0.5">
+              <p className="text-sm font-semibold text-[#A9B7C6] uppercase tracking-wider mt-0.5">
                 {village.name} • {village.district}
               </p>
             </div>
@@ -210,7 +211,7 @@ export default function ResidentAlertView({ isOpen, onClose }: ResidentAlertView
             </div>
 
             {/* 3. One Concrete Action Card (Large Arrow & Distance - Never a list) */}
-            <div className="bg-gradient-to-r from-emerald-950/60 to-navy-card border-2 border-emerald-500/60 p-4 rounded-2xl text-left shadow-lg space-y-2">
+            <div className="bg-[#12233A] border-2 border-[#2E8B68] p-4 rounded-md text-left space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
                   <Compass size={14} />
@@ -274,31 +275,31 @@ export default function ResidentAlertView({ isOpen, onClose }: ResidentAlertView
                 </div>
               ) : (
                 <div className="grid grid-cols-2 gap-3">
-                  {/* Button 1: Big Green Checkmark */}
+                  {/* Button 1: I Need Help */}
                   <button
                     onClick={() => handleVote("confirmed")}
-                    className="h-20 bg-gradient-to-br from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white rounded-2xl shadow-lg flex flex-col items-center justify-center gap-1 p-2 active:scale-95 transition-transform"
+                    className="h-20 bg-[#C43D3D] hover:bg-[#982F35] text-white rounded-md flex flex-col items-center justify-center gap-1 p-2 active:scale-95 transition-transform"
                   >
-                    <Check size={28} className="stroke-[3]" />
+                    <AlertTriangle size={24} />
                     <span className="text-xs font-bold leading-tight">
-                      {language === "mr" ? "मी सुरक्षित आहे" : "I AM SAFE"}
+                      {language === "mr" ? "मला मदत हवी आहे" : "I NEED HELP"}
                     </span>
-                    <span className="text-[9px] text-emerald-200">
-                      {language === "mr" ? "धोका जाणवतोय" : "Hazard confirmed"}
+                    <span className="text-[9px] text-white/80">
+                      {language === "mr" ? "तात्काळ मदत आवश्यक" : "Assistance requested"}
                     </span>
                   </button>
 
-                  {/* Button 2: Big Red X */}
+                  {/* Button 2: I Am Safe */}
                   <button
-                    onClick={() => handleVote("normalized")}
-                    className="h-20 bg-gradient-to-br from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-gray-200 rounded-2xl shadow-lg flex flex-col items-center justify-center gap-1 p-2 active:scale-95 transition-transform border border-gray-600"
+                    onClick={() => handleVote("confirmed")}
+                    className="h-20 bg-[#2E8B68] hover:bg-[#236C51] text-white rounded-md flex flex-col items-center justify-center gap-1 p-2 active:scale-95 transition-transform"
                   >
-                    <X size={28} className="stroke-[3] text-red-400" />
+                    <Check size={24} className="stroke-[3]" />
                     <span className="text-xs font-bold leading-tight">
-                      {language === "mr" ? "सर्व ठीक आहे" : "ALL NORMAL"}
+                      {language === "mr" ? "मी सुरक्षित आहे" : "I AM SAFE"}
                     </span>
-                    <span className="text-[9px] text-gray-400">
-                      {language === "mr" ? "धोका नाही" : "No hazard"}
+                    <span className="text-[9px] text-emerald-100">
+                      {language === "mr" ? "परिस्थिती सामान्य" : "Conditions normal"}
                     </span>
                   </button>
                 </div>
@@ -309,10 +310,10 @@ export default function ResidentAlertView({ isOpen, onClose }: ResidentAlertView
             <div className="pt-2">
               <a
                 href={`sms:1077?body=${smsBody}`}
-                className="w-full bg-navy-card hover:bg-navy-light border border-gray-700 hover:border-pink/50 text-gray-300 py-2.5 px-3 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors"
+                className="w-full bg-navy-card hover:bg-navy-light border border-gray-700 hover:border-[#147D78]/50 text-gray-300 py-2.5 px-3 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors"
                 title="Works on any basic feature phone without mobile internet"
               >
-                <MessageSquare size={14} className="text-pink" />
+                <MessageSquare size={14} className="text-[#147D78]" />
                 <span>
                   {language === "mr"
                     ? "मोफत साधा एसएमएस (SMS) पाठवा"
@@ -329,7 +330,7 @@ export default function ResidentAlertView({ isOpen, onClose }: ResidentAlertView
                   onClick={() => setLanguage(l.code as SupportedLanguage)}
                   className={`px-2 py-0.5 rounded-full transition-colors ${
                     language === l.code
-                      ? "bg-pink text-white font-bold"
+                      ? "bg-[#147D78] text-white font-bold"
                       : "text-gray-400 hover:text-white"
                   }`}
                 >

@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${sora.variable} ${inter.variable}`}>
-      <body className="bg-navy text-white min-h-screen antialiased selection:bg-pink selection:text-white">
+      <body className="bg-[#F4F7F8] text-[#17212B] min-h-screen antialiased selection:bg-[#147D78] selection:text-white">
         <RiskProvider>{children}</RiskProvider>
       </body>
     </html>

@@ -44,7 +44,7 @@ export default function CollectorateOrderModal({ isOpen, onClose }: Collectorate
           {/* Action Bar */}
           <div className="bg-navy px-5 py-3 text-white flex items-center justify-between border-b border-navy-light">
             <div className="flex items-center gap-2">
-              <FileText className="text-pink" size={18} />
+              <FileText className="text-[#147D78]" size={18} />
               <span className="font-heading font-bold text-sm">
                 Official Administrative Directive Generator
               </span>

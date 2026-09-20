@@ -87,7 +87,7 @@ export default function RiskTransparencyModal({
               </div>
 
               <div className="bg-navy/80 p-3 rounded-lg border border-gray-800 font-mono text-xs text-gray-200 overflow-x-auto text-center">
-                <span className="text-pink font-bold">Risk_Score(x)</span> ={" "}
+                <span className="text-[#147D78] font-bold">Risk_Score(x)</span> ={" "}
                 <span className="text-cyan-300">0.167</span> × Norm(Temp) +{" "}
                 <span className="text-cyan-300">0.220</span> × Norm(HeatIndex) +{" "}
                 <span className="text-cyan-300">0.112</span> × Norm(Precip) +{" "}
@@ -106,10 +106,10 @@ export default function RiskTransparencyModal({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                  <Sliders size={13} className="text-pink" />
+                  <Sliders size={13} className="text-[#147D78]" />
                   <span>Live Input Variable Breakdown ({village.name})</span>
                 </h3>
-                <span className="text-[10px] font-mono text-pink font-bold">
+                <span className="text-[10px] font-mono text-[#C43D3D] font-bold">
                   Final Score: {Math.round(overall_score * 100)} / 100
                 </span>
               </div>
@@ -140,7 +140,7 @@ export default function RiskTransparencyModal({
                         <td className="py-2.5 px-3 text-gray-400">
                           {(item.weight * 100).toFixed(1)}%
                         </td>
-                        <td className="py-2.5 px-3 text-right font-bold text-pink">
+                        <td className="py-2.5 px-3 text-right font-bold text-[#147D78]">
                           +{(item.weighted_contribution * 100).toFixed(1)} pts
                         </td>
                       </tr>
@@ -180,7 +180,7 @@ export default function RiskTransparencyModal({
 
           {/* Footer */}
           <div className="bg-navy-card px-5 py-3 border-t border-gray-800 flex items-center justify-between text-xs text-gray-400">
-            <span>Primary Driver: <strong className="text-pink">{primary_risk_driver}</strong></span>
+            <span>Primary Driver: <strong className="text-[#147D78]">{primary_risk_driver}</strong></span>
             <button
               onClick={onClose}
               className="bg-navy-light hover:bg-gray-700 text-white px-4 py-1.5 rounded transition-colors text-xs font-semibold"

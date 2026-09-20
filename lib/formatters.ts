@@ -57,6 +57,7 @@ export function formatTimeToCritical(
 
 /**
  * Canonical risk state helper ensuring strict 0.45 and 0.70 thresholds across all views.
+ * Adheres to Section 7.1 flat non-gradient semantic color system.
  */
 export function getRiskState(score: number): {
   label: "Critical" | "Watch" | "Stable";
@@ -72,11 +73,11 @@ export function getRiskState(score: number): {
   if (score >= RISK_THRESHOLDS.HIGH_MIN) {
     return {
       label: "Critical",
-      colorClass: "text-[#E5484D]",
-      badgeClass: "bg-[#E5484D]/20 text-[#E5484D] border-[#E5484D]/40",
-      bgLightClass: "bg-[#E5484D]/10",
-      borderClass: "border-[#E5484D]",
-      dotColor: "#E5484D",
+      colorClass: "text-[#C43D3D]",
+      badgeClass: "bg-[#FCEBEB] text-[#C43D3D] border-[#F4BEBE]",
+      bgLightClass: "bg-[#FCEBEB]",
+      borderClass: "border-[#C43D3D]",
+      dotColor: "#C43D3D",
       scoreDisplay,
     };
   }
@@ -84,22 +85,22 @@ export function getRiskState(score: number): {
   if (score >= RISK_THRESHOLDS.MODERATE_MIN) {
     return {
       label: "Watch",
-      colorClass: "text-[#F5B942]",
-      badgeClass: "bg-[#F5B942]/20 text-[#F5B942] border-[#F5B942]/40",
-      bgLightClass: "bg-[#F5B942]/10",
-      borderClass: "border-[#F5B942]",
-      dotColor: "#F5B942",
+      colorClass: "text-[#B7791F]",
+      badgeClass: "bg-[#FBF3E8] text-[#B7791F] border-[#F3D8B0]",
+      bgLightClass: "bg-[#FBF3E8]",
+      borderClass: "border-[#B7791F]",
+      dotColor: "#B7791F",
       scoreDisplay,
     };
   }
 
   return {
     label: "Stable",
-    colorClass: "text-[#16B8A6]",
-    badgeClass: "bg-[#16B8A6]/20 text-[#16B8A6] border-[#16B8A6]/40",
-    bgLightClass: "bg-[#16B8A6]/10",
-    borderClass: "border-[#16B8A6]",
-    dotColor: "#16B8A6",
+    colorClass: "text-[#2E8B68]",
+    badgeClass: "bg-[#EAF5F0] text-[#2E8B68] border-[#BCE1D1]",
+    bgLightClass: "bg-[#EAF5F0]",
+    borderClass: "border-[#2E8B68]",
+    dotColor: "#2E8B68",
     scoreDisplay,
   };
 }

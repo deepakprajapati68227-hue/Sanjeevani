@@ -44,7 +44,7 @@ export default function RecentOutcomesList() {
 
             <div className="flex items-center justify-between text-[9px] text-gray-500 pt-0.5">
               <span className="flex items-center gap-1">
-                <Users size={10} className="text-pink" />
+                <Users size={10} className="text-[#147D78]" />
                 <span>~{item.residents_protected_estimate} protected</span>
               </span>
               <span>{item.logged_by}</span>

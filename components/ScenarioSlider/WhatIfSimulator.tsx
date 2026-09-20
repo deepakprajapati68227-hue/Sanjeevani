@@ -24,18 +24,18 @@ export default function WhatIfSimulator({ isOpen, onClose }: WhatIfSimulatorProp
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 80, opacity: 0 }}
         transition={{ type: "spring", damping: 20, stiffness: 250 }}
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 w-[94%] max-w-2xl bg-navy-card/95 backdrop-blur-md border border-pink/40 rounded-card p-4 shadow-2xl text-white text-xs"
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 w-[94%] max-w-2xl bg-[#203447]/95 backdrop-blur-md border border-[#147D78]/60 rounded-card p-4 shadow-2xl text-white text-xs"
       >
-        <div className="flex items-center justify-between border-b border-gray-700/60 pb-2 mb-3">
+        <div className="flex items-center justify-between border-b border-[#2D465A] pb-2 mb-3">
           <div className="flex items-center gap-2">
-            <div className="p-1 rounded bg-pink/20 text-pink">
+            <div className="p-1.5 rounded bg-[#147D78]/20 text-[#147D78]">
               <Sliders size={16} />
             </div>
             <div>
               <span className="font-heading font-bold text-sm text-white">
                 Interactive "What-If" Climate Simulator
               </span>
-              <span className="text-[10px] text-gray-400 block">
+              <span className="text-[10px] text-[#E7EDF0] block">
                 Stress-test {districtStats.district} district risk levels under simulated climate extremes
               </span>
             </div>
@@ -45,7 +45,7 @@ export default function WhatIfSimulator({ isOpen, onClose }: WhatIfSimulatorProp
             {isModified && (
               <button
                 onClick={resetWhatIf}
-                className="flex items-center gap-1 text-[11px] bg-gray-800 hover:bg-gray-700 px-2.5 py-1 rounded text-gray-300 transition-colors"
+                className="flex items-center gap-1 text-[11px] bg-[#17212B] hover:bg-[#2D465A] px-2.5 py-1 rounded text-gray-300 transition-colors"
               >
                 <RotateCcw size={12} />
                 <span>Reset to Live</span>
@@ -63,7 +63,7 @@ export default function WhatIfSimulator({ isOpen, onClose }: WhatIfSimulatorProp
         {/* Sliders Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-3">
           {/* Temperature Delta Slider */}
-          <div className="bg-navy p-2.5 rounded border border-gray-700/60">
+          <div className="bg-[#17212B] p-2.5 rounded border border-[#2D465A]">
             <div className="flex items-center justify-between mb-1.5">
               <span className="flex items-center gap-1 text-gray-300 font-semibold text-[11px]">
                 <Thermometer size={14} className="text-red-400" />
@@ -88,7 +88,7 @@ export default function WhatIfSimulator({ isOpen, onClose }: WhatIfSimulatorProp
               step="0.5"
               value={whatIf.tempDelta}
               onChange={(e) => updateWhatIf(parseFloat(e.target.value), whatIf.precipDelta)}
-              className="w-full accent-pink cursor-pointer"
+              className="w-full accent-[#147D78] cursor-pointer"
             />
             <div className="flex justify-between text-[9px] text-gray-500 font-mono mt-1">
               <span>-2°C (Cooler)</span>

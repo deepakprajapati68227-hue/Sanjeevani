@@ -374,3 +374,150 @@ Add the following direction to the implementation brief:
 ## 6. Updated final design standard
 
 The desired outcome is **quietly distinctive rather than flashy**. Sanjeevani should feel trustworthy, locally grounded, and deliberately composed. Its personality should come from the quality of its decisions, the specificity of its language, the clarity of its hierarchy, and the care given to district and community context. It should look like a mature human-designed public-service system that happens to use advanced data and AI—not like an AI-generated interface trying to advertise its intelligence.
+
+
+## 7. Color analysis and final flat-color system
+
+The latest live dashboard has a stronger information architecture, but its visual treatment still uses too many high-intensity accents at once. The current dark navy/black surfaces are combined with bright pink primary controls, purple AI actions, cyan/teal utility states, amber risk states, red critical states, and animated colored map markers. This makes the interface feel like a technology demo and weakens the meaning of semantic colors.
+
+The redesign must use a **flat, non-gradient, standard color system**. Do not use CSS gradients, radial gradients, mesh gradients, aurora effects, blurred color glows, gradient text, gradient borders, or gradient map overlays in the interface. This rule applies to backgrounds, buttons, cards, badges, charts, loading states, hero areas, modals, and alert banners. Color transitions between risk states must be discrete and semantic.
+
+### 7.1 Recommended primary palette
+
+Use a light operational interface by default because officers may work for long periods and need clean data separation. Retain a dark map canvas as an optional workspace surface, not as the color treatment for every screen.
+
+| Token | Hex value | Intended use |
+|---|---:|---|
+| `--ink-950` | `#17212B` | Main text, dark map labels, deepest contrast |
+| `--navy-900` | `#203447` | Header, navigation, dark map shell |
+| `--navy-800` | `#2D465A` | Dark elevated panel and selected map context |
+| `--slate-700` | `#526575` | Secondary text, dividers on dark surfaces |
+| `--slate-500` | `#7D8C98` | Muted text and metadata |
+| `--mist-100` | `#F4F7F8` | Application background |
+| `--mist-200` | `#E7EDF0` | Subtle section surfaces and separators |
+| `--white` | `#FFFFFF` | Cards, drawers, modal surfaces |
+| `--sanjeevani-teal` | `#147D78` | Brand accent, links, focus ring, stable state |
+| `--sanjeevani-teal-dark` | `#0E625E` | Hover and pressed teal actions |
+| `--stable` | `#2E8B68` | Stable/safe status and confirmed community signal |
+| `--watch` | `#B7791F` | Watch/moderate risk and attention state |
+| `--critical` | `#C43D3D` | Critical risk, urgent response, emergency state |
+| `--critical-dark` | `#982F35` | Critical hover, pressed, and dark-surface variant |
+| `--information` | `#2F6F9F` | Informational state, data source, map selection |
+| `--analysis` | `#635B8F` | Model evidence and analysis tools only |
+| `--focus` | `#1E6FA8` | Keyboard focus ring and accessible interaction emphasis |
+
+### 7.2 Palette rules
+
+- Use `--sanjeevani-teal` as the single brand accent. Remove bright pink as the global primary action color.
+- Use risk colors only for risk and safety meaning. Do not use red, amber, or green as general decoration.
+- Use the dark navy family for structure, navigation, and the map frame. Use white and mist surfaces for most content cards.
+- Use violet only for technical analysis or model evidence. It must not compete with critical risk red.
+- Use teal for normal operations and safe confirmation, but never use teal to imply that a hazard is low unless the text label also says `Stable` or `Safe`.
+- Keep one primary button color per screen. Secondary buttons should use neutral borders or flat tonal surfaces.
+- Use neutral borders and typography to create most hierarchy. Do not use colored outlines around every card.
+- Use flat fills only. A tonal change between surfaces is acceptable; a color blend is not.
+- Keep status chips compact and text-led. Every colored status must also have an icon or written label.
+- Use color tokens consistently across the officer dashboard, resident dashboard, map, charts, reports, and exported SITREP.
+
+### 7.3 Contrast and color validation
+
+- Meet WCAG AA contrast for normal text and controls. Target a contrast ratio of at least 4.5:1 for normal text and 3:1 for large text and graphical controls.
+- Test the palette under protanopia, deuteranopia, and tritanopia simulations.
+- Do not use red versus green as the sole distinction between risk states.
+- Provide labels such as `Critical`, `Watch`, and `Stable` beside every status color.
+- Use a visible 2px `--focus` outline with a 2px offset for keyboard focus.
+- Do not reduce opacity on critical text or action buttons to create a softer visual effect.
+- Ensure the dark map theme has readable marker outlines and labels against both light and dark map tiles.
+
+### 7.4 Component color mapping
+
+- **Primary response action:** flat `--critical` only when the action is an emergency escalation; otherwise flat `--sanjeevani-teal`.
+- **Secondary response action:** white or `--mist-100` surface with a neutral border.
+- **Critical alert banner:** `--critical` fill with white text and a clear alert icon.
+- **Watch banner:** pale solid amber-tinted surface with dark text and a visible amber rule; do not use a yellow gradient.
+- **Stable banner:** pale solid teal-tinted surface with dark text and a stable icon.
+- **AI advisory:** neutral or `--analysis` tonal treatment with the label `Model-assisted recommendation`; avoid sparkles and purple glow.
+- **Data freshness:** `--information` for live, `--watch` for stale, and neutral gray for cached or curated baseline.
+- **Map markers:** discrete solid colors with a dark outline, consistent shape, and a text-supported legend.
+- **Resident emergency screen:** use one dominant semantic state color at a time. Do not combine pink, purple, orange, and red around the same alert.
+
+## 8. Animation and interaction specification
+
+Use animation to improve orientation, feedback, state change, and perceived performance. Animation must not make Sanjeevani look like an AI-generated showcase. It must be quiet, repeatable, and understandable.
+
+### 8.1 Animation technology
+
+Use **Framer Motion** as the primary animation system for React layout transitions, drawers, modals, route changes, list updates, and state transitions. Use shared motion variants and tokens instead of writing unrelated animations inside individual components.
+
+Use **CSS transitions** for simple hover, focus, pressed, border, and color changes. Use the existing Leaflet animation capabilities for map pan and zoom. Use chart-library animation only for first reveal and data updates. If a second animation library is needed, use it for a narrowly defined purpose only:
+
+- **Framer Motion:** page transitions, priority queue updates, drawers, modals, banners, layout changes, and status changes.
+- **React Spring or Motion One:** optional physics-based map drawer or compass movement where a natural spring is demonstrably clearer than a standard transition.
+- **AutoAnimate:** optional for simple priority-list insertion/removal if it reduces implementation complexity and does not conflict with Framer Motion.
+- **Lottie:** avoid by default. Use only for one small, custom-authored offline/loading or voice-state illustration if a static icon cannot communicate the state. Never use stock AI-themed Lottie animations.
+
+Do not install several animation libraries for decorative effects. Framer Motion plus CSS transitions is the default and preferred implementation.
+
+### 8.2 Motion tokens
+
+Define motion tokens in one place:
+
+- `motion-fast`: 120ms for hover and pressed feedback.
+- `motion-standard`: 180–240ms for fades, tabs, and small surface changes.
+- `motion-emphasis`: 300–420ms for drawers, alert transitions, and selected-zone changes.
+- `motion-spring`: a restrained spring with low bounce for drawers and route cards.
+- `motion-stagger`: 40–60ms between priority rows, limited to the initial reveal.
+- `motion-ease`: use a standard ease-out for entrances and ease-in-out for layout changes.
+
+Avoid bouncy, elastic, or overshooting transitions in critical safety flows.
+
+### 8.3 Officer dashboard motion
+
+- On first load, fade the status header and priority workspace into place over 180–240ms. Do not animate every metric card independently with a large stagger.
+- When switching district, crossfade the summary values, move the map to the new extent, and display a short inline message naming the new district. Avoid a full-page wipe.
+- When selecting a map marker or priority row, use a subtle selected-state ring and open the detail drawer from the right on desktop or bottom on mobile.
+- When a new critical zone appears, animate one short status transition: a single 1.2–1.8 second ring pulse and a visible `New critical zone` label. Do not loop the pulse forever.
+- When the data refreshes, animate changed numbers over 300–450ms and leave unchanged values still. Do not make the entire dashboard shimmer.
+- When an action is started, disable the button, show a compact progress state, then transition to a completed or needs-attention state with a clear text label.
+- Animate priority queue insertion once. Preserve row position after the animation so the user does not lose their place.
+- Use a short crossfade between evidence tabs. Keep the selected tab and focus position stable.
+- Animate the shelter route line only when the user explicitly turns route guidance on. Do not animate routes continuously.
+
+### 8.4 Resident dashboard motion
+
+- Use one calm entrance transition for the alert card and refuge card.
+- Animate the voice button between `Ready`, `Playing`, `Paused`, and `Replay` using a small icon state change and an accessible text label. Do not use a glowing halo.
+- When the resident selects `I need help` or `I am safe`, show a clear pressed state, a short confirmation transition, and a persistent text confirmation.
+- Move the shelter direction indicator with a restrained spring only when the user’s orientation or route changes.
+- Do not flash, shake, bounce, or continuously pulse the resident screen. Emergency severity must come from clear words, color, and instruction.
+
+### 8.5 Loading, errors, and reduced motion
+
+- Prefer static skeleton blocks with subtle opacity changes. Do not use animated gradient skeletons because gradients are prohibited.
+- Use a static neutral loading state with a small rotating stroke only when a wait is genuinely occurring.
+- Make error recovery visible with a flat button such as `Try again` or `Use last available data`.
+- Implement `prefers-reduced-motion`. Under reduced motion, remove looping pulses, spring movement, animated counters, chart drawing, and parallax; retain instant state changes, focus movement, and clear labels.
+- Ensure all important state changes are communicated in text and through an ARIA live region where appropriate. Motion must never be the only signal.
+
+## 9. Additional acceptance criteria for color and motion
+
+- A full visual scan of the application contains no CSS gradients, SVG gradients, gradient text, gradient borders, or animated color blends.
+- The interface uses one brand accent and a small semantic palette rather than multiple neon accents.
+- Red, amber, and teal consistently mean critical, watch, and stable across every screen.
+- The live map, officer dashboard, resident dashboard, modals, charts, and exported reports use the same semantic tokens.
+- Framer Motion is used through shared variants and motion tokens, not as isolated decorative effects.
+- Animation communicates selection, loading, navigation, confirmation, or data change.
+- No critical control flashes, shakes, glows continuously, or relies on motion for meaning.
+- The resident experience remains calm and readable even when the officer dashboard has many live updates.
+- Reduced-motion mode removes nonessential movement without removing information or access to actions.
+- A design reviewer should describe the final interface as **clear, trustworthy, locally specific, and human-designed**, not “AI-looking,” “neon,” “over-animated,” or “template-based.”
+
+## 10. Revised implementation order
+
+1. Replace the current multi-accent and dark-first treatment with the flat semantic token system.
+2. Remove all gradients from CSS, SVG, charts, loading states, cards, buttons, and map overlays.
+3. Apply the token system consistently to both dashboards and all status components.
+4. Implement shared Framer Motion variants and motion tokens.
+5. Add only the interaction animations that improve orientation and feedback.
+6. Test contrast, color-blind distinguishability, reduced motion, and mobile performance.
+7. Review the final UI for visual restraint and human authorship before adding any optional decorative detail.

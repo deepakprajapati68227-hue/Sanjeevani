@@ -39,25 +39,25 @@ export default function PriorityQueue({ onSelectWard }: PriorityQueueProps) {
   };
 
   return (
-    <div className="h-full flex flex-col bg-[#0B1220] border-l border-[#1E344D] text-[#F5F7FA]">
+    <div className="h-full flex flex-col bg-white border-l border-[#E7EDF0] text-[#17212B]">
       {/* Header & Filter Bar */}
-      <div className="p-3 border-b border-[#1E344D] bg-[#0E1726] flex items-center justify-between gap-2 flex-wrap">
+      <div className="p-3 border-b border-[#E7EDF0] bg-[#F4F7F8] flex items-center justify-between gap-2 flex-wrap">
         <div>
-          <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-white flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#E5484D]"></span>
+          <h3 className="font-heading font-bold text-xs uppercase tracking-wider text-[#17212B] flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-[#C43D3D]"></span>
             <span>Priority Queue ({assessments.length} Monitored Wards)</span>
           </h3>
-          <p className="text-[10px] text-[#94A3B8]">
+          <p className="text-[10px] text-[#526575]">
             Ranked by composite vulnerability & climate velocity
           </p>
         </div>
 
         {/* Filter Pills */}
-        <div className="flex items-center gap-1 bg-[#12233A] p-0.5 rounded border border-[#2C4663] text-[10px]">
+        <div className="flex items-center gap-1 bg-white p-0.5 rounded border border-[#E7EDF0] text-[10px]">
           <button
             onClick={() => setFilter("all")}
             className={`px-2 py-0.5 rounded font-medium transition-colors ${
-              filter === "all" ? "bg-[#1E344D] text-white" : "text-[#94A3B8] hover:text-white"
+              filter === "all" ? "bg-[#203447] text-white" : "text-[#526575] hover:text-[#17212B]"
             }`}
           >
             All ({assessments.length})
@@ -65,7 +65,7 @@ export default function PriorityQueue({ onSelectWard }: PriorityQueueProps) {
           <button
             onClick={() => setFilter("critical")}
             className={`px-2 py-0.5 rounded font-medium transition-colors ${
-              filter === "critical" ? "bg-[#E5484D] text-white font-bold" : "text-[#E5484D] hover:bg-[#E5484D]/10"
+              filter === "critical" ? "bg-[#C43D3D] text-white font-bold" : "text-[#C43D3D] hover:bg-[#FCEBEB]"
             }`}
           >
             Critical ({assessments.filter((a) => a.overall_score >= 0.70).length})
@@ -73,7 +73,7 @@ export default function PriorityQueue({ onSelectWard }: PriorityQueueProps) {
           <button
             onClick={() => setFilter("watch")}
             className={`px-2 py-0.5 rounded font-medium transition-colors ${
-              filter === "watch" ? "bg-[#F5B942] text-[#0B1220] font-bold" : "text-[#F5B942] hover:bg-[#F5B942]/10"
+              filter === "watch" ? "bg-[#B7791F] text-white font-bold" : "text-[#B7791F] hover:bg-[#FBF3E8]"
             }`}
           >
             Watch ({assessments.filter((a) => a.overall_score >= 0.45 && a.overall_score < 0.70).length})
@@ -81,7 +81,7 @@ export default function PriorityQueue({ onSelectWard }: PriorityQueueProps) {
           <button
             onClick={() => setFilter("stable")}
             className={`px-2 py-0.5 rounded font-medium transition-colors ${
-              filter === "stable" ? "bg-[#16B8A6] text-white font-bold" : "text-[#16B8A6] hover:bg-[#16B8A6]/10"
+              filter === "stable" ? "bg-[#2E8B68] text-white font-bold" : "text-[#2E8B68] hover:bg-[#EAF5F0]"
             }`}
           >
             Stable ({assessments.filter((a) => a.overall_score < 0.45).length})
@@ -90,7 +90,7 @@ export default function PriorityQueue({ onSelectWard }: PriorityQueueProps) {
       </div>
 
       {/* Priority Queue Rows List */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar divide-y divide-[#1E344D]/80">
+      <div className="flex-1 overflow-y-auto custom-scrollbar divide-y divide-[#E7EDF0]">
         {filteredAssessments.map((item, idx) => {
           const isSelected = selectedAssessment?.village.id === item.village.id;
           const riskState = getRiskState(item.overall_score);
@@ -104,52 +104,52 @@ export default function PriorityQueue({ onSelectWard }: PriorityQueueProps) {
             <div
               key={item.village.id}
               onClick={() => handleSelect(item)}
-              className={`p-3 cursor-pointer transition-all hover:bg-[#12233A] flex items-center justify-between gap-3 ${
+              className={`p-3 cursor-pointer transition-all hover:bg-[#F4F7F8] flex items-center justify-between gap-3 ${
                 isSelected
-                  ? "bg-[#162940] border-l-4 border-l-[#4CC9F0]"
+                  ? "bg-[#EAF5F0]/60 border-l-4 border-l-[#147D78]"
                   : "border-l-4 border-l-transparent"
               }`}
             >
               {/* Left Info: Rank + Name + Driver */}
               <div className="flex items-start gap-2.5 min-w-0">
-                <span className="font-mono text-xs text-[#94A3B8] font-bold w-4 text-center mt-0.5">
+                <span className="font-mono text-xs text-[#7D8C98] font-bold w-4 text-center mt-0.5">
                   #{idx + 1}
                 </span>
 
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <h4 className="font-bold text-xs text-white tracking-tight truncate">
+                    <h4 className="font-bold text-xs text-[#17212B] tracking-tight truncate">
                       {item.village.name}
                     </h4>
-                    <span className="text-[10px] text-[#94A3B8]">
+                    <span className="text-[10px] text-[#526575]">
                       ({item.village.block} Block)
                     </span>
                   </div>
 
                   {/* Primary Hazard Driver */}
-                  <div className="text-[11px] text-[#94A3B8] flex items-center gap-1.5 mt-0.5">
-                    <span>Threat: <strong className="text-gray-200">{item.primary_risk_driver}</strong></span>
+                  <div className="text-[11px] text-[#526575] flex items-center gap-1.5 mt-0.5">
+                    <span>Threat: <strong className="text-[#17212B]">{item.primary_risk_driver}</strong></span>
                     {item.is_compound_risk && (
-                      <span className="bg-[#8B7CF6]/20 text-[#8B7CF6] border border-[#8B7CF6]/40 text-[9px] px-1 rounded font-bold uppercase">
+                      <span className="bg-[#635B8F]/15 text-[#635B8F] border border-[#635B8F]/30 text-[9px] px-1 rounded font-bold uppercase">
                         Compound
                       </span>
                     )}
                   </div>
 
                   {/* Decision Context Bar */}
-                  <div className="flex items-center gap-3 mt-1.5 text-[10px] text-[#94A3B8]">
+                  <div className="flex items-center gap-3 mt-1.5 text-[10px] text-[#526575]">
                     <span className="flex items-center gap-1">
-                      <Users size={11} className="text-[#4CC9F0]" />
+                      <Users size={11} className="text-[#2F6F9F]" />
                       <span>{formatPopulation(item.village.population)} pop</span>
                     </span>
                     <span className="flex items-center gap-1">
-                      <Clock size={11} className={timeVelocity.urgency === "critical" ? "text-[#E5484D]" : "text-[#F5B942]"} />
-                      <span className={timeVelocity.urgency === "critical" ? "text-[#F16B6F] font-semibold" : ""}>
+                      <Clock size={11} className={timeVelocity.urgency === "critical" ? "text-[#C43D3D]" : "text-[#B7791F]"} />
+                      <span className={timeVelocity.urgency === "critical" ? "text-[#C43D3D] font-semibold" : ""}>
                         {timeVelocity.display}
                       </span>
                     </span>
                     {item.community_verification && (
-                      <span className="hidden sm:flex items-center gap-1 text-[#16B8A6]">
+                      <span className="hidden sm:flex items-center gap-1 text-[#2E8B68]">
                         <ThumbsUp size={10} />
                         <span>{item.community_verification.verified_percentage}% Verified</span>
                       </span>
@@ -165,11 +165,11 @@ export default function PriorityQueue({ onSelectWard }: PriorityQueueProps) {
                 >
                   {riskState.label}
                 </div>
-                <div className="font-mono text-xs font-bold text-white mt-1">
+                <div className="font-mono text-xs font-bold text-[#17212B] mt-1">
                   {riskState.scoreDisplay} / 100
                 </div>
                 <button
-                  className="mt-1 text-[10px] text-[#4CC9F0] hover:text-white flex items-center gap-0.5"
+                  className="mt-1 text-[10px] text-[#147D78] hover:text-[#0E625E] font-medium flex items-center gap-0.5"
                 >
                   <span>Inspect</span>
                   <ChevronRight size={12} />
@@ -180,7 +180,7 @@ export default function PriorityQueue({ onSelectWard }: PriorityQueueProps) {
         })}
 
         {filteredAssessments.length === 0 && (
-          <div className="p-8 text-center text-xs text-[#94A3B8]">
+          <div className="p-8 text-center text-xs text-[#526575]">
             No wards match the selected &quot;{filter}&quot; filter in this district.
           </div>
         )}

@@ -134,7 +134,7 @@ export default function PhoneMockup() {
           <div className="bg-[#1F2C34] px-4 py-2 border-b border-gray-800 space-y-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-[#EC1E63] flex items-center justify-center text-white font-bold text-xs shadow">
+                <div className="w-8 h-8 rounded-full bg-[#147D78] flex items-center justify-center text-white font-bold text-xs shadow">
                   सं
                 </div>
                 <div>

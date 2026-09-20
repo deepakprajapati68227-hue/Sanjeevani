@@ -114,19 +114,19 @@ export default function ResidentPage() {
   const isFlood = assessment.village.primary_hazard.toLowerCase().includes("flood");
 
   return (
-    <div className="min-h-screen bg-[#0B1220] text-[#F5F7FA] font-body flex flex-col items-center">
-      {/* 1. Header: Brand, Ward Picker & Language Switcher (Section 3 D1) */}
-      <header className="w-full max-w-xl bg-[#12233A] border-b border-[#1E344D] px-4 py-3 flex items-center justify-between gap-2 shadow-sm sticky top-0 z-20">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded bg-[#1E344D] border border-[#2C4663] flex items-center justify-center text-[#4CC9F0]">
+    <div className="min-h-screen bg-[#F4F7F8] text-[#17212B] font-body flex flex-col items-center">
+      {/* 1. Header: Brand, Ward Picker & Language Switcher */}
+      <header className="w-full max-w-xl bg-[#203447] border-b border-[#2D465A] px-4 py-3 flex items-center justify-between gap-2 shadow-sm sticky top-0 z-20">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded bg-[#147D78] flex items-center justify-center text-white">
             <ShieldAlert size={18} />
           </div>
           <div>
             <span className="font-heading font-bold text-sm tracking-tight text-white block leading-none">
               SANJEEVANI
             </span>
-            <span className="text-[10px] text-[#94A3B8]">
-              Resident Safety Alert
+            <span className="text-[10px] text-[#E7EDF0]">
+              Resident Public Safety Advisory
             </span>
           </div>
         </div>
@@ -134,7 +134,7 @@ export default function ResidentPage() {
         {/* Right Controls: Ward Selector + Language */}
         <div className="flex items-center gap-2">
           {/* Ward Switcher */}
-          <div className="bg-[#0B1220] border border-[#2C4663] rounded px-2 py-1 text-xs">
+          <div className="bg-[#17212B] border border-[#2D465A] rounded px-2 py-1 text-xs">
             <select
               value={assessment.village.id}
               onChange={(e) => selectVillage(e.target.value)}
@@ -142,7 +142,7 @@ export default function ResidentPage() {
               aria-label="Select Ward"
             >
               {assessments.map((a) => (
-                <option key={a.village.id} value={a.village.id} className="bg-[#12233A] text-white">
+                <option key={a.village.id} value={a.village.id} className="bg-[#203447] text-white">
                   {a.village.name}
                 </option>
               ))}
@@ -150,55 +150,55 @@ export default function ResidentPage() {
           </div>
 
           {/* Language Switcher */}
-          <div className="bg-[#0B1220] border border-[#2C4663] rounded px-2 py-1 text-xs text-[#94A3B8] flex items-center gap-1">
-            <Globe size={12} className="text-[#4CC9F0]" />
+          <div className="bg-[#17212B] border border-[#2D465A] rounded px-2 py-1 text-xs text-[#E7EDF0] flex items-center gap-1">
+            <Globe size={12} className="text-[#147D78]" />
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value as SupportedLanguage)}
               className="bg-transparent text-white font-medium text-xs border-none focus:outline-none cursor-pointer"
               aria-label="Select Language"
             >
-              <option value="en" className="bg-[#12233A] text-white">EN</option>
-              <option value="hi" className="bg-[#12233A] text-white">हिन्दी</option>
-              <option value="mr" className="bg-[#12233A] text-white">मराठी</option>
-              <option value="te" className="bg-[#12233A] text-white">తెలుగు</option>
-              <option value="ta" className="bg-[#12233A] text-white">தமிழ்</option>
-              <option value="bn" className="bg-[#12233A] text-white">বাংলা</option>
-              <option value="gu" className="bg-[#12233A] text-white">ગુજરાતી</option>
-              <option value="kn" className="bg-[#12233A] text-white">ಕನ್ನಡ</option>
+              <option value="en" className="bg-[#203447] text-white">EN</option>
+              <option value="hi" className="bg-[#203447] text-white">हिन्दी</option>
+              <option value="mr" className="bg-[#203447] text-white">मराठी</option>
+              <option value="te" className="bg-[#203447] text-white">తెలుగు</option>
+              <option value="ta" className="bg-[#203447] text-white">தமிழ்</option>
+              <option value="bn" className="bg-[#203447] text-white">বাংলা</option>
+              <option value="gu" className="bg-[#203447] text-white">ગુજરાતી</option>
+              <option value="kn" className="bg-[#203447] text-white">ಕನ್ನಡ</option>
             </select>
           </div>
         </div>
       </header>
 
-      {/* Main Single-Column Vertical Flow (Section 3 D1) */}
+      {/* Main Single-Column Vertical Flow */}
       <main className="w-full max-w-xl p-4 sm:p-5 space-y-4 pb-12">
         {/* Officer Switch Link */}
-        <div className="flex items-center justify-between text-xs text-[#94A3B8] px-1">
-          <span className="flex items-center gap-1.5 font-medium text-gray-300">
-            <MapPin size={12} className="text-[#4CC9F0]" />
+        <div className="flex items-center justify-between text-xs text-[#526575] px-1">
+          <span className="flex items-center gap-1.5 font-medium text-[#17212B]">
+            <MapPin size={13} className="text-[#147D78]" />
             <span>{assessment.village.name}, {assessment.village.district}</span>
           </span>
           <Link
             href="/dashboard"
-            className="text-[11px] text-[#4CC9F0] hover:underline flex items-center gap-1"
+            className="text-[11px] font-semibold text-[#147D78] hover:underline flex items-center gap-1"
           >
             <span>Officer Command View</span>
             <ArrowRight size={11} />
           </Link>
         </div>
 
-        {/* 2. Large Alert State Banner with Semantic Color & Icon (Section 3 D1) */}
+        {/* 2. Large Alert State Banner with Semantic Color & Icon */}
         <div
-          className={`p-4 rounded-xl border flex items-start gap-3.5 shadow-lg ${
+          className={`p-4 rounded-xl border flex items-start gap-3.5 shadow-xs ${
             isCritical
-              ? "bg-[#E5484D]/15 border-[#E5484D]/50 text-white"
-              : "bg-[#F5B942]/15 border-[#F5B942]/50 text-white"
+              ? "bg-[#FCEBEB] border-[#F4BEBE] text-[#17212B]"
+              : "bg-[#FBF3E8] border-[#F3D8B0] text-[#17212B]"
           }`}
         >
           <div
-            className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
-              isCritical ? "bg-[#E5484D] text-white" : "bg-[#F5B942] text-[#0B1220]"
+            className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 shadow-xs ${
+              isCritical ? "bg-[#C43D3D] text-white" : "bg-[#B7791F] text-white"
             }`}
           >
             {isFlood ? <Waves size={26} /> : <Sun size={26} />}
@@ -207,47 +207,47 @@ export default function ResidentPage() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <span
-                className={`text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded ${
-                  isCritical ? "bg-[#E5484D] text-white" : "bg-[#F5B942] text-[#0B1220]"
+                className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded text-white ${
+                  isCritical ? "bg-[#C43D3D]" : "bg-[#B7791F]"
                 }`}
               >
                 {isCritical ? "Critical Alert" : "Weather Watch"}
               </span>
-              <span className="text-xs text-gray-300 font-mono">
+              <span className="text-xs text-[#526575] font-mono font-medium">
                 {formatTemp(assessment.weather.max_temperature_forecast)} Peak
               </span>
             </div>
 
-            <h1 className="text-base sm:text-lg font-heading font-bold text-white mt-1 leading-tight">
+            <h1 className="text-base sm:text-lg font-heading font-bold text-[#17212B] mt-1 leading-tight">
               {alertContent.header}
             </h1>
 
             {/* 3. One-sentence plain language explanation */}
-            <p className="text-xs text-gray-200 mt-1.5 leading-relaxed">
+            <p className="text-xs text-[#526575] mt-1.5 leading-relaxed">
               {alertContent.bodyParagraph}
             </p>
           </div>
         </div>
 
-        {/* 4. One Dominant Immediate Instruction (Section 3 D1) */}
-        <div className="bg-[#12233A] border-l-4 border-l-[#E5484D] border-y border-r border-[#2C4663] p-3.5 rounded-r-md">
-          <span className="text-[10px] uppercase font-bold text-[#E5484D] tracking-wider block">
+        {/* 4. One Dominant Immediate Instruction */}
+        <div className="bg-white border-l-4 border-l-[#C43D3D] border-y border-r border-[#E7EDF0] p-4 rounded-r-lg shadow-xs">
+          <span className="text-[10px] uppercase font-bold text-[#C43D3D] tracking-wider block">
             Immediate Action Required
           </span>
-          <p className="text-sm font-bold text-white mt-0.5">
+          <p className="text-sm font-bold text-[#17212B] mt-0.5">
             {isCritical
               ? "Stop outdoor labor between 11:30 AM – 4:00 PM. Move to nearest designated cooling center."
               : "Drink water frequently. Keep livestock in shade and stay alert to weather updates."}
           </p>
         </div>
 
-        {/* 5. Large Voice Audio Playback Button (Section 3 D1) */}
+        {/* 5. Large Voice Audio Playback Button */}
         <button
           onClick={handleToggleVoice}
-          className={`w-full py-3.5 px-4 rounded-xl border font-bold text-sm flex items-center justify-center gap-3 transition-all shadow-md ${
+          className={`w-full py-3.5 px-4 rounded-xl border font-bold text-sm flex items-center justify-center gap-3 transition-all shadow-xs ${
             isSpeaking
-              ? "bg-[#E5484D] text-white border-[#E5484D] animate-pulse"
-              : "bg-[#1E344D] hover:bg-[#2A4766] text-white border-[#4CC9F0]/40"
+              ? "bg-[#C43D3D] text-white border-[#C43D3D]"
+              : "bg-[#147D78] hover:bg-[#0E625E] text-white border-[#147D78]"
           }`}
           aria-label="Play audio voice alert"
         >
@@ -258,52 +258,52 @@ export default function ResidentPage() {
             </>
           ) : (
             <>
-              <Volume2 size={20} className="text-[#4CC9F0]" />
+              <Volume2 size={20} className="text-white" />
               <span>Listen to Alert (हा इशारा ऐका / यह चेतावनी सुनें)</span>
             </>
           )}
         </button>
 
-        {/* 6. Large Shelter Refuge Card with Walking Compass (Section 3 D1) */}
-        <div className="bg-[#12233A] border border-[#2C4663] rounded-xl p-4 space-y-3 shadow-md">
-          <div className="flex items-center justify-between border-b border-[#2C4663] pb-2">
+        {/* 6. Large Shelter Refuge Card with Walking Compass */}
+        <div className="bg-white border border-[#E7EDF0] rounded-xl p-4 space-y-3 shadow-xs">
+          <div className="flex items-center justify-between border-b border-[#E7EDF0] pb-2">
             <div className="flex items-center gap-2">
-              <Building size={16} className="text-[#16B8A6]" />
-              <h3 className="font-bold text-xs uppercase tracking-wider text-white">
+              <Building size={16} className="text-[#147D78]" />
+              <h3 className="font-bold text-xs uppercase tracking-wider text-[#17212B]">
                 Designated Safety Refuge Center
               </h3>
             </div>
-            <span className="text-[10px] text-[#16B8A6] font-bold font-mono px-2 py-0.5 rounded bg-[#16B8A6]/15 border border-[#16B8A6]/30">
+            <span className="text-[10px] text-[#2E8B68] font-bold font-mono px-2 py-0.5 rounded bg-[#EAF5F0] border border-[#BCE1D1]">
               {assessment.nearest_shelter.open_status}
             </span>
           </div>
 
           <div>
-            <h4 className="text-sm font-bold text-white">
+            <h4 className="text-sm font-bold text-[#17212B]">
               {assessment.nearest_shelter.name}
             </h4>
-            <p className="text-xs text-[#94A3B8] mt-0.5">
+            <p className="text-xs text-[#526575] mt-0.5">
               {alertContent.shelterDirections}
             </p>
           </div>
 
           {/* Compass & Distance Row */}
-          <div className="grid grid-cols-2 gap-2 bg-[#0E1726] p-2.5 rounded-lg border border-[#1E344D] text-xs">
+          <div className="grid grid-cols-2 gap-2 bg-[#F4F7F8] p-2.5 rounded-lg border border-[#E7EDF0] text-xs">
             <div className="flex items-center gap-2">
-              <Compass size={18} className="text-[#4CC9F0]" />
+              <Compass size={18} className="text-[#147D78]" />
               <div>
-                <span className="text-[9px] text-[#94A3B8] uppercase block">Walking Distance</span>
-                <span className="font-mono font-bold text-white">
+                <span className="text-[9px] text-[#7D8C98] uppercase block">Walking Distance</span>
+                <span className="font-mono font-bold text-[#17212B]">
                   {formatDistance(assessment.nearest_shelter.distanceKm)}
                 </span>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <Navigation size={18} className="text-[#16B8A6]" />
+              <Navigation size={18} className="text-[#2E8B68]" />
               <div>
-                <span className="text-[9px] text-[#94A3B8] uppercase block">Direction</span>
-                <span className="font-semibold text-white">
+                <span className="text-[9px] text-[#7D8C98] uppercase block">Direction</span>
+                <span className="font-semibold text-[#17212B]">
                   {(assessment.nearest_shelter.distanceKm ?? 0) < 1 ? "Within village" : "Follow main road"}
                 </span>
               </div>
@@ -315,39 +315,51 @@ export default function ResidentPage() {
             {assessment.nearest_shelter.facilities.map((fac, idx) => (
               <span
                 key={idx}
-                className="bg-[#0B1220] px-2 py-1 rounded border border-[#2C4663] text-gray-200"
+                className="bg-[#F4F7F8] px-2 py-1 rounded border border-[#E7EDF0] text-[#526575] font-medium"
               >
                 {fac}
               </span>
             ))}
           </div>
 
-          {/* Contact Helpline Button */}
-          <a
-            href={`tel:${assessment.nearest_shelter.contact}`}
-            className="w-full bg-[#16B8A6]/20 hover:bg-[#16B8A6]/30 text-[#16B8A6] border border-[#16B8A6]/50 py-2.5 px-3 rounded-md text-xs font-bold flex items-center justify-center gap-2 transition-colors"
-          >
-            <Phone size={14} />
-            <span>Call Shelter Helpline ({assessment.nearest_shelter.contact})</span>
-          </a>
+          {/* Action Row: Google Maps & Phone */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+            <a
+              href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(assessment.nearest_shelter.name + ", " + assessment.village.name)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#F4F7F8] hover:bg-[#E7EDF0] text-[#147D78] border border-[#BCE1D1] py-2.5 px-3 rounded-md text-xs font-bold flex items-center justify-center gap-2 transition-colors"
+            >
+              <Navigation size={14} />
+              <span>Directions (Google Maps)</span>
+            </a>
+
+            <a
+              href={`tel:${assessment.nearest_shelter.contact}`}
+              className="bg-[#147D78] hover:bg-[#0E625E] text-white py-2.5 px-3 rounded-md text-xs font-bold flex items-center justify-center gap-2 transition-colors"
+            >
+              <Phone size={14} />
+              <span>Call ({assessment.nearest_shelter.contact})</span>
+            </a>
+          </div>
         </div>
 
-        {/* 7. Two Unambiguous Community Response Buttons (Section 3 D1) */}
-        <div className="bg-[#12233A] border border-[#2C4663] rounded-xl p-4 space-y-2.5 shadow-md">
+        {/* 7. Two Unambiguous Community Response Buttons */}
+        <div className="bg-white border border-[#E7EDF0] rounded-xl p-4 space-y-2.5 shadow-xs">
           <div className="text-center">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+            <h4 className="text-xs font-bold text-[#17212B] uppercase tracking-wider">
               Community Ground Status Check-in
             </h4>
-            <p className="text-[11px] text-[#94A3B8] mt-0.5">
+            <p className="text-[11px] text-[#526575] mt-0.5">
               Confirm conditions in {assessment.village.name} to help emergency teams prioritize tankers
             </p>
           </div>
 
           {hasVoted ? (
-            <div className="py-3 text-center bg-[#0E1726] border border-[#2C4663] rounded-lg text-xs space-y-1">
-              <CheckCircle2 size={24} className="text-[#16B8A6] mx-auto" />
-              <div className="font-bold text-white">Status Transmitted to DDMA Workstation</div>
-              <p className="text-[10px] text-[#94A3B8]">
+            <div className="py-3 text-center bg-[#EAF5F0] border border-[#BCE1D1] rounded-lg text-xs space-y-1">
+              <CheckCircle2 size={24} className="text-[#2E8B68] mx-auto" />
+              <div className="font-bold text-[#2E8B68]">Status Transmitted to DDMA Workstation</div>
+              <p className="text-[10px] text-[#526575]">
                 {hasVoted === "help"
                   ? "Emergency escalation sent to local response team."
                   : "Thank you for confirming your safety."}
@@ -357,7 +369,7 @@ export default function ResidentPage() {
             <div className="grid grid-cols-2 gap-3 pt-1">
               <button
                 onClick={() => handleVote("help")}
-                className="bg-[#E5484D] hover:bg-[#D32F2F] text-white py-3 px-3 rounded-lg font-bold text-xs shadow transition-all flex flex-col items-center justify-center gap-1 text-center"
+                className="bg-[#C43D3D] hover:bg-[#982F35] text-white py-3.5 px-3 rounded-lg font-bold text-xs shadow-xs transition-colors flex flex-col items-center justify-center gap-1 text-center"
               >
                 <AlertTriangle size={18} />
                 <span>I Need Help</span>
@@ -366,7 +378,7 @@ export default function ResidentPage() {
 
               <button
                 onClick={() => handleVote("safe")}
-                className="bg-[#16B8A6] hover:bg-[#0F766E] text-white py-3 px-3 rounded-lg font-bold text-xs shadow transition-all flex flex-col items-center justify-center gap-1 text-center"
+                className="bg-[#2E8B68] hover:bg-[#236C51] text-white py-3.5 px-3 rounded-lg font-bold text-xs shadow-xs transition-colors flex flex-col items-center justify-center gap-1 text-center"
               >
                 <CheckCircle2 size={18} />
                 <span>I Am Safe</span>
@@ -376,39 +388,39 @@ export default function ResidentPage() {
           )}
         </div>
 
-        {/* 8. Basic Phone SMS Fallback & Emergency Helplines (Section 3 D1) */}
-        <div className="bg-[#12233A] border border-[#2C4663] rounded-xl p-3.5 space-y-2 text-xs">
+        {/* 8. Basic Phone SMS Fallback & Emergency Helplines */}
+        <div className="bg-white border border-[#E7EDF0] rounded-xl p-3.5 space-y-2 text-xs shadow-xs">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-gray-200 flex items-center gap-1.5">
-              <MessageSquare size={13} className="text-[#4CC9F0]" />
+            <span className="font-bold text-[#17212B] flex items-center gap-1.5">
+              <MessageSquare size={13} className="text-[#147D78]" />
               <span>2G Basic Phone SMS Alert</span>
             </span>
             <button
               onClick={handleCopySms}
-              className="text-[10px] text-[#4CC9F0] hover:underline"
+              className="text-[10px] font-semibold text-[#147D78] hover:underline"
             >
               {smsCopied ? "SMS Text Copied!" : "Copy SMS Text"}
             </button>
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-[#1E344D] text-[11px] text-[#94A3B8]">
-            <span>National Disaster Helpline: <strong className="text-white font-mono">112</strong></span>
-            <span>District Disaster Cell: <strong className="text-white font-mono">1077</strong></span>
+          <div className="flex items-center justify-between pt-2 border-t border-[#E7EDF0] text-[11px] text-[#526575]">
+            <span>National Disaster Helpline: <strong className="text-[#17212B] font-mono">112</strong></span>
+            <span>District Disaster Cell: <strong className="text-[#17212B] font-mono">1077</strong></span>
           </div>
         </div>
 
-        {/* 9. Collapsible "More Information" (Section 3 D1) */}
-        <div className="border border-[#1E344D] rounded-xl overflow-hidden text-xs">
+        {/* 9. Collapsible "More Information" */}
+        <div className="border border-[#E7EDF0] rounded-xl overflow-hidden text-xs shadow-xs bg-white">
           <button
             onClick={() => setShowMoreInfo((prev) => !prev)}
-            className="w-full bg-[#12233A] p-3 text-left font-semibold text-gray-300 hover:text-white flex items-center justify-between"
+            className="w-full bg-white p-3 text-left font-semibold text-[#17212B] hover:bg-[#F4F7F8] flex items-center justify-between transition-colors"
           >
             <span>Why did I get this alert? (हे सूचना का मिळाली?)</span>
-            <ChevronDown size={15} className={`transition-transform ${showMoreInfo ? "rotate-180" : ""}`} />
+            <ChevronDown size={15} className={`text-[#526575] transition-transform ${showMoreInfo ? "rotate-180" : ""}`} />
           </button>
 
           {showMoreInfo && (
-            <div className="p-3.5 bg-[#0E1726] space-y-2 text-[11px] text-[#94A3B8] border-t border-[#1E344D] leading-relaxed">
+            <div className="p-3.5 bg-[#F4F7F8] space-y-2 text-[11px] text-[#526575] border-t border-[#E7EDF0] leading-relaxed">
               <p>
                 This advisory was triggered by real-time Open-Meteo temperature observations and Central Ground Water Board (CGWB) aquifer monitoring.
               </p>

@@ -113,7 +113,7 @@ export default function LiveLocationSearch() {
           liveSearchAssessment
             ? "border-cyan-400/80 ring-1 ring-cyan-400/50"
             : isOpen
-            ? "border-pink ring-1 ring-pink/40"
+            ? "border-[#147D78] ring-1 ring-[#147D78]/40"
             : "border-navy-light/80 hover:border-gray-600"
         }`}
       >
@@ -143,7 +143,7 @@ export default function LiveLocationSearch() {
         {/* Live Active Pill Indicator */}
         {liveSearchAssessment && !query && (
           <span className="hidden lg:inline-flex items-center gap-1 bg-cyan-950/80 border border-cyan-500/50 text-cyan-300 text-[9px] font-bold uppercase px-1.5 py-0.5 rounded tracking-wider flex-shrink-0">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping"></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
             LIVE
           </span>
         )}
@@ -165,32 +165,32 @@ export default function LiveLocationSearch() {
 
       {/* Floating Status Notification */}
       {statusMessage && (
-        <div className="absolute top-full left-0 right-0 mt-1.5 bg-navy-card border border-cyan-500/60 p-2 rounded-md shadow-xl text-[11px] text-cyan-300 flex items-center gap-2 animate-fade-in z-50">
-          <Sparkles size={13} className="text-cyan-400 flex-shrink-0" />
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-[#203447] border border-[#147D78]/60 p-2 rounded-md shadow-xl text-[11px] text-[#EAF5F0] flex items-center gap-2 animate-fade-in z-50">
+          <Radio size={13} className="text-[#147D78] flex-shrink-0" />
           <span>{statusMessage}</span>
         </div>
       )}
 
       {/* Autocomplete Results Dropdown */}
       {isOpen && results.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1.5 bg-navy border border-gray-700/90 rounded-lg shadow-2xl overflow-hidden custom-scrollbar max-h-72 z-50 divide-y divide-gray-800">
-          <div className="px-3 py-1.5 bg-navy-card text-[10px] font-semibold uppercase tracking-wider text-gray-400 flex items-center justify-between">
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-[#203447] border border-[#2D465A] rounded-lg shadow-2xl overflow-hidden custom-scrollbar max-h-72 z-50 divide-y divide-[#2D465A]">
+          <div className="px-3 py-1.5 bg-[#17212B] text-[10px] font-semibold uppercase tracking-wider text-gray-400 flex items-center justify-between">
             <span>Pan-India Live Geocoding</span>
-            <span className="text-pink">Select to Analyze Live Hazard</span>
+            <span className="text-[#147D78] font-bold">Select to Analyze Live Hazard</span>
           </div>
 
           {results.map((item) => (
             <button
               key={item.id}
               onClick={() => handleSelectLocation(item)}
-              className="w-full text-left px-3 py-2.5 hover:bg-navy-card/90 transition-colors flex items-start gap-2.5 group"
+              className="w-full text-left px-3 py-2.5 hover:bg-[#2D465A] transition-colors flex items-start gap-2.5 group"
             >
-              <div className="mt-0.5 p-1 rounded bg-navy-light/60 text-pink group-hover:bg-pink group-hover:text-white transition-colors flex-shrink-0">
+              <div className="mt-0.5 p-1 rounded bg-[#17212B] text-[#147D78] group-hover:bg-[#147D78] group-hover:text-white transition-colors flex-shrink-0">
                 <MapPin size={13} />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-heading font-semibold text-xs text-white group-hover:text-pink-light transition-colors truncate">
+                  <span className="font-heading font-semibold text-xs text-white group-hover:text-[#147D78] transition-colors truncate">
                     {item.name}
                   </span>
                   <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-gray-800 text-gray-300 font-mono flex-shrink-0">

@@ -44,7 +44,7 @@ export default function ResidentPage() {
   } = useRisk();
 
   const [hasVoted, setHasVoted] = useState<"help" | "safe" | null>(null);
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [voiceState, setVoiceState] = useState<"ready" | "playing" | "paused" | "replay">("ready");
   const [showMoreInfo, setShowMoreInfo] = useState(false);
   const [smsCopied, setSmsCopied] = useState(false);
 
@@ -61,15 +61,15 @@ export default function ResidentPage() {
     : "";
 
   const handleToggleVoice = () => {
-    if (isSpeaking) {
+    if (voiceState === "playing") {
       stopSpeaking();
-      setIsSpeaking(false);
+      setVoiceState("paused");
     } else {
       speakText(spokenText, language, {
         rate: 0.9,
-        onStart: () => setIsSpeaking(true),
-        onEnd: () => setIsSpeaking(false),
-        onError: () => setIsSpeaking(false),
+        onStart: () => setVoiceState("playing"),
+        onEnd: () => setVoiceState("replay"),
+        onError: () => setVoiceState("ready"),
       });
     }
   };
@@ -241,21 +241,23 @@ export default function ResidentPage() {
           </p>
         </div>
 
-        {/* 5. Section 12.1 Voice Audio Playback Button with Flat Solid Waveform Animation */}
+        {/* 5. Section 2 & 12.1 Voice Audio Playback Control with 4 Visible States */}
         <button
           onClick={handleToggleVoice}
-          className={`w-full py-3.5 px-4 rounded-xl border font-bold text-sm flex items-center justify-center gap-3 transition-all shadow-xs focus:outline-none focus:ring-2 focus:ring-[#1D6FD0] ${
-            isSpeaking
+          className={`w-full min-h-[48px] py-3.5 px-4 rounded-xl border font-bold text-sm flex items-center justify-center gap-3 transition-all shadow-xs focus:outline-none focus:ring-2 focus:ring-[#1D6FD0] ${
+            voiceState === "playing"
               ? "bg-[#B9383E] text-white border-[#B9383E]"
+              : voiceState === "paused"
+              ? "bg-[#C47A12] text-white border-[#C47A12]"
               : "bg-[#087F7B] hover:bg-[#05605D] text-white border-[#087F7B]"
           }`}
-          aria-label="Play audio voice alert"
+          aria-label="Audio alert broadcast"
         >
-          {isSpeaking ? (
+          {voiceState === "playing" && (
             <div className="flex items-center gap-3">
               <VolumeX size={20} />
-              <span>Playing Audio Alert... Tap to Stop</span>
-              {/* Section 12.1 Flat Solid Waveform Strokes (no glowing, flat strokes) */}
+              <span>Playing alert... Tap to Pause</span>
+              {/* Flat Solid Waveform Strokes */}
               <div className="flex items-center gap-1 h-5 pl-2 border-l border-white/40">
                 {[14, 20, 10, 18, 12].map((height, i) => (
                   <span
@@ -270,10 +272,23 @@ export default function ResidentPage() {
                 ))}
               </div>
             </div>
-          ) : (
+          )}
+          {voiceState === "paused" && (
             <div className="flex items-center gap-2">
               <Volume2 size={20} className="text-white" />
-              <span>Listen to Alert (हा इशारा ऐका / यह चेतावनी सुनें)</span>
+              <span>Paused · Tap to Resume Alert</span>
+            </div>
+          )}
+          {voiceState === "replay" && (
+            <div className="flex items-center gap-2">
+              <RotateCcw size={20} className="text-white" />
+              <span>Replay alert (पुन्हा ऐका / दोबारा सुनें)</span>
+            </div>
+          )}
+          {voiceState === "ready" && (
+            <div className="flex items-center gap-2">
+              <Volume2 size={20} className="text-white" />
+              <span>Ready to play (हा इशारा ऐका / यह चेतावनी सुनें)</span>
             </div>
           )}
         </button>
@@ -340,13 +355,13 @@ export default function ResidentPage() {
             ))}
           </div>
 
-          {/* Action Row: Google Maps & Phone */}
+          {/* Action Row: Google Maps & Phone (Min 48px touch targets) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
             <a
               href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(assessment.nearest_shelter.name + ", " + assessment.village.name)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-[#F7F9FC] hover:bg-[#EAF2F5] text-[#087F7B] border border-[#087F7B]/30 py-2.5 px-3 rounded-md text-xs font-bold flex items-center justify-center gap-2 transition-colors focus:outline-none focus:ring-1 focus:ring-[#1D6FD0]"
+              className="min-h-[48px] bg-[#F7F9FC] hover:bg-[#EAF2F5] text-[#087F7B] border border-[#087F7B]/30 py-2.5 px-3 rounded-md text-xs font-bold flex items-center justify-center gap-2 transition-colors focus:outline-none focus:ring-1 focus:ring-[#1D6FD0]"
             >
               <Navigation size={14} />
               <span>Directions (Google Maps)</span>
@@ -354,7 +369,7 @@ export default function ResidentPage() {
 
             <a
               href={`tel:${assessment.nearest_shelter.contact}`}
-              className="bg-[#087F7B] hover:bg-[#05605D] text-white py-2.5 px-3 rounded-md text-xs font-bold flex items-center justify-center gap-2 transition-colors focus:outline-none focus:ring-1 focus:ring-[#1D6FD0]"
+              className="min-h-[48px] bg-[#087F7B] hover:bg-[#05605D] text-white py-2.5 px-3 rounded-md text-xs font-bold flex items-center justify-center gap-2 transition-colors focus:outline-none focus:ring-1 focus:ring-[#1D6FD0]"
             >
               <Phone size={14} />
               <span>Call ({assessment.nearest_shelter.contact})</span>
@@ -362,7 +377,7 @@ export default function ResidentPage() {
           </div>
         </div>
 
-        {/* 7. Section 12.1 Community Confirmation: Smooth Morph to Confirmed State */}
+        {/* 7. Section 12.1 Community Confirmation: Smooth Morph to Confirmed State (Min 48px touch targets) */}
         <div className="bg-[#FFFFFF] border border-[#CBD7E2] rounded-xl p-4 space-y-2.5 shadow-xs">
           <div className="text-center">
             <h4 className="text-xs font-bold text-[#172B4D] uppercase tracking-wider">
@@ -389,7 +404,7 @@ export default function ResidentPage() {
             <div className="grid grid-cols-2 gap-3 pt-1">
               <button
                 onClick={() => handleVote("help")}
-                className="bg-[#B9383E] hover:bg-[#8F2B30] text-white py-3.5 px-3 rounded-lg font-bold text-xs shadow-xs transition-colors flex flex-col items-center justify-center gap-1 text-center focus:outline-none focus:ring-2 focus:ring-[#1D6FD0]"
+                className="min-h-[48px] bg-[#B9383E] hover:bg-[#8F2B30] text-white py-3.5 px-3 rounded-lg font-bold text-xs shadow-xs transition-colors flex flex-col items-center justify-center gap-1 text-center focus:outline-none focus:ring-2 focus:ring-[#1D6FD0]"
               >
                 <AlertTriangle size={18} />
                 <span>I Need Help</span>
@@ -398,7 +413,7 @@ export default function ResidentPage() {
 
               <button
                 onClick={() => handleVote("safe")}
-                className="bg-[#267A58] hover:bg-[#1E5F44] text-white py-3.5 px-3 rounded-lg font-bold text-xs shadow-xs transition-colors flex flex-col items-center justify-center gap-1 text-center focus:outline-none focus:ring-2 focus:ring-[#1D6FD0]"
+                className="min-h-[48px] bg-[#267A58] hover:bg-[#1E5F44] text-white py-3.5 px-3 rounded-lg font-bold text-xs shadow-xs transition-colors flex flex-col items-center justify-center gap-1 text-center focus:outline-none focus:ring-2 focus:ring-[#1D6FD0]"
               >
                 <CheckCircle2 size={18} />
                 <span>I Am Safe</span>
@@ -408,8 +423,8 @@ export default function ResidentPage() {
           )}
         </div>
 
-        {/* 8. Basic Phone SMS Fallback & Emergency Helplines */}
-        <div className="bg-[#FFFFFF] border border-[#CBD7E2] rounded-xl p-3.5 space-y-2 text-xs shadow-xs">
+        {/* 8. Tap-to-Call Helplines & 2G Basic Phone SMS Fallback (Min 48px touch targets) */}
+        <div className="bg-[#FFFFFF] border border-[#CBD7E2] rounded-xl p-3.5 space-y-3 text-xs shadow-xs">
           <div className="flex items-center justify-between">
             <span className="font-bold text-[#172B4D] flex items-center gap-1.5">
               <MessageSquare size={13} className="text-[#087F7B]" />
@@ -417,15 +432,27 @@ export default function ResidentPage() {
             </span>
             <button
               onClick={handleCopySms}
-              className="text-[10px] font-semibold text-[#087F7B] hover:underline focus:outline-none focus:ring-1 focus:ring-[#1D6FD0]"
+              className="min-h-[48px] px-3 py-2 text-xs font-semibold text-[#087F7B] bg-[#EAF2F5] hover:bg-[#CBD7E2]/50 rounded-md transition-colors flex items-center gap-1 focus:outline-none focus:ring-1 focus:ring-[#1D6FD0]"
             >
               {smsCopied ? "SMS Text Copied!" : "Copy SMS Text"}
             </button>
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-[#CBD7E2] text-[11px] text-[#52657A]">
-            <span>National Disaster Helpline: <strong className="text-[#172B4D] font-mono">112</strong></span>
-            <span>District Disaster Cell: <strong className="text-[#172B4D] font-mono">1077</strong></span>
+          <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#CBD7E2]">
+            <a
+              href="tel:1077"
+              className="min-h-[48px] bg-[#EAF2F5] hover:bg-[#CBD7E2]/40 text-[#172B4D] border border-[#CBD7E2] rounded-lg p-2 flex items-center justify-center gap-2 font-semibold text-xs transition-colors focus:outline-none focus:ring-1 focus:ring-[#1D6FD0]"
+            >
+              <Phone size={14} className="text-[#087F7B]" />
+              <span>District Cell: 1077</span>
+            </a>
+            <a
+              href="tel:112"
+              className="min-h-[48px] bg-[#EAF2F5] hover:bg-[#CBD7E2]/40 text-[#172B4D] border border-[#CBD7E2] rounded-lg p-2 flex items-center justify-center gap-2 font-semibold text-xs transition-colors focus:outline-none focus:ring-1 focus:ring-[#1D6FD0]"
+            >
+              <Phone size={14} className="text-[#B9383E]" />
+              <span>National Helpline: 112</span>
+            </a>
           </div>
         </div>
 

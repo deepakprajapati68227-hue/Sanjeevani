@@ -30,7 +30,7 @@ import DistrictBriefingExport from "@/components/ExecutiveDirective/DistrictBrie
 import HistoricalBacktestModal from "@/components/Backtest/HistoricalBacktestModal";
 import RiskTransparencyModal from "@/components/Transparency/RiskTransparencyModal";
 
-export type OfficerTab = "overview" | "map" | "priority" | "actions";
+export type OfficerTab = "overview" | "map" | "priority" | "actions" | "reports";
 
 interface HeaderProps {
   activeTab?: OfficerTab;
@@ -111,7 +111,7 @@ export default function Header({
             </div>
             <div className="hidden lg:flex items-center gap-1.5 pl-2 border-l border-[#4469B5] text-[10px] text-[#E5F3EC]">
               <span className="w-2 h-2 rounded-full bg-[#267A58] animate-pulse"></span>
-              <span className="font-mono text-[#DCE6F2]">Live Telemetry</span>
+              <span className="font-mono text-[#DCE6F2]">Refreshed live from Open-Meteo &amp; CGWB · 2 min ago</span>
             </div>
           </div>
 
@@ -223,6 +223,18 @@ export default function Header({
           >
             <Truck size={13} className={activeTab === "actions" ? "text-[#267A58]" : "text-[#CBD7E2]"} />
             <span>Response Fleet</span>
+          </button>
+
+          <button
+            onClick={() => onTabChange?.("reports")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+              activeTab === "reports"
+                ? "bg-[#3157A6] text-white font-semibold border-b-2 border-b-[#087F7B]"
+                : "text-[#DCE6F2] hover:text-white hover:bg-[#3157A6]/60"
+            }`}
+          >
+            <FileText size={13} className={activeTab === "reports" ? "text-[#087F7B]" : "text-[#CBD7E2]"} />
+            <span>Reports</span>
           </button>
         </nav>
 

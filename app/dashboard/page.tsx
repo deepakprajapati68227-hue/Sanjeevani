@@ -10,13 +10,14 @@ import PhoneMockup from "@/components/AlertPreview/PhoneMockup";
 import OutcomeModal from "@/components/OutcomeLogger/OutcomeModal";
 import WhatIfSimulator from "@/components/ScenarioSlider/WhatIfSimulator";
 import { useRisk } from "@/context/RiskContext";
-import { ListOrdered, ShieldAlert, Truck, CheckCircle2, Clock, Users } from "lucide-react";
+import { ListOrdered, ShieldAlert, Truck, CheckCircle2, Clock, Users, FileText, Printer, Copy, Check } from "lucide-react";
 
 export default function DashboardPage() {
-  const { selectedAssessment, recentOutcomes, districtStats } = useRisk();
+  const { selectedAssessment, recentOutcomes, districtStats, assessments, currentDistrictInfo } = useRisk();
   const [activeTab, setActiveTab] = useState<OfficerTab>("overview");
   const [isWhatIfOpen, setIsWhatIfOpen] = useState(false);
   const [rightView, setRightView] = useState<"detail" | "queue">("detail");
+  const [copiedSitrep, setCopiedSitrep] = useState(false);
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#F7F9FC] font-body text-[#172B4D] select-none">
@@ -78,7 +79,7 @@ export default function DashboardPage() {
               {/* View Content */}
               <div className="flex-1 overflow-hidden">
                 {rightView === "detail" ? (
-                  <VillageDetail />
+                  <VillageDetail onSwitchToQueue={() => setRightView("queue")} />
                 ) : (
                   <PriorityQueue
                     onSelectWard={() => setRightView("detail")}
@@ -185,6 +186,101 @@ export default function DashboardPage() {
                   No field outcomes logged yet in active session. Click &quot;Log Field Outcome&quot; from any ward to record actions.
                 </p>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Tab 5: Executive Situation Reports & DDMA Briefing Workspace */}
+        {activeTab === "reports" && (
+          <div className="h-full w-full max-w-4xl mx-auto p-4 sm:p-6 overflow-y-auto custom-scrollbar space-y-4">
+            <div className="border-b border-[#CBD7E2] pb-3 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 className="text-base font-bold text-[#172B4D] flex items-center gap-2">
+                  <FileText className="text-[#087F7B]" size={18} />
+                  <span>DDMA Executive Situation Report (SITREP)</span>
+                </h2>
+                <p className="text-xs text-[#52657A] mt-0.5">
+                  Daily operational intelligence summary for District Collector and Incident Commanders in {districtStats.district}.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    const text = `DISTRICT DISASTER MANAGEMENT AUTHORITY (DDMA) SITREP\nDistrict: ${districtStats.district}, ${currentDistrictInfo.state}\nCritical Hotspots: ${districtStats.high_risk_count} Wards\nPopulation at Risk: ${districtStats.total_population_at_high_risk.toLocaleString()} residents\nRefreshed: Open-Meteo & CGWB`;
+                    navigator.clipboard.writeText(text);
+                    setCopiedSitrep(true);
+                    setTimeout(() => setCopiedSitrep(false), 2000);
+                  }}
+                  className="px-3 py-1.5 bg-white border border-[#CBD7E2] text-[#172B4D] text-xs font-semibold rounded-md hover:bg-[#F7F9FC] transition-colors flex items-center gap-1.5 shadow-xs"
+                >
+                  {copiedSitrep ? <Check size={13} className="text-[#267A58]" /> : <Copy size={13} />}
+                  <span>{copiedSitrep ? "Copied" : "Copy Plaintext"}</span>
+                </button>
+
+                <button
+                  onClick={() => window.print()}
+                  className="px-3 py-1.5 bg-[#3157A6] hover:bg-[#24417D] text-white text-xs font-semibold rounded-md transition-colors flex items-center gap-1.5 shadow-xs"
+                >
+                  <Printer size={13} />
+                  <span>Print / PDF Export</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Briefing Card Container */}
+            <div className="bg-[#FFFFFF] border border-[#CBD7E2] rounded-md p-5 space-y-4 shadow-xs">
+              <div className="border-b border-[#CBD7E2] pb-3 flex items-center justify-between">
+                <div>
+                  <div className="text-[10px] text-[#52657A] uppercase font-bold tracking-wider font-mono">
+                    OFFICIAL DDMA DISASTER SITREP
+                  </div>
+                  <h3 className="text-sm font-bold text-[#172B4D]">
+                    {districtStats.district} Disaster Risk &amp; Field Preparedness Directive
+                  </h3>
+                </div>
+                <span className="text-[11px] font-mono font-semibold text-[#087F7B] bg-[#E5F3EC] border border-[#087F7B]/30 px-2 py-0.5 rounded">
+                  Status: Action Required
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                <div className="bg-[#F7F9FC] p-3 rounded border border-[#CBD7E2]">
+                  <span className="text-[10px] text-[#52657A] uppercase font-bold block">Monitored Wards</span>
+                  <span className="text-base font-bold text-[#172B4D] font-mono">{districtStats.assessed_count} Total</span>
+                  <span className="text-[10px] text-[#B9383E] block mt-0.5 font-semibold">{districtStats.high_risk_count} Require Immediate Intervention</span>
+                </div>
+                <div className="bg-[#F7F9FC] p-3 rounded border border-[#CBD7E2]">
+                  <span className="text-[10px] text-[#52657A] uppercase font-bold block">Population in Danger Zone</span>
+                  <span className="text-base font-bold text-[#172B4D] font-mono">{districtStats.total_population_at_high_risk.toLocaleString()}</span>
+                  <span className="text-[10px] text-[#52657A] block mt-0.5">High exposure to heat &amp; water depletion</span>
+                </div>
+                <div className="bg-[#F7F9FC] p-3 rounded border border-[#CBD7E2]">
+                  <span className="text-[10px] text-[#52657A] uppercase font-bold block">Telemetry Source</span>
+                  <span className="text-base font-bold text-[#267A58] font-mono">Live Sync</span>
+                  <span className="text-[10px] text-[#52657A] block mt-0.5">Open-Meteo &amp; CGWB In-Situ Sensors</span>
+                </div>
+              </div>
+
+              <div className="space-y-2 text-xs">
+                <h4 className="font-bold text-xs uppercase tracking-wider text-[#172B4D]">
+                  Priority Action Checklist
+                </h4>
+                <div className="space-y-1.5 text-xs text-[#52657A]">
+                  <div className="flex items-start gap-2 bg-[#F7F9FC] p-2.5 rounded border border-[#CBD7E2]">
+                    <CheckCircle2 size={15} className="text-[#087F7B] flex-shrink-0 mt-0.5" />
+                    <span>Issue heat advisory and reschedule heavy outdoor agricultural labor away from 11:30 AM – 4:00 PM in critical sectors.</span>
+                  </div>
+                  <div className="flex items-start gap-2 bg-[#F7F9FC] p-2.5 rounded border border-[#CBD7E2]">
+                    <CheckCircle2 size={15} className="text-[#087F7B] flex-shrink-0 mt-0.5" />
+                    <span>Deploy emergency municipal water tankers to critical wards facing severe aquifer depletion below 20 mbgl.</span>
+                  </div>
+                  <div className="flex items-start gap-2 bg-[#F7F9FC] p-2.5 rounded border border-[#CBD7E2]">
+                    <CheckCircle2 size={15} className="text-[#087F7B] flex-shrink-0 mt-0.5" />
+                    <span>Place Primary Health Centers and Sub-District cooling wards on active alert with IV saline and ORS supplies.</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}

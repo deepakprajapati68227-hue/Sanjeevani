@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRisk } from "@/context/RiskContext";
 import ExplainabilityBars from "./ExplainabilityBars";
 import HistoricalTrend from "../TrendChart/HistoricalTrend";
@@ -26,6 +26,7 @@ import {
   Activity,
   Layers,
   HelpCircle,
+  ListOrdered,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import CollectorateOrderModal from "../ExecutiveDirective/CollectorateOrderModal";
@@ -41,9 +42,13 @@ import {
   formatTemp,
 } from "@/lib/formatters";
 
-type EvidenceTab = "drivers" | "forecast" | "shelter" | "community" | "math";
+type EvidenceTab = "drivers" | "forecast" | "shelter" | "community" | "audit" | "math";
 
-export default function VillageDetail() {
+interface VillageDetailProps {
+  onSwitchToQueue?: () => void;
+}
+
+export default function VillageDetail({ onSwitchToQueue }: VillageDetailProps = {}) {
   const {
     selectedAssessment,
     setIsAlertOpen,
@@ -59,18 +64,44 @@ export default function VillageDetail() {
   const [isBacktestOpen, setIsBacktestOpen] = useState(false);
   const [isTransparencyOpen, setIsTransparencyOpen] = useState(false);
 
+  // Response Trail lifecycle states: Identified -> Prepared -> Dispatched -> Verified
+  const [responseStage, setResponseStage] = useState<"identified" | "prepared" | "dispatched" | "verified">("identified");
+
+  useEffect(() => {
+    if (selectedAssessment) {
+      const vOutcomes = recentOutcomes.filter((o) => o.village_id === selectedAssessment.village.id);
+      const isCrit = selectedAssessment.overall_score >= 0.70;
+      setResponseStage(vOutcomes.length > 0 ? "verified" : isCrit ? "prepared" : "identified");
+    }
+  }, [selectedAssessment?.village?.id, recentOutcomes, selectedAssessment?.overall_score]);
+
   if (!selectedAssessment) {
     return (
-      <div className="h-full flex flex-col items-center justify-center p-6 text-center text-[#526575] bg-[#F4F7F8]">
-        <div className="w-12 h-12 rounded-full bg-white border border-[#E7EDF0] flex items-center justify-center text-[#526575] mb-3 shadow-sm">
-          <ShieldAlert size={24} className="text-[#147D78]" />
+      <div className="h-full flex flex-col items-center justify-center p-6 text-center text-[#52657A] bg-[#F7F9FC]">
+        <div className="w-12 h-12 rounded-full bg-white border border-[#CBD7E2] flex items-center justify-center text-[#087F7B] mb-3 shadow-xs">
+          <ShieldAlert size={24} className="text-[#087F7B]" />
         </div>
-        <h3 className="font-heading font-semibold text-[#17212B] text-sm mb-1">
-          No Village or Ward Selected
+        <h3 className="font-heading font-semibold text-[#172B4D] text-sm mb-1.5 max-w-[280px]">
+          Select a ward to review its risk evidence and dispatch actions.
         </h3>
-        <p className="text-xs text-[#526575] max-w-[260px] leading-relaxed">
-          Select any marker on the map or choose a row from the priority queue to examine risk evidence and dispatch actions.
+        <p className="text-xs text-[#52657A] max-w-[280px] leading-relaxed mb-4">
+          Review live environmental risk drivers, safe shelter refuges, and execute DDMA response directives.
         </p>
+        <div className="flex flex-col sm:flex-row items-center gap-2 w-full max-w-[280px]">
+          {onSwitchToQueue && (
+            <button
+              onClick={onSwitchToQueue}
+              className="w-full py-2 px-3 bg-[#3157A6] hover:bg-[#24417D] text-white text-xs font-semibold rounded-md transition-colors flex items-center justify-center gap-1.5 shadow-xs focus:outline-none focus:ring-2 focus:ring-[#1D6FD0]"
+            >
+              <ListOrdered size={14} />
+              <span>Choose from priority queue</span>
+            </button>
+          )}
+          <div className="text-[11px] text-[#52657A] font-medium flex items-center gap-1 py-1">
+            <MapPin size={12} className="text-[#087F7B]" />
+            <span>Select on map</span>
+          </div>
+        </div>
       </div>
     );
   }
@@ -107,11 +138,6 @@ export default function VillageDetail() {
   )} and aquifer depth at ${groundwater.water_level_mbgl} mbgl.`;
 
   const isCritical = overall_score >= 0.70;
-
-  // Response Trail lifecycle states: Identified -> Prepared -> Dispatched -> Verified
-  const [responseStage, setResponseStage] = useState<"identified" | "prepared" | "dispatched" | "verified">(
-    villageOutcomes.length > 0 ? "verified" : isCritical ? "prepared" : "identified"
-  );
 
   const stages = [
     { id: "identified", label: "Identified" },
@@ -363,6 +389,16 @@ export default function VillageDetail() {
             Ground Reports
           </button>
           <button
+            onClick={() => setActiveTab("audit")}
+            className={`px-2.5 py-2 font-medium text-[11px] border-b-2 transition-colors whitespace-nowrap focus:outline-none focus:ring-1 focus:ring-[#1D6FD0] ${
+              activeTab === "audit"
+                ? "border-[#087F7B] text-[#087F7B] font-bold"
+                : "border-transparent text-[#52657A] hover:text-[#172B4D]"
+            }`}
+          >
+            Audit Trail
+          </button>
+          <button
             onClick={() => setActiveTab("math")}
             className={`px-2.5 py-2 font-medium text-[11px] border-b-2 transition-colors whitespace-nowrap focus:outline-none focus:ring-1 focus:ring-[#1D6FD0] ${
               activeTab === "math"
@@ -452,6 +488,55 @@ export default function VillageDetail() {
               <p className="text-[11px] text-[#52657A] leading-relaxed">
                 Ground reports from residents in {village.name} confirm the severity of heat and dry borewell conditions.
               </p>
+            </div>
+          )}
+
+          {activeTab === "audit" && (
+            <div className="space-y-2.5 text-xs">
+              <div className="flex items-center justify-between pb-1 border-b border-[#CBD7E2]">
+                <span className="font-bold text-xs text-[#172B4D]">
+                  Operational Incident &amp; Action Log
+                </span>
+                <span className="text-[10px] text-[#52657A] font-mono font-medium">
+                  {villageOutcomes.length} Entries Recorded
+                </span>
+              </div>
+              {villageOutcomes.length > 0 ? (
+                <div className="space-y-2">
+                  {villageOutcomes.map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-[#F7F9FC] border border-[#CBD7E2] rounded p-2.5 text-xs space-y-1"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-[#172B4D]">
+                          {item.event_type}
+                        </span>
+                        <span className="bg-[#E5F3EC] text-[#267A58] border border-[#267A58]/30 px-1.5 py-0.5 rounded text-[10px] font-bold">
+                          +{item.residents_protected_estimate} Protected
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[#52657A]">{item.notes}</p>
+                      <div className="text-[10px] text-[#52657A] flex items-center justify-between pt-1 border-t border-[#CBD7E2]/50">
+                        <span>Officer: <strong className="text-[#172B4D]">{item.logged_by}</strong></span>
+                        <span className="font-mono">{item.timestamp}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-[#F7F9FC] border border-[#CBD7E2] rounded p-3 text-center text-[#52657A] space-y-2">
+                  <p className="text-xs">
+                    No local field outcomes logged yet for {village.name}.
+                  </p>
+                  <button
+                    onClick={() => setIsOutcomeOpen(true)}
+                    className="px-3 py-1.5 bg-[#FFFFFF] border border-[#CBD7E2] hover:border-[#087F7B] text-[#087F7B] font-semibold text-xs rounded transition-colors"
+                  >
+                    + Log Field Outcome
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

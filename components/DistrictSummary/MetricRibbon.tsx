@@ -25,11 +25,11 @@ export default function MetricRibbon() {
       <div className="px-4 py-2 sm:px-6 bg-[#FFF3D6] border-b border-[#C47A12]/30 flex flex-wrap items-center justify-between gap-2 text-xs">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="w-2 h-2 rounded-full bg-[#087F7B] animate-pulse"></span>
-          <span className="font-semibold text-[#172B4D]">
+          <span className="font-semibold text-[#172B4D]" suppressHydrationWarning>
             {greeting}, {districtStats.district} response team
           </span>
           <span className="text-[#CBD7E2] hidden sm:inline">•</span>
-          <span className="text-[#52657A] hidden sm:inline">
+          <span className="text-[#52657A] hidden sm:inline" suppressHydrationWarning>
             DDMA · {todayDate}
           </span>
           <span className="text-[#CBD7E2] hidden sm:inline">•</span>

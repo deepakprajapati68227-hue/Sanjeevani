@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 3500); // 3.5s timeout for fast response
 
-    const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,precipitation_sum&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=auto`;
+    const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,precipitation_sum&current=temperature_2m,relative_humidity_2m,wind_speed_10m&past_days=7&timezone=auto`;
 
     const res = await fetch(apiUrl, {
       signal: controller.signal,
@@ -70,9 +70,23 @@ export async function GET(request: NextRequest) {
 
     const json = await res.json();
 
-    const maxTempForecast = json.daily?.temperature_2m_max?.[0] ?? 41.5;
-    const precipSum = json.daily?.precipitation_sum?.[0] ?? 0.0;
+    const allTimes: string[] = json.daily?.time ?? [];
+    const allTemps: number[] = json.daily?.temperature_2m_max ?? [];
+    const allPrecips: number[] = json.daily?.precipitation_sum ?? [];
+
+    // When past_days=7, index 7 is today
+    const todayIndex = allTimes.length > 7 ? 7 : 0;
+    const maxTempForecast = allTemps[todayIndex] ?? 41.5;
+    const precipSum = allPrecips[todayIndex] ?? 0.0;
     const currentTemp = json.current?.temperature_2m ?? (maxTempForecast - 2.0);
+
+    const pastDates = allTimes.slice(0, todayIndex);
+    const pastTemps = allTemps.slice(0, todayIndex);
+    const pastPrecips = allPrecips.slice(0, todayIndex);
+
+    const forecastDates = allTimes.slice(todayIndex);
+    const forecastTemps = allTemps.slice(todayIndex);
+    const forecastPrecips = allPrecips.slice(todayIndex);
 
     const weatherData: WeatherData = {
       latitude: lat,
@@ -82,9 +96,12 @@ export async function GET(request: NextRequest) {
       precipitation_forecast_sum: Math.round(precipSum * 10) / 10,
       humidity: json.current?.relative_humidity_2m ?? 32,
       wind_speed: json.current?.wind_speed_10m ?? 11.5,
-      forecast_dates: json.daily?.time ?? [],
-      forecast_max_temps: json.daily?.temperature_2m_max ?? [maxTempForecast],
-      forecast_precip: json.daily?.precipitation_sum ?? [precipSum],
+      forecast_dates: forecastDates,
+      forecast_max_temps: forecastTemps,
+      forecast_precip: forecastPrecips,
+      past_dates: pastDates,
+      past_max_temps: pastTemps,
+      past_precip: pastPrecips,
       is_live: true,
       cached_at: new Date().toISOString(),
     };

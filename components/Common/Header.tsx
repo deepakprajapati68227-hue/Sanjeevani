@@ -4,10 +4,13 @@ import React from "react";
 import { useRisk } from "@/context/RiskContext";
 import { PredictIcon, AlertIcon, RespondIcon } from "./Icons";
 import { UI_STRINGS } from "@/lib/translations";
-import { Flame, Sliders, Radio, Smartphone, Activity, MapPin, Globe } from "lucide-react";
+import { Flame, Sliders, Radio, Smartphone, Activity, MapPin, Globe, FileText, History } from "lucide-react";
 import Link from "next/link";
 import LiveLocationSearch from "@/components/Search/LiveLocationSearch";
 import { SupportedLanguage } from "@/lib/types";
+import DistrictBriefingExport from "@/components/ExecutiveDirective/DistrictBriefingExport";
+import HistoricalBacktestModal from "@/components/Backtest/HistoricalBacktestModal";
+import ResidentAlertView from "@/components/ResidentView/ResidentAlertView";
 
 interface HeaderProps {
   onToggleWhatIf?: () => void;
@@ -29,6 +32,10 @@ export default function Header({ onToggleWhatIf, isWhatIfOpen }: HeaderProps) {
     availableDistricts,
     currentDistrictInfo,
   } = useRisk();
+
+  const [isBacktestOpen, setIsBacktestOpen] = React.useState(false);
+  const [isBriefingOpen, setIsBriefingOpen] = React.useState(false);
+  const [isResidentModalOpen, setIsResidentModalOpen] = React.useState(false);
 
   const t = UI_STRINGS[language];
   const isSimulationActive = whatIf.tempDelta !== 0 || whatIf.precipDelta !== 0;
@@ -141,6 +148,26 @@ export default function Header({ onToggleWhatIf, isWhatIfOpen }: HeaderProps) {
           <span className="hidden sm:inline">NASA Thermal</span>
         </button>
 
+        {/* Morning District SITREP Briefing (Master Doc Section 4.6) */}
+        <button
+          onClick={() => setIsBriefingOpen(true)}
+          className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-btn border border-pink/60 bg-pink/20 text-pink hover:bg-pink/30 transition-all shadow-sm"
+          title="Generate DDMA Morning Risk Briefing SITREP (Export / Print)"
+        >
+          <FileText size={13} className="text-pink" />
+          <span className="hidden md:inline">Morning SITREP</span>
+        </button>
+
+        {/* Historical Disaster Forewarning Backtest (Master Doc Section 2.1) */}
+        <button
+          onClick={() => setIsBacktestOpen(true)}
+          className="hidden xl:flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-btn border border-blue-500/50 bg-blue-500/15 text-blue-300 hover:bg-blue-500/25 transition-all shadow-sm"
+          title="Empirical Disaster Forewarning Backtest against Open-Meteo ERA5 Reanalysis"
+        >
+          <History size={13} className="text-blue-400" />
+          <span>Disaster Backtest</span>
+        </button>
+
         {/* Supervisor vs Resident View Toggle */}
         <div className="bg-navy-card border border-gray-700/80 p-0.5 rounded-btn flex items-center text-xs">
           <button
@@ -155,7 +182,10 @@ export default function Header({ onToggleWhatIf, isWhatIfOpen }: HeaderProps) {
             <span>{t.supervisorView}</span>
           </button>
           <button
-            onClick={() => setActiveRole("resident")}
+            onClick={() => {
+              setActiveRole("resident");
+              setIsResidentModalOpen(true);
+            }}
             className={`flex items-center gap-1.5 px-3 py-1 rounded-sm transition-all font-medium ${
               activeRole === "resident"
                 ? "bg-emerald-600 text-white shadow-sm"
@@ -187,6 +217,22 @@ export default function Header({ onToggleWhatIf, isWhatIfOpen }: HeaderProps) {
           </select>
         </div>
       </div>
+
+      {/* Global Modals Mounted from Header */}
+      <DistrictBriefingExport
+        isOpen={isBriefingOpen}
+        onClose={() => setIsBriefingOpen(false)}
+      />
+
+      <HistoricalBacktestModal
+        isOpen={isBacktestOpen}
+        onClose={() => setIsBacktestOpen(false)}
+      />
+
+      <ResidentAlertView
+        isOpen={isResidentModalOpen}
+        onClose={() => setIsResidentModalOpen(false)}
+      />
     </header>
   );
 }

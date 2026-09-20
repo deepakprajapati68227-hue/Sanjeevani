@@ -8,12 +8,14 @@ import VillageDetail from "@/components/RiskPanel/VillageDetail";
 import PhoneMockup from "@/components/AlertPreview/PhoneMockup";
 import OutcomeModal from "@/components/OutcomeLogger/OutcomeModal";
 import WhatIfSimulator from "@/components/ScenarioSlider/WhatIfSimulator";
+import ResidentAlertView from "@/components/ResidentView/ResidentAlertView";
 import { useRisk } from "@/context/RiskContext";
-import { Smartphone, Activity } from "lucide-react";
+import { Smartphone, Activity, Volume2 } from "lucide-react";
 
 export default function DashboardPage() {
   const { activeRole, setActiveRole, selectedAssessment, setIsAlertOpen } = useRisk();
   const [isWhatIfOpen, setIsWhatIfOpen] = useState(false);
+  const [isResidentModalOpen, setIsResidentModalOpen] = useState(false);
 
   return (
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-navy font-body text-white select-none">
@@ -55,18 +57,27 @@ export default function DashboardPage() {
                 <strong className="text-pink">
                   {selectedAssessment?.village.name || "selected ward"}
                 </strong>{" "}
-                receives via simulated WhatsApp broadcast.
+                receives via simulated WhatsApp broadcast or icon-first audio warning.
               </p>
-              <button
-                onClick={() => setIsAlertOpen(true)}
-                className="bg-[#00A884] hover:bg-[#029070] text-white text-xs font-semibold px-4 py-2.5 rounded-btn shadow transition-colors flex items-center gap-2"
-              >
-                <Smartphone size={15} />
-                <span>Open Simulated Phone Message</span>
-              </button>
+              <div className="flex flex-col gap-2 w-full max-w-[280px]">
+                <button
+                  onClick={() => setIsResidentModalOpen(true)}
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-4 py-2.5 rounded-btn shadow transition-colors flex items-center justify-center gap-2"
+                >
+                  <Volume2 size={15} />
+                  <span>Icon-First Audio Alert & SMS</span>
+                </button>
+                <button
+                  onClick={() => setIsAlertOpen(true)}
+                  className="bg-[#00A884] hover:bg-[#029070] text-white text-xs font-semibold px-4 py-2.5 rounded-btn shadow transition-colors flex items-center justify-center gap-2"
+                >
+                  <Smartphone size={15} />
+                  <span>Open WhatsApp Broadcast</span>
+                </button>
+              </div>
               <button
                 onClick={() => setActiveRole("supervisor")}
-                className="mt-3 text-[11px] text-gray-400 hover:text-gray-200 underline"
+                className="mt-4 text-[11px] text-gray-400 hover:text-gray-200 underline"
               >
                 Return to Supervisor Dashboard
               </button>
@@ -81,6 +92,10 @@ export default function DashboardPage() {
       {/* Global Modals */}
       <PhoneMockup />
       <OutcomeModal />
+      <ResidentAlertView
+        isOpen={isResidentModalOpen}
+        onClose={() => setIsResidentModalOpen(false)}
+      />
     </div>
   );
 }

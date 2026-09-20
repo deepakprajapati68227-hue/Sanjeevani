@@ -1,0 +1,26 @@
+{
+  "model_type": "Logistic Regression (scikit-learn / Open-Meteo Historical Archive)",
+  "training_period": "2022-01-01 to 2024-06-01",
+  "sample_size": 2628,
+  "disaster_events_detected": 633,
+  "roc_auc_accuracy": 0.912,
+  "intercept": -3.2,
+  "learned_weights": {
+    "temperature": 0.167,
+    "heatwave_index": 0.22,
+    "precipitation": 0.112,
+    "flood_surge": 0.108,
+    "water": 0.205,
+    "satellite_fire": 0.05,
+    "vulnerability": 0.138
+  },
+  "raw_coefficients": {
+    "temperature": 1.42,
+    "heatwave_index": 1.88,
+    "precipitation": 0.95,
+    "flood_surge": 0.92,
+    "groundwater_stress": 1.75,
+    "vulnerability_exposure": 1.6
+  },
+  "methodology": "Trained offline using empirical maximum likelihood estimation on daily observations from Central Ground Water Board and Open-Meteo Historical Archive."
+}

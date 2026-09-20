@@ -82,6 +82,9 @@ export interface WeatherData {
   forecast_dates: string[];
   forecast_max_temps: number[];
   forecast_precip: number[];
+  past_dates?: string[];
+  past_max_temps?: number[];
+  past_precip?: number[];
   is_live: boolean;
   cached_at: string;
 }
@@ -111,6 +114,14 @@ export interface HistoricalDataPoint {
   score: number;
   maxTemp: number;
   precipitation: number;
+  is_observed?: boolean;
+}
+
+export interface CommunityVerificationData {
+  verified_percentage: number;
+  total_responses: number;
+  status: "Verified by Community" | "Under Review" | "Low Activity";
+  last_updated?: string;
 }
 
 export interface RiskAssessment {
@@ -127,6 +138,12 @@ export interface RiskAssessment {
   calculated_at: string;
   outcomes_count: number;
   is_recalibrated?: boolean;
+  is_compound_risk?: boolean;
+  compound_risk_description?: string;
+  time_to_critical_days?: number;
+  time_to_critical_hours?: number;
+  time_to_critical_driver?: string;
+  community_verification?: CommunityVerificationData;
 }
 
 export interface OutcomeRecord {

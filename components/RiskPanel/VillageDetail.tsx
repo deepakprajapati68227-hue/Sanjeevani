@@ -19,6 +19,17 @@ import {
 import { motion } from "framer-motion";
 import CollectorateOrderModal from "../ExecutiveDirective/CollectorateOrderModal";
 import AIIncidentAdvisorModal from "../AIAdvisory/AIIncidentAdvisorModal";
+import ResidentAlertView from "../ResidentView/ResidentAlertView";
+import HistoricalBacktestModal from "../Backtest/HistoricalBacktestModal";
+import RiskTransparencyModal from "../Transparency/RiskTransparencyModal";
+import {
+  AlertTriangle,
+  Clock,
+  ThumbsUp,
+  History,
+  Binary,
+  Smartphone,
+} from "lucide-react";
 
 export default function VillageDetail() {
   const {
@@ -32,6 +43,9 @@ export default function VillageDetail() {
 
   const [isDirectiveOpen, setIsDirectiveOpen] = React.useState(false);
   const [isAIAdvisorOpen, setIsAIAdvisorOpen] = React.useState(false);
+  const [isResidentViewOpen, setIsResidentViewOpen] = React.useState(false);
+  const [isBacktestOpen, setIsBacktestOpen] = React.useState(false);
+  const [isTransparencyOpen, setIsTransparencyOpen] = React.useState(false);
 
   if (!selectedAssessment) {
     return (
@@ -112,6 +126,49 @@ export default function VillageDetail() {
           {village.description}
         </p>
 
+        {/* Compound Risk Cascade Alert (Master Doc Section 4.3) */}
+        {selectedAssessment.is_compound_risk && (
+          <div className="mt-2.5 bg-purple-950/40 border border-purple-500/50 rounded p-2 text-purple-200 text-xs flex items-start gap-2">
+            <AlertTriangle size={15} className="text-purple-400 flex-shrink-0 mt-0.5" />
+            <div>
+              <div className="font-bold uppercase tracking-wider text-[10px] text-purple-300">
+                Compound Risk Cascade Flag
+              </div>
+              <div className="text-[11px] text-purple-200/90 leading-tight mt-0.5">
+                {selectedAssessment.compound_risk_description}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Time-to-Critical Velocity Countdown (Master Doc Section 4.4) */}
+        {selectedAssessment.time_to_critical_days !== undefined && (
+          <div className="mt-2 bg-red-950/40 border border-red-500/50 rounded px-2.5 py-1.5 text-xs flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-red-200">
+              <Clock size={13} className="text-red-400" />
+              <span className="font-semibold text-[11px]">Time-to-Critical Velocity:</span>
+            </div>
+            <span className="font-mono font-bold text-red-400 text-xs">
+              {selectedAssessment.time_to_critical_days === 0
+                ? "< 24 Hours to Red Zone"
+                : `${selectedAssessment.time_to_critical_days}d (${selectedAssessment.time_to_critical_hours}h) until Red`}
+            </span>
+          </div>
+        )}
+
+        {/* Community-Verified Ground Reports (Master Doc Section 4.1) */}
+        {selectedAssessment.community_verification && (
+          <div className="mt-2 flex items-center justify-between bg-navy/80 border border-gray-700/60 px-2.5 py-1.5 rounded text-[11px]">
+            <span className="text-gray-300 flex items-center gap-1.5">
+              <ThumbsUp size={12} className="text-emerald-400" />
+              <span>Ground Verification:</span>
+            </span>
+            <span className="font-semibold text-emerald-300">
+              {selectedAssessment.community_verification.total_responses} Reports ({selectedAssessment.community_verification.verified_percentage}% Confirmed)
+            </span>
+          </div>
+        )}
+
         {/* Feedback Recalibration Status Banner */}
         {villageOutcomes.length > 0 && (
           <div className="mt-2.5 flex items-center gap-2 bg-emerald-950/40 border border-emerald-700/50 px-2.5 py-1.5 rounded text-[11px] text-emerald-300">
@@ -123,7 +180,7 @@ export default function VillageDetail() {
         )}
       </div>
 
-      {/* Primary Action Buttons (P0 Core Demo Beats) */}
+      {/* Primary Action Buttons (P0 Core Demo Beats & Advanced Capabilities) */}
       <div className="space-y-2">
         <div className="grid grid-cols-2 gap-2">
           <button
@@ -143,6 +200,15 @@ export default function VillageDetail() {
           </button>
         </div>
 
+        {/* Low-Literacy Resident View & Voice Alert (Master Doc Section 3.1) */}
+        <button
+          onClick={() => setIsResidentViewOpen(true)}
+          className="w-full bg-emerald-700/30 hover:bg-emerald-700/50 border border-emerald-500/50 text-emerald-200 text-xs font-semibold py-2 px-3 rounded-btn transition-all flex items-center justify-center gap-2 shadow-sm"
+        >
+          <Smartphone size={14} className="text-emerald-400" />
+          <span>Low-Literacy Resident View & Audio Alert (Icon-First)</span>
+        </button>
+
         {/* AI Incident Solutions Advisor (Groq-Powered Action Matrix) */}
         <button
           onClick={() => setIsAIAdvisorOpen(true)}
@@ -160,18 +226,53 @@ export default function VillageDetail() {
           <FileText size={14} className="text-amber-400" />
           <span>Official Collectorate Disaster Order (DMA 2005)</span>
         </button>
+
+        {/* Historical Backtest & Model Transparency Grid */}
+        <div className="grid grid-cols-2 gap-2 pt-1">
+          <button
+            onClick={() => setIsBacktestOpen(true)}
+            className="bg-navy-card hover:bg-navy-light border border-blue-500/40 text-blue-300 text-xs font-medium py-2 px-2.5 rounded-btn transition-all flex items-center justify-center gap-1.5"
+            title="Backtest against real Open-Meteo ERA5 Reanalysis past disasters"
+          >
+            <History size={13} className="text-blue-400" />
+            <span>Disaster Backtest</span>
+          </button>
+
+          <button
+            onClick={() => setIsTransparencyOpen(true)}
+            className="bg-navy-card hover:bg-navy-light border border-cyan-500/40 text-cyan-300 text-xs font-medium py-2 px-2.5 rounded-btn transition-all flex items-center justify-center gap-1.5"
+            title="Inspect machine-learned mathematical weights & formula"
+          >
+            <Binary size={13} className="text-cyan-400" />
+            <span>Risk Math & XAI</span>
+          </button>
+        </div>
       </div>
 
-      {/* AI Incident Advisor Modal */}
+      {/* Modals */}
       <AIIncidentAdvisorModal
         isOpen={isAIAdvisorOpen}
         onClose={() => setIsAIAdvisorOpen(false)}
       />
 
-      {/* Collectorate Executive Order Modal */}
       <CollectorateOrderModal
         isOpen={isDirectiveOpen}
         onClose={() => setIsDirectiveOpen(false)}
+      />
+
+      <ResidentAlertView
+        isOpen={isResidentViewOpen}
+        onClose={() => setIsResidentViewOpen(false)}
+      />
+
+      <HistoricalBacktestModal
+        isOpen={isBacktestOpen}
+        onClose={() => setIsBacktestOpen(false)}
+      />
+
+      <RiskTransparencyModal
+        isOpen={isTransparencyOpen}
+        onClose={() => setIsTransparencyOpen(false)}
       />
 
       {/* Explainability Breakdown (Core Differentiator) */}
